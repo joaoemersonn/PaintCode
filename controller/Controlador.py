@@ -20,6 +20,8 @@ from util.Util import ler_saves
 from view.Tela import Tela
 
 TOCAREMLOOP = -1
+
+
 class Controlador:
     def __init__(self):
         self._carregando = True
@@ -30,7 +32,7 @@ class Controlador:
         #largura = 1000
         #altura = 768
         #(largura,altura), pygame.FULLSCREEN
-        self.window = self.janela = pygame.display.set_mode(flags=pygame.FULLSCREEN)
+        self.window = self.janela = Util.WINDOW
         self.window.fill(Cores.BRANCO)
         self.splash = carrega_imagem("splash.png", escala=2)
         self.gif = GIFImage("loading.gif")
@@ -57,13 +59,13 @@ class Controlador:
         self.volume = True
         self.jogandoFasePersonalizada = self.fimdejogo = False
         self.espera = self.esperaperda = 0
-        self.contaviso = self.j = self.i= 0
+        self.contaviso = self.j = self.i = 0
         self.verificandodesenho = False
         self.exibindoperda = False
         ###
-        self.gif.executar(self.window, 950, 350)
+        #self.gif.executar(self.window, 950, 350)
         self.inicializar()
-        self.gif.pause()
+        # self.gif.pause()
 
     def inicializar(self):
         criarPastas()
@@ -75,12 +77,11 @@ class Controlador:
         self.__inicio = Bloco("inicio")
         self.pincel = Pincel()
         self.comando.append(self.__inicio)
-        self.gif.pause()
+        Util.CARREGANDO = False
         gerarFases(self.fases)
         self.sons.BACKGROUND.set_volume(0.2)
         self.sons.BACKGROUND.play(TOCAREMLOOP)
         self._carregando = False
-
 
     def start(self):
         while self.rodando:
@@ -92,10 +93,12 @@ class Controlador:
                 self.desenharaviso()
                 if self.executandoComando:
                     self.executarcomando()
-                self.tela.jogoPane.desenhar(self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
+                self.tela.jogoPane.desenhar(
+                    self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
 
             self.tratarEventos()
-            self.tela.jogoPane.desenharAnimacaoWin(self.faseanterior, self.jogador, self.comando, self.pincel)
+            self.tela.jogoPane.desenharAnimacaoWin(
+                self.faseanterior, self.jogador, self.comando, self.pincel)
             self.verificardesenho()
             pygame.display.update()
             self.relogio.tick(self.fps)
@@ -118,6 +121,7 @@ class Controlador:
                 self.verificandodesenho = True
         else:
             self.espera += 1
+
     def desenharaviso(self):
         if self.tela.jogoPane.exibeAviso:
             if self.contaviso > 150:
@@ -125,6 +129,7 @@ class Controlador:
                 self.tela.jogoPane.exibeAviso = False
             else:
                 self.contaviso += 1
+
     def perdeu(self):
         self.sons.LOSE.play()
         self.i = self.j = 0
@@ -147,7 +152,8 @@ class Controlador:
             self.sons.WIN.play()
             self.faseanterior = self.fase
             self.tela.jogoPane.tempoAnGanhou = (50 * 4)
-            self.tela.textoAlerta = ("Parabéns Você Concluiu a Fase!", "Pressione OK para Retornar!")
+            self.tela.textoAlerta = (
+                "Parabéns Você Concluiu a Fase!", "Pressione OK para Retornar!")
             self.pincel.posicaoInicial()
             self.tela.fasespersonalizadas = ler_fases()
             self.tela.desenhaAlerta = True
@@ -155,7 +161,8 @@ class Controlador:
             self.sons.WIN.play()
             self.faseanterior = self.fase
             self.tela.jogoPane.tempoAnGanhou = (50 * 4)
-            self.tela.textoAlerta = ("Parabéns Você Passou de Nível!", "Pressione OK para continuar!")
+            self.tela.textoAlerta = (
+                "Parabéns Você Passou de Nível!", "Pressione OK para continuar!")
             self.tela.desenhaAlerta = True
             self.jogador.subirNivel()
             self.pincel.posicaoInicial()
@@ -172,10 +179,10 @@ class Controlador:
             self.pincel.posicaoInicial()
             gravar_saves(self.saves)
 
-
     def refreshDesenho(self):
         self.tela.desenhar()
-        self.tela.jogoPane.desenhar(self.fase, self.jogador, self.comando, self.pincel)
+        self.tela.jogoPane.desenhar(
+            self.fase, self.jogador, self.comando, self.pincel)
         pygame.display.update()
 
     def tratarEventos(self):
@@ -212,7 +219,8 @@ class Controlador:
                             gravar_saves(self.saves)
                             self.fase = self.fases[self.jogador.getNivel()]
                             self.pincel.posicaoInicial()
-                            self.tela.botaoPlay.append(Sprite("BOTAOPLAY.PNG", 1, 2))
+                            self.tela.botaoPlay.append(
+                                Sprite("BOTAOPLAY.PNG", 1, 2))
                             self.tela.telaSaves = False
                             self.tela.telaJogo = True
 
@@ -272,7 +280,8 @@ class Controlador:
                                 self.tela.jogoPane.exibeAviso = True
                         x.pressionado = False
                     self.atualizarListaBlMover(self.comando)
-                    self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
+                    self.atualizarListaBlMover(
+                        self.fase.blocosdisponiveis, True)
 
     def _VerificarTelaJogo(self, posicaomouse):
 
@@ -284,7 +293,8 @@ class Controlador:
                     self.pinceledicao = i - 1
             self.tela.jogoPane.trocarimgPincel(self.pinceledicao)
             if self.tela.jogoPane.botaoSalvar.colisao_point(posicaomouse) and not self.tela.jogoPane.finalizacriacao:
-                self.tela.textoAlerta = ("PRONTO!", "", "Agora Modifique o desenho para ser o desafio a ser cumprido")
+                self.tela.textoAlerta = (
+                    "PRONTO!", "", "Agora Modifique o desenho para ser o desafio a ser cumprido")
                 self.pinceledicao = 0
                 self.tela.jogoPane.trocarimgPincel(self.pinceledicao)
                 self.tela.jogoPane.botaoSalvar.mudarImg("BOTAOSALVAR.PNG")
@@ -298,7 +308,8 @@ class Controlador:
                 self.fase.coresdisponiveis.append(3)
                 gravar_fase(self.fase)
                 self.tela.jogoPane.finalizacriacao = False
-                self.tela.textoAlerta = ("Nível Criado Com Sucesso!", "", "Pressione OK para voltar ao inicio")
+                self.tela.textoAlerta = (
+                    "Nível Criado Com Sucesso!", "", "Pressione OK para voltar ao inicio")
                 self.tela.desenhaAlerta = True
                 self.tela.telaJogo = False
                 self.tela.telaInicio = True
@@ -333,7 +344,8 @@ class Controlador:
             self.executandoComando = True
         #  Arrastar BLoco comando
         for x in self.fase.blocosdisponiveis:
-            pos = pygame.Rect((x.get_rect().x + 11, x.get_rect().y + 58, x.get_rect().w - 30, x.get_rect().h - 58))
+            pos = pygame.Rect((x.get_rect().x + 11, x.get_rect().y +
+                               58, x.get_rect().w - 30, x.get_rect().h - 58))
             if x.get_tipo() == "selecionar_cor" and pos.collidepoint(posicaomouse):
                 if x.get_Valor() < 0:
                     x.set_Valor(0)
@@ -343,7 +355,8 @@ class Controlador:
                 vl = 0
                 pos = x.get_rect()
                 for cor in self.fase.coresdisponiveis:
-                    rect = pygame.Rect((pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
+                    rect = pygame.Rect(
+                        (pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
                     if rect.collidepoint(posicaomouse):
                         x.set_Valor(cor)
                     vl += 1
@@ -366,12 +379,14 @@ class Controlador:
                 vl = 0
                 posi = x.get_rect()
                 for cor in self.fase.coresdisponiveis:
-                    rect = pygame.Rect((posi.x + 5 + 16 * vl, posi.y + 87, 15, 15))
+                    rect = pygame.Rect(
+                        (posi.x + 5 + 16 * vl, posi.y + 87, 15, 15))
                     if rect.collidepoint(posicaomouse):
                         x.set_Valor(cor)
                     vl += 1
             elif x.colisao_point(posicaomouse) and x.get_tipo() != "inicio":
-                pos = pygame.Rect((x.get_rect().x + 11, x.get_rect().y + 58, x.get_rect().w - 30, x.get_rect().h - 58))
+                pos = pygame.Rect(
+                    (x.get_rect().x + 11, x.get_rect().y + 58, x.get_rect().w - 30, x.get_rect().h - 58))
                 if x.get_tipo() == "selecionar_cor" and pos.collidepoint(posicaomouse):
                     if x.get_Valor() < 0:
                         x.set_Valor(0)
@@ -406,7 +421,8 @@ class Controlador:
         elif self.tela.botaoProximo.colisao_point(posicaomouse) and not self.botaoclicado:
             self.tela.jogoPane.modoCriar()
             self.fase = Fase()
-            self.fase.desenhoDesafio = Desenho(self.tela.linhas, self.tela.colunas, 0)
+            self.fase.desenhoDesafio = Desenho(
+                self.tela.linhas, self.tela.colunas, 0)
             self.fase.tentativas = self.tela.execucoes
             self.tela.telaCriar = False
             self.tela.jogoPane.botaoSalvar.mudarImg("BOTAOPROX.PNG")
@@ -414,7 +430,8 @@ class Controlador:
 
     def _VerificarTelaSaves(self, posicaomouse):
         if self.tela.botaoNovoJogo.colisao_point(posicaomouse):
-            self.tela.textoAlerta = ("Digite Seu Nome: ", "Pressione OK para continuar")
+            self.tela.textoAlerta = (
+                "Digite Seu Nome: ", "Pressione OK para continuar")
             self.tela.botaoPlay.append(Sprite("BOTAOPLAY.PNG", 1, 2))
             self.tela.botaolixeira.append(Sprite("lixeira.png", 1, 2))
             self.tela.desenhaNovoJogo = self.tela.caixaTexto.active = True
@@ -427,7 +444,8 @@ class Controlador:
                 self.tela.carregarContornos()
                 self.tela.telaFases = True
             else:
-                self.tela.textoAlerta = ("Não Existem Fases Criadas","Crie Novas Fases na opção Criar!")
+                self.tela.textoAlerta = (
+                    "Não Existem Fases Criadas", "Crie Novas Fases na opção Criar!")
                 self.tela.desenhaAlerta = True
 
         elif self.tela.botaoVoltar.colisao_point(posicaomouse):
@@ -507,7 +525,8 @@ class Controlador:
         inty = 150
         for i in range(0, desenho.colunas):
             for j in range(0, desenho.linhas):
-                quad = pygame.Rect((self.tela.ajuste / 2) + intx + 85 + (75 * i), 85 + inty + (75 * j), 75, 75)
+                quad = pygame.Rect(
+                    (self.tela.ajuste / 2) + intx + 85 + (75 * i), 85 + inty + (75 * j), 75, 75)
                 pos = pygame.mouse.get_pos()
                 if quad.collidepoint(pos[0] - 115, pos[1] + 115):
                     if (self.pinceledicao == -1 and i == j == 0):
@@ -518,7 +537,7 @@ class Controlador:
                         desenho.tiles[i][j] = self.pinceledicao
                     else:
                         self.sons.ALERT.play(2)
-                        self.tela.jogoPane.textoaviso = "AÇÃO INVALIDA!","Você não pode remover janelas no desenho desafio!"
+                        self.tela.jogoPane.textoaviso = "AÇÃO INVALIDA!", "Você não pode remover janelas no desenho desafio!"
                         self.tela.jogoPane.exibeAviso = True
 
     def _VerificarTelaInicio(self, posicaomouse):
@@ -530,7 +549,7 @@ class Controlador:
             else:
                 self.tela.botaoVolume.mudarImg("BOTAOVOLUMEON.PNG")
                 self.volume = True
-            ReproduzirSons(self.volume,SONS)
+            ReproduzirSons(self.volume, SONS)
         # BOTÃO SAIR
         elif self.tela.botaoSair.colisao_point(posicaomouse):
             self.rodando = False
@@ -579,7 +598,7 @@ class Controlador:
         if self.verificandodesenho:
             self.tela.jogoPane.desenharVerificacao(self.i, self.j)
             if self.espera > 2:
-                #print("Teste["+str(self.i)+","+str(self.j)+"]")
+                # print("Teste["+str(self.i)+","+str(self.j)+"]")
                 self.espera = 0
                 if self.i < self.fase.desenhoDesafio.colunas-1:
                     if int(self.fase.desenhoDesafio.tiles[self.i][self.j]) != int(self.fase.desenhoResposta.tiles[self.i][self.j]):
@@ -599,18 +618,19 @@ class Controlador:
             else:
                 self.espera += 1
         elif self.exibindoperda:
-            #if self.fase.tentativas > 1:
+            # if self.fase.tentativas > 1:
             self.tela.jogoPane.destaque = True
-            self.tela.jogoPane.desenharVerificacao(self.i-1, self.j, passou=False)
+            self.tela.jogoPane.desenharVerificacao(
+                self.i-1, self.j, passou=False)
             if self.esperaperda > 20:
                 self.esperaperda = 0
                 self.exibindoperda = False
                 self.i = self.j = 0
-                #if self.fase.tentativas > 1:
+                # if self.fase.tentativas > 1:
                 self.sons.MENOS.play()
                 self.tela.jogoPane.destaque = False
                 self.fase.tentativas -= 1
-                #else:
+                # else:
                 if self.fase.tentativas < 1:
                     self.perdeu()
             else:

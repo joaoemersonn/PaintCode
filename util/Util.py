@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-
+from util.GIFImage import GIFImage
 import pygame
 from pygame import mixer
 from model.Desenho import Desenho
@@ -8,8 +8,22 @@ from model.Jogador import Jogador
 from model.Fase import Fase
 import platform
 SISTEMA = platform.system()
-
+WINDOW = pygame.display.set_mode(
+    flags=pygame.FULLSCREEN)
+GIF = GIFImage("loading.gif")
+CARREGANDO = True
 mixer.init()
+
+
+def animarGIF():
+    if CARREGANDO:
+        for x in range(0, 25):
+            GIF.render(WINDOW, (950, 350))
+            pygame.display.update()
+
+
+
+
 
 def get_cor(valor):
     if valor == 1:
@@ -22,8 +36,6 @@ def get_cor(valor):
         return Cores.VERMELHO
     else:
         return Cores.BRANCO
-
-
 
 
 class Cores:
@@ -41,7 +53,7 @@ class Cores:
 
 def get_path_projeto():
     return os.path.dirname(os.path.abspath(__file__)).replace("view", "").replace("model", "").replace("controller", "").replace("util",
-                                                                                                                "")
+                                                                                                                                 "")
 
 
 def ler_saves():
@@ -65,7 +77,9 @@ def ler_saves():
     arquivo.close()
     return saves
 
+
 def gravar_saves(saves):
+    animarGIF()
     if SISTEMA == "Windows":
         diretorio = os.path.join(Path.home(), ".PaintCode")
     else:
@@ -85,6 +99,7 @@ def gravar_saves(saves):
 
 # FALTA TERMINAR
 def ler_fases():
+    animarGIF()
     fasesCriadas = list()
     if SISTEMA == "Windows":
         diretorio = os.path.join(Path.home(), ".PaintCode")
@@ -169,7 +184,9 @@ def gravar_fase(fase):
             arquivo.write(str(fase.desenhoResposta.tiles[i][j]) + ",")
     arquivo.close()
 
+
 def criarPastas():
+    animarGIF()
     if SISTEMA == "Windows":
         diretorio = os.path.join(Path.home(), ".PaintCode")
     else:
@@ -183,20 +200,24 @@ def criarPastas():
     print("Diretorio criado: ", diretorio)
     if not os.path.isdir(diretorio):
         os.mkdir(diretorio)
-        os.mkdir(os.path.join(diretorio,"fasescriadas"))
-        arquivo = open(os.path.join(diretorio,"saves.saves"), 'w')
+        os.mkdir(os.path.join(diretorio, "fasescriadas"))
+        arquivo = open(os.path.join(diretorio, "saves.saves"), 'w')
         arquivo.close()
 
+
 def carregar_som(nome):
+    animarGIF()
     diretorio = get_path_projeto()
     diretorio = os.path.join(diretorio, 'lib')
     diretorio = os.path.join(diretorio, 'sons')
     sompath = os.path.join(diretorio, nome)
-    print("tentando carregar: ",sompath)
+    print("tentando carregar: ", sompath)
     som = mixer.Sound(sompath)
     return som
 
+
 def carrega_imagem(imagem_nome, subdir="", escala=1):
+    animarGIF()
     diretorio = get_path_projeto()
     diretorio = os.path.join(diretorio, "lib")
     diretorio = os.path.join(diretorio, "imagens")
@@ -207,7 +228,8 @@ def carrega_imagem(imagem_nome, subdir="", escala=1):
         image = pygame.image.load(iagempath)
         if escala > 1:
             img1 = image
-            image = pygame.transform.scale(img1, (int(img1.get_rect().w / escala), int(img1.get_rect().h / escala)))
+            image = pygame.transform.scale(
+                img1, (int(img1.get_rect().w / escala), int(img1.get_rect().h / escala)))
     except pygame.error:
         print("Não foi possivel carregar Imagem:", iagempath)
         raise SystemExit
@@ -271,5 +293,6 @@ class Sons:
         self.CONFIRMAR = carregar_som('confirmar.ogg')
         self.NEGAR = carregar_som('negar.ogg')
         self.MENOS = carregar_som('menos.ogg')
+
 
 SONS = Sons()

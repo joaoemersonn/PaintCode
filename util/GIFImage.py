@@ -1,20 +1,17 @@
 """GIFImage by Matthew Roe"""
 import os
-from multiprocessing import Process
-
+import threading
 from PIL import Image
 import pygame
-import threading
 from pygame.locals import *
 
 import time
 
-from util.Util import get_path_projeto
-
 
 class GIFImage(object):
     def __init__(self, filename):
-        diretorio = get_path_projeto()
+        diretorio = os.path.dirname(os.path.abspath(__file__)).replace("view", "").replace("model", "").replace("controller", "").replace("util",
+                                                                                                                                          "")
         diretorio = os.path.join(diretorio, "lib")
         diretorio = os.path.join(diretorio, "imagens")
         iagempath = os.path.join(diretorio, filename)
@@ -193,12 +190,11 @@ class GIFImage(object):
                              (x, y, self.image.width, self.image.height))
             self.render(screen, (x, y))
             print("DESENHANDO GIF!")
-            # time.sleep(0.01)
             pygame.display.update()
 
     def executar(self, screen, x, y):
-        self.running = True
         t = threading.Thread(target=self.desenha, args=(screen, x, y,))
         t.start()
-        # self.desenha(screen,x,y)
+        t.join()
+        self.desenha(screen, x, y)
         print("TREAD TERMINOU!")
