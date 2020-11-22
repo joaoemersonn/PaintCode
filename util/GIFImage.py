@@ -32,7 +32,7 @@ class GIFImage(object):
         self.reversed = False
 
     def get_rect(self):
-        return pygame.rect.Rect((0,0), self.image.size)
+        return pygame.rect.Rect((0, 0), self.image.size)
 
     def get_frames(self):
         image = self.image
@@ -63,7 +63,7 @@ class GIFImage(object):
                 except:
                     duration = 100
 
-                duration *= .001 #convert to milliseconds!
+                duration *= .001  # convert to milliseconds!
                 cons = False
 
                 x0, y0, x1, y1 = (0, 0) + image.size
@@ -94,14 +94,15 @@ class GIFImage(object):
                 else:
                     palette = base_palette
 
-                pi = pygame.image.frombuffer(image.tobytes(), image.size, image.mode)
+                pi = pygame.image.frombuffer(
+                    image.tobytes(), image.size, image.mode)
                 pi.set_palette(palette)
                 if "transparency" in image.info:
                     pi.set_colorkey(image.info["transparency"])
                 pi2 = pygame.Surface(image.size, SRCALPHA)
                 if cons:
                     for i in self.frames:
-                        pi2.blit(i[0], (0,0))
+                        pi2.blit(i[0], (0, 0))
                 pi2.blit(pi, (x0, y0), (x0, y0, x1-x0, y1-y0))
 
                 self.frames.append([pi2, duration])
@@ -122,7 +123,8 @@ class GIFImage(object):
                         self.cur = self.startpoint
 
                 self.ptime = time.time()
-        pygame.draw.rect(screen, (255, 255, 255), (pos[0], pos[1], self.image.width, self.image.height))
+        pygame.draw.rect(screen, (255, 255, 255),
+                         (pos[0], pos[1], self.image.width, self.image.height))
         screen.blit(self.frames[self.cur][0], pos)
 
     def seek(self, num):
@@ -151,19 +153,25 @@ class GIFImage(object):
 
     def rewind(self):
         self.seek(0)
+
     def fastforward(self):
         self.seek(self.length()-1)
 
     def get_height(self):
         return self.image.size[1]
+
     def get_width(self):
         return self.image.size[0]
+
     def get_size(self):
         return self.image.size
+
     def length(self):
         return len(self.frames)
+
     def reverse(self):
         self.reversed = not self.reversed
+
     def reset(self):
         self.cur = 0
         self.ptime = time.time()
@@ -179,18 +187,18 @@ class GIFImage(object):
         new.reversed = self.reversed
         return new
 
-    def desenha(self,screen,x,y):
+    def desenha(self, screen, x, y):
         while self.running:
-            pygame.draw.rect(screen,(255,255,255),(x,y,self.image.width,self.image.height))
+            pygame.draw.rect(screen, (255, 255, 255),
+                             (x, y, self.image.width, self.image.height))
             self.render(screen, (x, y))
             print("DESENHANDO GIF!")
-            #time.sleep(0.01)
+            # time.sleep(0.01)
             pygame.display.update()
 
-    def executar(self,screen,x,y):
+    def executar(self, screen, x, y):
         self.running = True
-        t = Process(target=self.desenha, args=(screen,x,y,))
+        t = threading.Thread(target=self.desenha, args=(screen, x, y,))
         t.start()
-        t.join()
-        #self.desenha(screen,x,y)
+        # self.desenha(screen,x,y)
         print("TREAD TERMINOU!")
