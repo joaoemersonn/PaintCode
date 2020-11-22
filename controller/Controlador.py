@@ -3,7 +3,6 @@ import sys
 from copy import deepcopy
 
 import pygame
-from pygame.locals import *
 
 from model.Bloco import Bloco
 from model.Desenho import Desenho
@@ -14,8 +13,7 @@ from model.Sprite import Sprite
 from util import Util
 from util.GIFImage import GIFImage
 from util.Gerador import gerarFases
-from util.Util import gravar_saves, gravar_fase, ler_fases, ReproduzirSons, criarPastas, Cores, carrega_imagem, Sons, \
-    SONS
+from util.Util import gravar_saves, gravar_fase, ler_fases, ReproduzirSons, criarPastas, Cores, carrega_imagem, SONS
 from util.Util import ler_saves
 from view.Tela import Tela
 
@@ -37,7 +35,7 @@ class Controlador:
         self.splash = carrega_imagem("splash.png", escala=2)
         self.gif = GIFImage("loading.gif")
         print("splash")
-        self.window.blit(self.splash, (400, 150))
+        self.window.blit(self.splash, (300, 150))
         #####
         self.fps = 60
         self.tela = None
@@ -566,7 +564,6 @@ class Controlador:
             self.tela.telaSaves = True
         # BOTAO Criar
         elif self.tela.botaoCriar.colisao_point(posicaomouse):
-            self.sons.CLICK.play()
             self.tela.telaInicio = False
             self.tela.telaCriar = True
 

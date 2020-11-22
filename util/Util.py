@@ -8,8 +8,8 @@ from model.Jogador import Jogador
 from model.Fase import Fase
 import platform
 SISTEMA = platform.system()
-WINDOW = pygame.display.set_mode(
-    flags=pygame.FULLSCREEN)
+WINDOW = pygame.display.set_mode((0, 0),
+                                 flags=pygame.FULLSCREEN)
 GIF = GIFImage("loading.gif")
 CARREGANDO = True
 mixer.init()
@@ -18,11 +18,8 @@ mixer.init()
 def animarGIF():
     if CARREGANDO:
         for x in range(0, 25):
-            GIF.render(WINDOW, (950, 350))
+            GIF.render(WINDOW, (850, 350))
             pygame.display.update()
-
-
-
 
 
 def get_cor(valor):
