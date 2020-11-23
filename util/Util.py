@@ -12,14 +12,23 @@ WINDOW = pygame.display.set_mode((0, 0),
                                  flags=pygame.FULLSCREEN)
 GIF = GIFImage("loading.gif")
 CARREGANDO = True
+STATUSCARREGAMENTO = 0
 mixer.init()
 
 
-def animarGIF():
+def animarLoad():
+    global STATUSCARREGAMENTO
     if CARREGANDO:
-        for x in range(0, 25):
-            GIF.render(WINDOW, (850, 350))
-            pygame.display.update()
+        pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
+                         (350, 650, 690, 30))
+        pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
+                         (350, 650, 10*STATUSCARREGAMENTO, 30))
+        pygame.display.update()
+        STATUSCARREGAMENTO += 1
+        # print(STATUSCARREGAMENTO)
+       # for x in range(0, 25):
+        #    GIF.render(WINDOW, (850, 350))
+        #    pygame.display.update()
 
 
 def get_cor(valor):
@@ -76,7 +85,7 @@ def ler_saves():
 
 
 def gravar_saves(saves):
-    animarGIF()
+    animarLoad()
     if SISTEMA == "Windows":
         diretorio = os.path.join(Path.home(), ".PaintCode")
     else:
@@ -96,7 +105,7 @@ def gravar_saves(saves):
 
 # FALTA TERMINAR
 def ler_fases():
-    animarGIF()
+    animarLoad()
     fasesCriadas = list()
     if SISTEMA == "Windows":
         diretorio = os.path.join(Path.home(), ".PaintCode")
@@ -183,7 +192,7 @@ def gravar_fase(fase):
 
 
 def criarPastas():
-    animarGIF()
+    animarLoad()
     if SISTEMA == "Windows":
         diretorio = os.path.join(Path.home(), ".PaintCode")
     else:
@@ -203,7 +212,7 @@ def criarPastas():
 
 
 def carregar_som(nome):
-    animarGIF()
+    animarLoad()
     diretorio = get_path_projeto()
     diretorio = os.path.join(diretorio, 'lib')
     diretorio = os.path.join(diretorio, 'sons')
@@ -214,7 +223,7 @@ def carregar_som(nome):
 
 
 def carrega_imagem(imagem_nome, subdir="", escala=1):
-    animarGIF()
+    animarLoad()
     diretorio = get_path_projeto()
     diretorio = os.path.join(diretorio, "lib")
     diretorio = os.path.join(diretorio, "imagens")
