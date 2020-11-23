@@ -13,16 +13,20 @@ WINDOW = pygame.display.set_mode((0, 0),
 GIF = GIFImage("loading.gif")
 CARREGANDO = True
 STATUSCARREGAMENTO = 0
-mixer.init()
+# mixer.init()
+
+
+def centerH(largura, tamH):
+    return ((largura/2)-tamH)
 
 
 def animarLoad():
     global STATUSCARREGAMENTO
     if CARREGANDO:
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
-                         (350, 650, 690, 30))
+                         ((WINDOW.get_width()/2)-345, 645, 700, 40))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
-                         (350, 650, 10*STATUSCARREGAMENTO, 30))
+                         ((WINDOW.get_width()/2)-340, 650, 10*STATUSCARREGAMENTO, 30))
         pygame.display.update()
         STATUSCARREGAMENTO += 1
         # print(STATUSCARREGAMENTO)

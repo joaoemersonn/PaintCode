@@ -27,6 +27,7 @@ class Controlador:
         pygame.init()
         info = pygame.display.Info()
         self.largura, self.altura = info.current_w, info.current_h
+        print("TELA: largura: ",self.largura," altura: ",self.altura)
         #largura = 1000
         #altura = 768
         #(largura,altura), pygame.FULLSCREEN
@@ -35,7 +36,7 @@ class Controlador:
         self.splash = carrega_imagem("splash.png", escala=2)
         self.gif = GIFImage("loading.gif")
         print("splash")
-        self.window.blit(self.splash, (300, 150))
+        self.window.blit(self.splash, ((self.largura/2) - (self.splash.get_width()/2), 150))
         #####
         self.fps = 60
         self.tela = None
@@ -69,8 +70,8 @@ class Controlador:
         criarPastas()
         pygame.mixer.init()
         Util.SONS.iniciar()
-        self.sons = Util.SONS
         self.tela = Tela(self.window, self.largura, self.altura)
+        self.sons = Util.SONS
         self.tela.saves = self.carregarSaves()
         self.__inicio = Bloco("inicio")
         self.pincel = Pincel()
