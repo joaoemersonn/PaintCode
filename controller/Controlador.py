@@ -13,7 +13,8 @@ from model.Sprite import Sprite
 from util import Util
 from util.GIFImage import GIFImage
 from util.Gerador import gerarFases
-from util.Util import gravar_saves, gravar_fase, ler_fases, ReproduzirSons, criarPastas, Cores, carrega_imagem, SONS
+from util.Util import gravar_saves, gravar_fase, ler_fases, ReproduzirSons, criarPastas, Cores, carrega_imagem, SONS, \
+    ESCALAX
 from util.Util import ler_saves
 from view.Tela import Tela
 
@@ -38,7 +39,12 @@ class Controlador:
         print("splash")
         self.window.blit(self.splash, ((self.largura/2) - (self.splash.get_width()/2), 150))
         #####
-        self.fps = 60
+        #self.fps = 120
+        self.TICKS_PER_SECOND = 40
+        self.SKIP_TICKS = 1000 / self.TICKS_PER_SECOND
+        self.MAX_FRAMESKIP = 5
+        self.next_game_tick = pygame.time.get_ticks()
+
         self.tela = None
         self.i = self.index = 0
         self.relogio = pygame.time.Clock()
@@ -84,23 +90,28 @@ class Controlador:
 
     def start(self):
         while self.rodando:
-            # if self._carregando:
-            #     self.gif.render(self.window, (950, 350))
-            # else:
+            loops = 0
             self.tela.desenhar()
-            if self.jogoexecutando():
-                self.desenharaviso()
-                if self.executandoComando:
-                    self.executarcomando()
-                self.tela.jogoPane.desenhar(
-                    self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
-
-            self.tratarEventos()
-            self.tela.jogoPane.desenharAnimacaoWin(
+            while pygame.time.get_ticks() > self.next_game_tick and loops < self.MAX_FRAMESKIP:
+                if self.jogoexecutando():
+                    self.desenharaviso()
+                    if self.executandoComando:
+                        self.executarcomando()
+                    #Desenha Jogo
+                    self.tela.jogoPane.desenhar(
+                        self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
+                self.tratarEventos()
+                self.verificardesenho()
+                self.next_game_tick += self.SKIP_TICKS
+                loops += 1
+            #Desenha Animação
+            if self.tela.jogoPane.tempoAnGanhou > 0:
+                self.tela.jogoPane.desenharAnimacaoWin(
                 self.faseanterior, self.jogador, self.comando, self.pincel)
-            self.verificardesenho()
+
+
             pygame.display.update()
-            self.relogio.tick(self.fps)
+            #self.relogio.tick(self.fps)
 
     def jogoexecutando(self):
         if self.tela.telaJogo and not self.tela.desenhaConfirmacao:
@@ -525,7 +536,7 @@ class Controlador:
         for i in range(0, desenho.colunas):
             for j in range(0, desenho.linhas):
                 quad = pygame.Rect(
-                    (self.tela.ajuste / 2) + intx + 85 + (75 * i), 85 + inty + (75 * j), 75, 75)
+                    (self.tela.ajuste / 2) + intx + 85 + (int(75*ESCALAX) * i), 85 + inty + (int(75*ESCALAX) * j), int(75*ESCALAX), int(75*ESCALAX))
                 pos = pygame.mouse.get_pos()
                 if quad.collidepoint(pos[0] - 115, pos[1] + 115):
                     if (self.pinceledicao == -1 and i == j == 0):
@@ -574,10 +585,10 @@ class Controlador:
 
     def _VerificarTelaFases(self, posicaomaouse):
         if self.tela.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.rolagemCriacoes < 0:
-            self.tela.rolagemCriacoes += 1400
+            self.tela.rolagemCriacoes += int(1400*ESCALAX)
         elif self.tela.botaoDireita.colisao_point(posicaomaouse) and self.tela.rolagemCriacoes > (
                 -700 * (len(self.tela.fasespersonalizadas) - 2)):
-            self.tela.rolagemCriacoes -= 1400
+            self.tela.rolagemCriacoes -= int(1400*ESCALAX)
         elif self.tela.btVoltarFases.colisao_point(posicaomaouse):
             self.tela.telaFases = False
             self.tela.telaSaves = True
@@ -594,11 +605,12 @@ class Controlador:
 
     def verificardesenho(self):
         if self.verificandodesenho:
-            self.tela.jogoPane.desenharVerificacao(self.i, self.j)
-            if self.espera > 2:
+            if self.i < self.fase.desenhoDesafio.colunas:
+                self.tela.jogoPane.desenharVerificacao(self.i, self.j)
+            if self.espera > 4:
                 # print("Teste["+str(self.i)+","+str(self.j)+"]")
                 self.espera = 0
-                if self.i < self.fase.desenhoDesafio.colunas-1:
+                if self.i < self.fase.desenhoDesafio.colunas:
                     if int(self.fase.desenhoDesafio.tiles[self.i][self.j]) != int(self.fase.desenhoResposta.tiles[self.i][self.j]):
                         self.sons.NEGAR.play()
                         self.verificandodesenho = False

@@ -2,7 +2,7 @@ import pygame
 import os
 
 from util import Util
-from util.Util import Cores, get_cor
+from util.Util import Cores, get_cor, ESCALAX
 from view.Painel import Painel
 from model.Sprite import Sprite
 from model.TextInput import InputBox
@@ -24,16 +24,18 @@ class Tela:
         self.fontetipo = 'comicsansms'
         self.ajuste = 360
         self.largura = largura
+        self.scala_x = self.largura / 1366
+        self.scala_y = self.altura / 768
         self.tamanho = (self.largura, self.altura)
         # pygame.display.set_mode(self.tamanho,pygame.SCALED)
         self.janela = window
         self.__janela = carrega_imagem("janela.png")
-        self.__janela2 = pygame.transform.scale(self.__janela, (60, 60))
+        self.__janela2 = pygame.transform.scale(self.__janela, (int(60* self.scala_x), int(60* self.scala_x)) )
 
         # FONTES
-        self.fonteGrande = pygame.font.Font(fontearquivo, 30 - 8)
-        self.fontePequena = pygame.font.Font(fontearquivo, 20 - 8)
-        self.fonteTitulo = pygame.font.Font(fontearquivo, 80 - 25)
+        self.fonteGrande = pygame.font.Font(fontearquivo, int(22*self.scala_x))
+        self.fontePequena = pygame.font.Font(fontearquivo, int(12*self.scala_x))
+        self.fonteTitulo = pygame.font.Font(fontearquivo, int(55*self.scala_x))
 
         self.corBranca = Cores.BRANCO
         self.corfundo = Cores.CORFUNDO
@@ -48,7 +50,7 @@ class Tela:
         pygame.display.set_caption("PaintCoding")
         # pygame.display.set_mode((self.largura, self.altura),pygame.FULLSCREEN)
         self.ok = Sprite("ok.png", 1, 2)
-        self.ok.definirPosicao((760, 380))
+        self.ok.definirPosicao((760*ESCALAX, 380))
         self.desenhaAlerta = self.desenhaNovoJogo = False
         self.textoAlerta = ("TEXTO TITULO!", "PRESSIONE OK PARA CONTINUAR!")
         self.caixaTexto = InputBox(100, 30, 550, 300)
@@ -346,7 +348,7 @@ class Tela:
                                              80, 85 + inty+aux,
                                              int(self.ajuste / 2) + intx+auxX+(espaco *
                                                                                qntdFase) + 90 + escala * desenho.colunas,
-                                             85 + inty+aux, Cores.TELHADO)
+                                             int(85 + inty+aux), Cores.TELHADO)
 
                 for i in range(0, desenho.colunas):
                     for j in range(0, desenho.linhas):

@@ -112,8 +112,8 @@ class PainelJogo(Painel):
             if self.exibeAviso:
                 self.aviso(self.textoaviso[0], self.textoaviso[1])
     def desenharAnimacaoWin(self,fase,jogador,comando,pincel,fps=0):
-        if self.tempoAnGanhou > 0:
-             self.__tela.jogoPane.desenhar(fase,jogador,comando,pincel=pincel)
+
+        self.__tela.jogoPane.desenhar(fase,jogador,comando,pincel=pincel)
         self.tempoAnGanhou = self.confete.animar(self, self.tempoAnGanhou, fps=fps)
         self.tempoAnGanhou = self.confete2.animar(self, self.tempoAnGanhou, fps=fps)
         self.tempoAnGanhou = self.confete3.animar(self, self.tempoAnGanhou, fps=fps)
