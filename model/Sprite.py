@@ -1,5 +1,5 @@
 import pygame
-from util.Util import carrega_imagem, SONS
+from util.Util import carrega_imagem, SONS, ESCALAX, ESCALAY
 from view.Painel import Painel
 
 
@@ -68,7 +68,7 @@ class Sprite:
         self.rect.move_ip((posicao[0], posicao[1]))
 
     def definirPosicao(self, posicao):
-        (self.rect.left, self.rect.top) = (posicao[0], posicao[1])
+        (self.rect.left, self.rect.top) = (int(posicao[0]*ESCALAX), posicao[1]*ESCALAY)
 
     def colisao_point(self, point):
         if self.rect.collidepoint((point[0] - self.posicaoRelativa[0], point[1] - self.posicaoRelativa[1])):

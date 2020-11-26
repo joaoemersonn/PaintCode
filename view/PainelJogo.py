@@ -8,7 +8,12 @@ from view.Painel import Painel
 from util.Util import carrega_imagem
 
 
-def contornar(superfice, x, y, largura, altura, tam=2, cor=Cores.CORSECUNDARIA):
+def contornar(superfice, x, y, largura, altura, tam=2, cor=Cores.CORSECUNDARIA,eX=1,eY=1):
+    x =int(eX * x)
+    y =int(y * eY)
+    largura = int(eX * largura)
+    altura = int(altura * eY)
+
     x -= tam / 2
     y -= tam / 2
     largura += tam

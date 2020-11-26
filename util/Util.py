@@ -14,7 +14,7 @@ GIF = GIFImage("loading.gif")
 CARREGANDO = True
 STATUSCARREGAMENTO = 0
 ESCALAX = WINDOW.get_width()/1366
-EXCALAY = WINDOW.get_height()/768
+ESCALAY = WINDOW.get_height()/768
 mixer.init()
 
 
@@ -26,9 +26,9 @@ def animarLoad():
     global STATUSCARREGAMENTO
     if CARREGANDO:
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
-                         ((WINDOW.get_width()/2)-345, 645, 700, 40))
+                         (int(338*ESCALAX), int(645*ESCALAY), int(700*ESCALAX), int(40*ESCALAY)))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
-                         ((WINDOW.get_width()/2)-340, 650, 10*STATUSCARREGAMENTO, 30))
+                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*10*STATUSCARREGAMENTO), int(30*ESCALAY)))
         pygame.display.update()
         STATUSCARREGAMENTO += 1
         # print(STATUSCARREGAMENTO)
@@ -241,8 +241,8 @@ def carrega_imagem(imagem_nome, subdir="", escala=1):
         if escala > 1 or (ESCALAX != 1 and imagem_nome != "confete.png" and imagem_nome != "confete2.png"):
             img1 = image
             print("o ESCALAX É: ", ESCALAX)
-            image = pygame.transform.scale(
-                img1, (int((img1.get_rect().w / escala) * ESCALAX), int((img1.get_rect().h / escala) * ESCALAX)))
+            image = pygame.transform.smoothscale(
+                img1.convert_alpha(), (int((img1.get_rect().w / escala) * ESCALAX), int((img1.get_rect().h / escala) * ESCALAX)))
     except pygame.error:
         print("Não foi possivel carregar Imagem:", iagempath)
         raise SystemExit
