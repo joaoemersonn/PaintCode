@@ -61,6 +61,8 @@ class Cores:
     TELHADO = pygame.Color("#C4875E")
     CORELEMENTO = pygame.Color(2, 60, 64, 100)
     VERMELHO = pygame.Color("#DD1C1A")
+    ROXO = pygame.Color(255, 117, 249, 100)
+    ROXOESCURO = pygame.Color(207, 101, 199, 100)
 
 
 def get_path_projeto():

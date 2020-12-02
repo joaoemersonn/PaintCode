@@ -1,7 +1,7 @@
 import pygame
 
 from view.Painel import Painel
-from util.Util import carrega_imagem
+from util.Util import carrega_imagem, ESCALAY, ESCALAX
 
 
 class Bloco:
@@ -23,6 +23,7 @@ class Bloco:
         self.imagem = carrega_imagem(str(self.Value) + ".png", "blocos")
         self.imagem = pygame.transform.scale(self.imagem,
                                              (int(self.imagem.get_rect().w / 2), int(self.imagem.get_rect().h / 2)))
+        self.rect = self.imagem.get_rect()
 
     def get_rect(self):
         return self.rect
@@ -49,7 +50,7 @@ class Bloco:
         surface.blit(self.imagem, self.rect)
 
     def definirPosicao(self, posicao):
-        (self.rect.left, self.rect.top) = (posicao[0], posicao[1])
+        (self.rect.left, self.rect.top) = (posicao[0]*ESCALAX, posicao[1]*ESCALAY)
 
     def colisao_point(self, point):
         if self.rect.collidepoint((point[0] - self.posicaoRelativa[0], point[1] - self.posicaoRelativa[1])):

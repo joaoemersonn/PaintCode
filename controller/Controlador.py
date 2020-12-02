@@ -35,7 +35,7 @@ class Controlador:
         self.window = self.janela = Util.WINDOW
         self.window.fill(Cores.BRANCO)
         self.splash = carrega_imagem("splash.png", escala=2)
-        self.gif = GIFImage("loading.gif")
+        #self.gif = GIFImage("loading.gif")
         print("splash")
         self.window.blit(self.splash, ((self.largura/2) - (self.splash.get_width()/2), 150))
         #####
@@ -270,7 +270,7 @@ class Controlador:
                                         if len(c.blocos) > 1:
                                             self.tam += 1
                                     else:
-                                        self.sons.ALERT.play(2)
+                                        self.sons.ALERT.play(1)
                                         self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                         self.tela.jogoPane.exibeAviso = True
                                 x.pressionado = False
@@ -285,7 +285,7 @@ class Controlador:
                                 self.comando.append(bloco)
                                 self.tam += 1
                             else:
-                                self.sons.ALERT.play(2)
+                                self.sons.ALERT.play(1)
                                 self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                 self.tela.jogoPane.exibeAviso = True
                         x.pressionado = False
@@ -363,10 +363,11 @@ class Controlador:
                     x.set_Valor(-1)
             elif x.get_tipo() == "selecionar_cor" and x.get_Valor() < 0:
                 vl = 0
+                tambl=70
                 pos = x.get_rect()
                 for cor in self.fase.coresdisponiveis:
                     rect = pygame.Rect(
-                        (pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
+                        (pos.x + 5 + self.tela.escalarX(tambl+2) * vl, pos.y + self.tela.escalarY(87), self.tela.escalarX(tambl), self.tela.escalarY(tambl)))
                     if rect.collidepoint(posicaomouse):
                         x.set_Valor(cor)
                     vl += 1
@@ -387,10 +388,11 @@ class Controlador:
                     x.Value += 1
             if x.get_tipo() == "selecionar_cor" and x.get_Valor() < 0:
                 vl = 0
+                tambl=70
                 posi = x.get_rect()
                 for cor in self.fase.coresdisponiveis:
                     rect = pygame.Rect(
-                        (posi.x + 5 + 16 * vl, posi.y + 87, 15, 15))
+                        (posi.x + 5 + self.tela.escalarX(tambl + 2) * vl, posi.y + self.tela.escalarY(87), self.tela.escalarX(tambl), self.tela.escalarY(tambl)))
                     if rect.collidepoint(posicaomouse):
                         x.set_Valor(cor)
                     vl += 1
