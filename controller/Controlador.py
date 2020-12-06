@@ -28,7 +28,7 @@ class Controlador:
         pygame.init()
         info = pygame.display.Info()
         self.largura, self.altura = info.current_w, info.current_h
-        print("TELA: largura: ",self.largura," altura: ",self.altura)
+        print("TELA: largura: ", self.largura, " altura: ", self.altura)
         #largura = 1000
         #altura = 768
         #(largura,altura), pygame.FULLSCREEN
@@ -37,7 +37,8 @@ class Controlador:
         self.splash = carrega_imagem("splash.png", escala=2)
         #self.gif = GIFImage("loading.gif")
         print("splash")
-        self.window.blit(self.splash, ((self.largura/2) - (self.splash.get_width()/2), 150))
+        self.window.blit(self.splash, ((self.largura/2) -
+                                       (self.splash.get_width()/2), 150))
         #####
         #self.fps = 120
         self.TICKS_PER_SECOND = 40
@@ -92,26 +93,24 @@ class Controlador:
         while self.rodando:
             loops = 0
             self.tela.desenhar()
+            if self.jogoexecutando():
+                self.desenharaviso()
+                self.tela.jogoPane.desenhar(
+                    self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
             while pygame.time.get_ticks() > self.next_game_tick and loops < self.MAX_FRAMESKIP:
-                if self.jogoexecutando():
-                    self.desenharaviso()
-                    if self.executandoComando:
-                        self.executarcomando()
-                    #Desenha Jogo
-                    self.tela.jogoPane.desenhar(
-                        self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
+                if self.executandoComando:
+                    self.executarcomando()
                 self.tratarEventos()
                 self.verificardesenho()
                 self.next_game_tick += self.SKIP_TICKS
                 loops += 1
-            #Desenha Animação
+            # Desenha Animação
             if self.tela.jogoPane.tempoAnGanhou > 0:
                 self.tela.jogoPane.desenharAnimacaoWin(
-                self.faseanterior, self.jogador, self.comando, self.pincel)
-
+                    self.faseanterior, self.jogador, self.comando, self.pincel)
 
             pygame.display.update()
-            #self.relogio.tick(self.fps)
+            # self.relogio.tick(self.fps)
 
     def jogoexecutando(self):
         if self.tela.telaJogo and not self.tela.desenhaConfirmacao:
@@ -363,7 +362,7 @@ class Controlador:
                     x.set_Valor(-1)
             elif x.get_tipo() == "selecionar_cor" and x.get_Valor() < 0:
                 vl = 0
-                tambl=70
+                tambl = 70
                 pos = x.get_rect()
                 for cor in self.fase.coresdisponiveis:
                     rect = pygame.Rect(
@@ -388,7 +387,7 @@ class Controlador:
                     x.Value += 1
             if x.get_tipo() == "selecionar_cor" and x.get_Valor() < 0:
                 vl = 0
-                tambl=70
+                tambl = 70
                 posi = x.get_rect()
                 for cor in self.fase.coresdisponiveis:
                     rect = pygame.Rect(
