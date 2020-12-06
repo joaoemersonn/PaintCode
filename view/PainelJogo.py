@@ -240,7 +240,7 @@ class PainelJogo(Painel):
     def desenharCaixaExecucao(self, comando, fase):
         pygame.gfxdraw.box(self, self.__boxExecucao, Cores.BRANCO)
         contornar(self, self.__boxExecucao.x, self.__boxExecucao.y,
-                  self.__boxExecucao.w, self.__boxExecucao.h, eY=ESCALAY, eX=ESCALAX)
+                  self.__boxExecucao.w, self.__boxExecucao.h)
         self.__executarButton.desenharBt(self)
         y = 565
         xspace = -60
@@ -405,7 +405,7 @@ class PainelJogo(Painel):
                                              pos.y + escalarY(87), escalarX(tambl), escalarY(tambl)))
                         vl += 1
             xspace -= x[i].get_rect().w
-            if i + 1 < x.__len__() and xspace <= x[i + 1].get_rect().w:
+            if i + 1 < x.__len__() and escalarX(xspace) <= x[i + 1].get_rect().w:
                 ajustey += 100
                 ajustex = 0
                 xspace = 300
