@@ -8,7 +8,7 @@ from model.Jogador import Jogador
 from model.Fase import Fase
 import platform
 SISTEMA = platform.system()
-WINDOW = pygame.display.set_mode((0,0),
+WINDOW = pygame.display.set_mode((0, 0),
                                  flags=pygame.FULLSCREEN)
 GIF = GIFImage("loading.gif")
 CARREGANDO = True
@@ -242,9 +242,9 @@ def carrega_imagem(imagem_nome, subdir="", escala=1):
         image = pygame.image.load(iagempath)
         if escala > 1 or (ESCALAX != 1 and imagem_nome != "confete.png" and imagem_nome != "confete2.png"):
             img1 = image
-            print("o ESCALAX É: ", ESCALAX)
+            #print("o ESCALAX É: ", ESCALAX)
             image = pygame.transform.smoothscale(
-                img1.convert_alpha(), (int((img1.get_rect().w / escala) * ESCALAX), int((img1.get_rect().h / escala) * ESCALAX)))
+                img1.convert_alpha(), (int((img1.get_rect().w / escala) * ESCALAX), int((img1.get_rect().h / escala) * ESCALAY)))
     except pygame.error:
         print("Não foi possivel carregar Imagem:", iagempath)
         raise SystemExit
