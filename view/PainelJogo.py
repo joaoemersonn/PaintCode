@@ -78,6 +78,8 @@ class PainelJogo(Painel):
         self._img3 = carrega_imagem("03.png", "blocos")
         self._img2 = carrega_imagem("02.png", "blocos")
         self._img1 = carrega_imagem("01.png", "blocos")
+        self.lixo = Sprite("lixo.png",1,2)
+        self.lixo.definirPosicao((1150,410))
         self._img1 = pygame.transform.scale(
             self._img1, (int(self._img1.get_rect().w / 2), int(self._img1.get_rect().h / 2)))
         self._img2 = pygame.transform.scale(
@@ -94,6 +96,17 @@ class PainelJogo(Painel):
         self.fontexg = pygame.font.Font(fontearquivo, escalarX(52))
         self.back = carrega_imagem("back.png")
         self.exibeAviso = False
+
+        self.transparent = pygame.Surface((self.__tela.largura, self.__tela.altura), pygame.SRCALPHA)
+        self.transparent.fill((0, 0, 0, 180))
+
+        self.exibindoTutorial = True
+        self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
+        self.botaoDireita = Sprite("BOTAODIREITA.png", 1, 2)
+        self.botaoEsquerda.definirPosicao((60, 350))
+        self.botaoDireita.definirPosicao((1220, 350))
+        self.indexTutorial = 0
+
         self.destaque = False
         self.c3 = carrega_imagem("c3.png")
         self.textoaviso = "", ""  # self.tituloaviso = ""
@@ -101,7 +114,7 @@ class PainelJogo(Painel):
         self.guiDesenhoRect = pygame.rect.Rect(escalar(40, 320, 300, 200))
         self.criando = self.finalizacriacao = False
         self.imgPincel = pygame.transform.rotate(carrega_imagem(
-            "pincel" + str(1) + ".png", escala=2*ESCALAX), 45)
+            "pincel" + str(1) + ".png", escala=2), 45)
         self.confete = Sprite("confete.png", 1, 59)
         self.confete2 = Sprite("confete.png", 1, 59)
         self.confete3 = Sprite("confete2.png", 1, 59)
@@ -135,10 +148,19 @@ class PainelJogo(Painel):
             desenho = fase.desenhoDesafio
             self.__tela.jogoPane.fill(self.__tela.corfundo)
 
-            self.botaoVoltar.desenharBt(self)
+            if fase.tutorial is None or len(fase.tutorial) <= self.indexTutorial:
+                self.exibindoTutorial = False
+                self.indexTutorial = 0
+            else:
+                img = fase.tutorial[self.indexTutorial]
+
+            if not self.exibindoTutorial:
+                self.botaoVoltar.desenharBt(self)
             self.desenharDesenho(desenho, pincel)
             if not self.criando:
-                self.reiniciarbotao.desenharBt(self)
+                if not self.exibindoTutorial:
+                    self.reiniciarbotao.desenharBt(self)
+                    self.lixo.desenharBt(self)
                 self.desenharDesenhoGuia(fase.desenhoResposta)
                 self.desenharCaixaExecucao(comando, fase)
                 self.desenharCaixaBlocos(fase)
@@ -150,6 +172,11 @@ class PainelJogo(Painel):
                 self.desenharPincelWidget()
             if self.exibeAviso:
                 self.aviso(self.textoaviso[0], self.textoaviso[1])
+            if self.exibindoTutorial:
+                self.__tela.jogoPane.blit(self.transparent,(0,0))
+                self.__tela.jogoPane.blit(img, ((self.__tela.largura/2)-(img.get_rect().w/2),(self.__tela.altura/2)-(img.get_rect().h/2)))
+                self.botaoDireita.desenharBt(self.__tela.jogoPane)
+                self.botaoEsquerda.desenharBt(self.__tela.jogoPane)
 
     def desenharAnimacaoWin(self, fase, jogador, comando, pincel, fps=0):
 
@@ -245,7 +272,8 @@ class PainelJogo(Painel):
         pygame.gfxdraw.box(self, self.__boxExecucao, Cores.BRANCO)
         contornar(self, self.__boxExecucao.x, self.__boxExecucao.y,
                   self.__boxExecucao.w, self.__boxExecucao.h)
-        self.__executarButton.desenharBt(self)
+        if not self.exibindoTutorial:
+            self.__executarButton.desenharBt(self)
         y = 565
         xspace = -60
         img1 = self._img1
@@ -373,9 +401,9 @@ class PainelJogo(Painel):
 
     def desenharCaixaBlocos(self, fase):
         pygame.gfxdraw.box(self, escalar(
-            680 + self.__tela.ajuste, 20, 300, 510), Cores.BRANCO)
+            680 + self.__tela.ajuste, 20, 300, 380), Cores.BRANCO)
         contornar(self, 680 + self.__tela.ajuste, 20,
-                  300, 510, eX=ESCALAX, eY=ESCALAY)
+                  300, 380, eX=ESCALAX, eY=ESCALAY)
         x = fase.blocosdisponiveis
         xspace = escalarX(300)
         ajustex = ajustey = 0

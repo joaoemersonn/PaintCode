@@ -205,8 +205,14 @@ class Controlador:
                 sys.exit(1)
             # CLIQUE MOUSE
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao:
+                if self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao and not self.tela.jogoPane.exibindoTutorial:
                     self._VerificarTelaJogo(posicaomaouse)
+                elif self.tela.jogoPane.exibindoTutorial:
+                    if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial>0:
+                        self.tela.jogoPane.indexTutorial -= 1
+                    elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse):
+                        self.tela.jogoPane.indexTutorial += 1
+
             if event.type == pygame.MOUSEBUTTONUP:
                 if self.tela.desenhaConfirmacao:
                     if self.tela.cancelarbotao.colisao_point(posicaomaouse):
@@ -235,6 +241,8 @@ class Controlador:
 
                 elif self.tela.desenhaAlerta and self.tela.ok.colisao_point(posicaomaouse):
                     self.tela.desenhaAlerta = not self.tela.desenhaAlerta
+                    if self.fase.tentativas is not None:
+                        self.tela.jogoPane.exibindoTutorial = True
                     if self.jogandoFasePersonalizada:
                         self.jogandoFasePersonalizada = False
                         self.tela.telaFases = True
@@ -481,6 +489,8 @@ class Controlador:
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()
                     self.fase = self.fases[self.jogador.getNivel()]
+                    if self.fase.tentativas is not None:
+                        self.tela.jogoPane.exibindoTutorial = True
                     self.tela.telaJogo = True
 
     def atualizarListaBlMover(self, blocos, fase=False):

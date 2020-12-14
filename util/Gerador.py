@@ -1,6 +1,7 @@
 from model.Bloco import Bloco
 from model.Desenho import Desenho
 from model.Fase import Fase
+from util.Util import carrega_imagem
 
 
 def gerarFases(listaFases):
@@ -14,6 +15,9 @@ def gerarFases(listaFases):
     fase.blocosdisponiveis.append(Bloco("girar_direita"))
     fase.blocosdisponiveis.append(Bloco("pintar"))
     fase.desenhoDesafio = Desenho(4, 5, 1)
+    fase.tutorial = list()
+    fase.tutorial.append(carrega_imagem("t1.jpg"))
+    fase.tutorial.append(carrega_imagem("t2.png"))
     fase.desenhoDesafio.tiles[0][2] = 0
     fase.desenhoDesafio.tiles[2][3] = -1
     fase.desenhoResposta = Desenho(4, 5, 1)
@@ -31,6 +35,9 @@ def gerarFases(listaFases):
 
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.desenhoResposta = Desenho(4, 5, 1)
+
+    fase.tutorial = list()
+    fase.tutorial.append(carrega_imagem("t1.jpg"))
 
     fase.desenhoDesafio.tiles[2][2] = 0
 

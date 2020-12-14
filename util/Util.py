@@ -63,6 +63,7 @@ class Cores:
     VERMELHO = pygame.Color("#DD1C1A")
     ROXO = pygame.Color(255, 117, 249, 100)
     ROXOESCURO = pygame.Color(207, 101, 199, 100)
+    TRANSPARENT = pygame.Color(0, 0, 0, a=180)
 
 
 def get_path_projeto():
