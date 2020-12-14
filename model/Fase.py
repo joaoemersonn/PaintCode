@@ -5,6 +5,7 @@ class Fase:
         self.coresdisponiveis = list()
         self.desenhoDesafio = None
         self.desenhoResposta = None
+        self.tutorial = None
         self.nivel = 0
         self.tentativas = 0
 
