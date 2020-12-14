@@ -78,6 +78,10 @@ class PainelJogo(Painel):
         self._img3 = carrega_imagem("03.png", "blocos")
         self._img2 = carrega_imagem("02.png", "blocos")
         self._img1 = carrega_imagem("01.png", "blocos")
+        self._img1 = pygame.transform.scale(
+            self._img1, (int(self._img1.get_rect().w / 2), int(self._img1.get_rect().h / 2)))
+        self._img2 = pygame.transform.scale(
+            self._img2, (int(self._img2.get_rect().w / 2), int(self._img2.get_rect().h / 2)))
         self.__seta2.sheet = pygame.transform.rotate(self.__seta2.sheet, 180)
         self.__executarButton.definirPosicao((980, 550))
         self.botaoVoltar.definirPosicao((1080, 570))
@@ -246,10 +250,6 @@ class PainelJogo(Painel):
         xspace = -60
         img1 = self._img1
         img2 = self._img2
-        img1 = pygame.transform.scale(
-            img1, (int(img1.get_rect().w / 2), int(img1.get_rect().h / 2)))
-        img2 = pygame.transform.scale(
-            img2, (int(img2.get_rect().w / 2), int(img2.get_rect().h / 2)))
         for x in comando:
             if x.get_tipo() == "repetir":
                 numRepet = self.fontePequena.render(
