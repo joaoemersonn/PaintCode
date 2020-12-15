@@ -47,8 +47,8 @@ def contornar(superfice, x, y, largura, altura, tam=2, cor=Cores.CORSECUNDARIA, 
 
 
 def contornarRect(superfice, rect, cor=Cores.CORSECUNDARIA):
-    #r = pygame.Rect(escalar(rect.x,rect.y,rect.w,rect.h))
-    pygame.gfxdraw.rectangle(superfice, escalar(
+    # r = pygame.Rect(escalar(rect.x,rect.y,rect.w,rect.h))
+    pygame.gfxdraw.rectangle(superfice, (
         rect[0], rect[1], rect[2], rect[3]), cor)
 
 
@@ -66,9 +66,10 @@ class PainelJogo(Painel):
         self.botaoSalvar = Sprite("BOTAOPROX.PNG", 1, 2)
         self.maoCursor = Sprite("cursor.png", 1, 2)
         self.__janela = carrega_imagem("janela.png")
+        self.__edit = carrega_imagem("edit.png")
         self.__janela2 = pygame.transform.scale(
             self.__janela, escalarXY(30, 30))
-        #self.__janela2 = pygame.transform.scale(self.__janela, escalarXY(escala, escala))
+        # self.__janela2 = pygame.transform.scale(self.__janela, escalarXY(escala, escala))
         self.__tinta = carrega_imagem("tinta.png", "", 2)
         self.__corTelhado = Cores.TELHADO
         self.__executarButton = Sprite("executar.png", 1, 2)
@@ -78,8 +79,8 @@ class PainelJogo(Painel):
         self._img3 = carrega_imagem("03.png", "blocos")
         self._img2 = carrega_imagem("02.png", "blocos")
         self._img1 = carrega_imagem("01.png", "blocos")
-        self.lixo = Sprite("lixo.png",1,2)
-        self.lixo.definirPosicao((1150,410))
+        self.lixo = Sprite("lixo.png", 1, 2)
+        self.lixo.definirPosicao((1150, 410))
         self._img1 = pygame.transform.scale(
             self._img1, (int(self._img1.get_rect().w / 2), int(self._img1.get_rect().h / 2)))
         self._img2 = pygame.transform.scale(
@@ -97,8 +98,8 @@ class PainelJogo(Painel):
         self.back = carrega_imagem("back.png")
         self.exibeAviso = False
 
-        self.transparent = pygame.Surface((self.__tela.largura, self.__tela.altura), pygame.SRCALPHA)
-        self.transparent.fill((0, 0, 0, 180))
+        self.transparent = pygame.Surface(
+            (self.__tela.largura, self.__tela.altura), pygame.SRCALPHA)
 
         self.exibindoTutorial = True
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
@@ -173,8 +174,10 @@ class PainelJogo(Painel):
             if self.exibeAviso:
                 self.aviso(self.textoaviso[0], self.textoaviso[1])
             if self.exibindoTutorial:
-                self.__tela.jogoPane.blit(self.transparent,(0,0))
-                self.__tela.jogoPane.blit(img, ((self.__tela.largura/2)-(img.get_rect().w/2),(self.__tela.altura/2)-(img.get_rect().h/2)))
+                self.transparent.fill((0, 0, 0, 180))
+                self.__tela.jogoPane.blit(self.transparent, (0, 0))
+                self.__tela.jogoPane.blit(img, ((
+                    self.__tela.largura/2)-(img.get_rect().w/2), (self.__tela.altura/2)-(img.get_rect().h/2)))
                 self.botaoDireita.desenharBt(self.__tela.jogoPane)
                 self.botaoEsquerda.desenharBt(self.__tela.jogoPane)
 
@@ -393,11 +396,18 @@ class PainelJogo(Painel):
                 repetajuste = 0
                 if x.get_tipo() == "repetir":
                     repetajuste = -30
-                print(x.get_rect().top, x.get_rect().left + x.get_rect().height)
-                pygame.draw.line(self, Cores.VERMELHO, (x.get_rect().x, x.get_rect().y), (
-                    x.get_rect().x + x.get_rect().width, x.get_rect().y + x.get_rect().height + repetajuste), 5)
-                pygame.draw.line(self, Cores.VERMELHO, (x.get_rect().x + x.get_rect().width, x.get_rect().y),
-                                 (x.get_rect().x, x.get_rect().y + x.get_rect().height + repetajuste), 5)
+                #print(x.get_rect().top, x.get_rect().left + x.get_rect().height)
+                s = pygame.Surface(
+                    (x.get_rect().width, x.get_rect().height), pygame.SRCALPHA)
+                s.fill((0, 0, 0, 100))
+                s.blit(self.__edit, (x.get_rect().width/2 - self.__edit.get_rect().w/2,
+                                     x.get_rect().height/2 - self.__edit.get_rect().h/2))
+                self.blit(s, (x.get_rect().x, x.get_rect().y))
+                contornar(self, x.get_rect().x,x.get_rect().y,x.get_rect().w,x.get_rect().h,tam=3,cor=Cores.CORPRINCIPAL)
+                # pygame.draw.line(self, Cores.VERMELHO, (x.get_rect().x, x.get_rect().y), (
+                #    x.get_rect().x + x.get_rect().width, x.get_rect().y + x.get_rect().height + repetajuste), 5)
+                # pygame.draw.line(self, Cores.VERMELHO, (x.get_rect().x + x.get_rect().width, x.get_rect().y),
+                #                (x.get_rect().x, x.get_rect().y + x.get_rect().height + repetajuste), 5)
 
     def desenharCaixaBlocos(self, fase):
         pygame.gfxdraw.box(self, escalar(

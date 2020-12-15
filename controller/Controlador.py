@@ -208,7 +208,7 @@ class Controlador:
                 if self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao and not self.tela.jogoPane.exibindoTutorial:
                     self._VerificarTelaJogo(posicaomaouse)
                 elif self.tela.jogoPane.exibindoTutorial:
-                    if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial>0:
+                    if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial > 0:
                         self.tela.jogoPane.indexTutorial -= 1
                     elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse):
                         self.tela.jogoPane.indexTutorial += 1
@@ -440,6 +440,8 @@ class Controlador:
         elif self.tela.botaoProximo.colisao_point(posicaomouse) and not self.botaoclicado:
             self.tela.jogoPane.modoCriar()
             self.fase = Fase()
+            if self.fase.tutorial is not None:
+                self.tela.jogoPane.exibindoTutorial = True
             self.fase.desenhoDesafio = Desenho(
                 self.tela.linhas, self.tela.colunas, 0)
             self.fase.tentativas = self.tela.execucoes
@@ -489,7 +491,7 @@ class Controlador:
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()
                     self.fase = self.fases[self.jogador.getNivel()]
-                    if self.fase.tentativas is not None:
+                    if self.fase.tutorial is not None:
                         self.tela.jogoPane.exibindoTutorial = True
                     self.tela.telaJogo = True
 
