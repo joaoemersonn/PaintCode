@@ -7,8 +7,8 @@ class Sprite:
     def __init__(self, nomearquivo, colunas, linhas, escala=None, rotacao=None):
         self.sheet = carrega_imagem(nomearquivo).convert_alpha()
         if escala is not None:
-            self.sheet = pygame.transform.scale(self.sheet, (
-            int(self.sheet.get_rect().w / escala), int(self.sheet.get_rect().h / escala)))
+            self.sheet = pygame.transform.smoothscale(self.sheet, (
+                int(self.sheet.get_rect().w / escala), int(self.sheet.get_rect().h / escala)))
         if rotacao is not None:
             self.sheet = pygame.transform.rotate(self.sheet, rotacao)
         self.colunas = colunas
@@ -22,7 +22,8 @@ class Sprite:
         self.rect.height = h = self.cellHeight = self.rect.height / linhas
         hw, hh = self.cellCenter = (w / 2, h / 2)
 
-        self.cells = list([(index % colunas * w, index / colunas * h, w, h) for index in range(self.totalCellCount)])
+        self.cells = list([(index % colunas * w, index / colunas * h, w, h)
+                           for index in range(self.totalCellCount)])
         self.handle = list([
             (0, 0), (-hw, 0), (-w, 0),
             (0, -hh), (-hw, -hh), (-w, -hh),
@@ -68,7 +69,8 @@ class Sprite:
         self.rect.move_ip((posicao[0], posicao[1]))
 
     def definirPosicao(self, posicao):
-        (self.rect.left, self.rect.top) = (int(posicao[0]*ESCALAX), posicao[1]*ESCALAY)
+        (self.rect.left, self.rect.top) = (
+            int(posicao[0]*ESCALAX), posicao[1]*ESCALAY)
 
     def colisao_point(self, point):
         if self.rect.collidepoint((point[0] - self.posicaoRelativa[0], point[1] - self.posicaoRelativa[1])):

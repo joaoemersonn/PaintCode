@@ -26,7 +26,7 @@ def animarLoad():
     global STATUSCARREGAMENTO
     if CARREGANDO:
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
-                         (int(338*ESCALAX), int(645*ESCALAY), int(700*ESCALAX), int(40*ESCALAY)))
+                         (int(338*ESCALAX), int(645*ESCALAY), int(770*ESCALAX), int(40*ESCALAY)))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
                          (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*10*STATUSCARREGAMENTO), int(30*ESCALAY)))
         pygame.display.update()
@@ -62,6 +62,8 @@ class Cores:
     CORELEMENTO = pygame.Color(2, 60, 64, 100)
     VERMELHO = pygame.Color("#DD1C1A")
     ROXO = pygame.Color(255, 117, 249, 100)
+    LARANJA = pygame.Color(255, 250, 200)
+    LARANJAESCURO = pygame.Color(255, 176, 32)
     ROXOESCURO = pygame.Color(207, 101, 199, 100)
     TRANSPARENT = pygame.Color(0, 0, 0, a=180)
 

@@ -74,18 +74,22 @@ class PainelJogo(Painel):
         self.__corTelhado = Cores.TELHADO
         self.__executarButton = Sprite("executar.png", 1, 2)
         self.reiniciarbotao = Sprite("reiniciar.png", 1, 2)
-        self.__seta = Sprite("seta.png", 1, 2)
-        self.__seta2 = Sprite("seta.png", 1, 2)
+        self.seta = Sprite("seta.png", 1, 2)
+        self.seta2 = Sprite("seta.png", 1, 2)
         self._img3 = carrega_imagem("03.png", "blocos")
         self._img2 = carrega_imagem("02.png", "blocos")
         self._img1 = carrega_imagem("01.png", "blocos")
         self.lixo = Sprite("lixo.png", 1, 2)
-        self.lixo.definirPosicao((1150, 410))
+        self.moverEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2, 2)
+        self.moverDireita = Sprite("BOTAODIREITA.png", 1, 2, 2)
+        #self.lixo.definirPosicao((1150, 410))
         self._img1 = pygame.transform.scale(
             self._img1, (int(self._img1.get_rect().w / 2), int(self._img1.get_rect().h / 2)))
         self._img2 = pygame.transform.scale(
             self._img2, (int(self._img2.get_rect().w / 2), int(self._img2.get_rect().h / 2)))
-        self.__seta2.sheet = pygame.transform.rotate(self.__seta2.sheet, 180)
+        # pygame.transform.rotate(self.__seta2.sheet, 180)
+        self.seta2.sheet = pygame.transform.flip(
+            self.seta2.sheet, True, False)
         self.__executarButton.definirPosicao((980, 550))
         self.botaoVoltar.definirPosicao((1080, 570))
         self.botaoSalvar.definirPosicao((810, 570))
@@ -161,7 +165,6 @@ class PainelJogo(Painel):
             if not self.criando:
                 if not self.exibindoTutorial:
                     self.reiniciarbotao.desenharBt(self)
-                    self.lixo.desenharBt(self)
                 self.desenharDesenhoGuia(fase.desenhoResposta)
                 self.desenharCaixaExecucao(comando, fase)
                 self.desenharCaixaBlocos(fase)
@@ -300,59 +303,11 @@ class PainelJogo(Painel):
                         self.blit(aux, (xspace + 140, escalarY(y - 14)))
                         bl.definirPosicao(((xspace + 115)/ESCALAX, y))
                         bl.desenhar(self)
-                        if bl.get_tipo() == "selecionar_cor":
-                            pos = bl.get_rect()
-                            pygame.draw.rect(self, Util.get_cor(
-                                bl.get_Valor()), escalar(pos.x + 28, pos.y + 23, 25, 25))
-                            contornarRect(
-                                self, (pos.x + 28, pos.y + 23, 25, 25))
-                            if bl.get_Valor() < 0:
-                                pygame.draw.rect(self, Cores.ROXO,
-                                                 (pos.x, pos.y + escalarY(75), escalarX(300), escalarY(100)))
-                                contornar(self, pos.x, pos.y + escalarY(74), escalarX(299), escalarY(99), 4,
-                                          Cores.ROXOESCURO)
-                                vl = 0
-                                tambl = 70
-                                for cor in fase.coresdisponiveis:
-                                    pygame.draw.rect(self, Util.get_cor(cor), (
-                                        pos.x + 5 + escalarX(tambl + 2) * vl, pos.y + 87, escalarX(tambl), escalarY(tambl)))
-                                    contornarRect(self, (
-                                        pos.x + 5 + escalarX(tambl + 2) * vl, pos.y + 87, escalarX(tambl), escalarY(tambl)))
-                                    vl += 1
-                            # if bl.get_Valor() < 0:
-                            #     pygame.draw.rect(self, Cores.BRANCO, escalar(pos.x, pos.y + 75, 80, 40))
-                            #     contornarRect(self, (pos.x, pos.y + 75, 80, 40))
-                            #     vl = 0
-                            #     for cor in fase.coresdisponiveis:
-                            #         pygame.draw.rect(self, Util.get_cor(cor),
-                            #                          escalar(pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
-                            #         contornarRect(self, (pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
-                            #         vl += 1
                         xspace += bl.get_rect().w - (12*ESCALAX)
                     x.set_rect(pygame.rect.Rect(x.get_rect().x, x.get_rect().y, (65 * x.blocos.__len__()) + 105,
                                                 img2.get_rect().h))
                     self.blit(img2, (xspace + 60, escalarY(y - 15)))
-
                     self.blit(numRepet, escalarXY(xspace + 147, (y + 70)))
-
-                    self.__seta.definirPosicao(
-                        ((xspace + 120)/ESCALAX, x.get_rect().y + x.get_rect().h - 25))
-                    x.seta1 = pygame.rect.Rect((xspace + 120)/ESCALAX, x.get_rect().y + x.get_rect().h - 25, self.__seta.rect.w,
-                                               self.__seta.rect.h)
-                    self.__seta2.definirPosicao(((xspace + 162)/ESCALAX,
-                                                 x.get_rect().y + x.get_rect().h - 25))
-                    x.seta2 = pygame.rect.Rect((xspace + 162)/ESCALAX,
-                                               x.get_rect().y + x.get_rect().h - 25, self.__seta2.rect.w,
-                                               self.__seta2.rect.h)
-                    if self.__seta.colisao_point(pygame.mouse.get_pos()):
-                        self.__seta.desenhar(self, 1)
-                    else:
-                        self.__seta.desenhar(self, 0)
-
-                    if self.__seta2.colisao_point(pygame.mouse.get_pos()):
-                        self.__seta2.desenhar(self, 0)
-                    else:
-                        self.__seta2.desenhar(self, 1)
                 else:
                     self.blit(img2, escalarXY(xspace + 123, y - 15))
                     self.blit(numRepet, escalarXY(xspace + 210, y + 70))
@@ -360,54 +315,76 @@ class PainelJogo(Painel):
                 xspace += 100*ESCALAX
             else:
                 x.definirPosicao(((xspace + 80)/ESCALAX, y))
-                print("Bloco/largura: ", x.get_tipo(), x.get_rect().w)
+                ##print("Bloco/largura: ", x.get_tipo(), x.get_rect().w)
                 xspace += x.get_rect().w - (ESCALAX*15)
                 x.desenhar(self)
-                if x.get_tipo() == "selecionar_cor":
-                    pos = x.get_rect()
-                    pygame.draw.rect(self, Util.get_cor(x.get_Valor(
-                    )), (pos.x + escalarX(28), pos.y + escalarY(23), escalarX(25), escalarY(25)))
-                    contornarRect(
-                        self, (pos.x + escalarX(28), pos.y + escalarY(23), escalarX(25), escalarY(25)))
-                    if x.get_Valor() < 0:
-                        pygame.draw.rect(
-                            self, Cores.ROXO, (pos.x, pos.y + escalarY(75), escalarX(300), escalarY(100)))
-                        contornar(self, pos.x, pos.y + escalarY(74),
-                                  escalarX(299), escalarY(99), 4, Cores.ROXOESCURO)
-                        vl = 0
-                        tambl = 70
-                        for cor in fase.coresdisponiveis:
-                            pygame.draw.rect(self, Util.get_cor(cor), (
-                                pos.x + 5 + escalarX(tambl + 2) * vl, pos.y + escalarY(87), escalarX(tambl), escalarY(tambl)))
-                            contornarRect(self, (
-                                pos.x + 5 + escalarX(tambl + 2) * vl, pos.y + escalarY(87), escalarX(tambl), escalarY(tambl)))
-                            vl += 1
-                    # if x.get_Valor() < 0:
-                    #     pygame.draw.rect(self, Cores.BRANCO, escalar(pos.x, pos.y + 75, 80, 40))
-                    #     contornarRect(self, (pos.x, pos.y + 75, 80, 40))
-                    #     vl = 0
-                    #     for cor in fase.coresdisponiveis:
-                    #         pygame.draw.rect(self, Util.get_cor(cor), escalar(pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
-                    #         contornarRect(self, (pos.x + 5 + 16 * vl, pos.y + 87, 15, 15))
-                    #         vl += 1
-            if x.get_tipo() != "inicio" and x.colisao_point(pygame.mouse.get_pos()) and not pygame.mouse.get_pressed()[
-                    0] and not self.__seta2.colisao_point(pygame.mouse.get_pos()) and not self.__seta.colisao_point(
-                    pygame.mouse.get_pos()):
-                repetajuste = 0
+
+            if x.selecionado:
+                pos = x.get_rect()
+                tamx = 200
+                tamy = 70
+                #x.get_rect().width/2 - tamx/2
+                pygame.draw.rect(
+                    self, Cores.BRANCO, (pos.x, pos.y - escalarY(75), escalarX(tamx), escalarY(tamy)))
+                contornar(self, pos.x, pos.y - escalarY(75),
+                          escalarX(tamx - 1), escalarY(tamy - 1), 4, Cores.CORPRINCIPAL)
+
+                self.lixo.definirPosicao(
+                    (pos.x + (80), pos.y - (60)))
+                self.lixo.desenharBt(self)
+
+                self.moverEsquerda.definirPosicao(
+                    (pos.x + (10), pos.y - (60)))
+                self.moverEsquerda.desenharBt(self)
+
+                self.moverDireita.definirPosicao(
+                    (pos.x + (150), pos.y - (60)))
+                self.moverDireita.desenharBt(self)
+
                 if x.get_tipo() == "repetir":
-                    repetajuste = -30
-                #print(x.get_rect().top, x.get_rect().left + x.get_rect().height)
+                    pygame.draw.rect(
+                        self, Cores.LARANJA, (pos.x, pos.y - escalarY(175), escalarX(300), escalarY(100)))
+                    contornar(self, pos.x, pos.y - escalarY(175),
+                              escalarX(299), escalarY(99), 4, Cores.LARANJAESCURO)
+
+                    numRepet = self.fontexg.render(
+                        str(x.get_Valor()), True, Cores.CORSECUNDARIA)
+                    self.blit(numRepet, (pos.x + escalarX(140),
+                                         pos.y - escalarY(145)))
+                    self.seta.definirPosicao(
+                        (pos.x + (20), pos.y - (160)))
+                    self.seta.desenharBt(self)
+
+                    self.seta2.definirPosicao(
+                        (pos.x + (210), pos.y - (160)))
+                    self.seta2.desenharBt(self)
+
+                elif x.get_tipo() == "selecionar_cor":
+                    pygame.draw.rect(
+                        self, Cores.ROXO, (pos.x, pos.y - escalarY(175), escalarX(300), escalarY(100)))
+                    contornar(self, pos.x, pos.y - escalarY(175),
+                              escalarX(299), escalarY(99), 4, Cores.ROXOESCURO)
+                    vl = 0
+                    tambl = 70
+                    for cor in fase.coresdisponiveis:
+                        pygame.draw.rect(self, Util.get_cor(cor), (
+                            pos.x + 5 + escalarX(tambl + 2) * vl, pos.y - escalarY(157), escalarX(tambl), escalarY(tambl)))
+                        contornarRect(self, (
+                            pos.x + 5 + escalarX(tambl + 2) * vl, pos.y - escalarY(157), escalarX(tambl), escalarY(tambl)))
+                        vl += 1
+
+            if x.selecionado and x.get_tipo() != "inicio" or (x.get_tipo() != "inicio" and x.colisao_point(pygame.mouse.get_pos()) and not pygame.mouse.get_pressed()[
+                    0] and not self.seta2.colisao_point(pygame.mouse.get_pos()) and not self.seta.colisao_point(
+                    pygame.mouse.get_pos())):
+                # MUITO USO DE MEMORIA VER DEPOIS
                 s = pygame.Surface(
                     (x.get_rect().width, x.get_rect().height), pygame.SRCALPHA)
                 s.fill((0, 0, 0, 100))
                 s.blit(self.__edit, (x.get_rect().width/2 - self.__edit.get_rect().w/2,
                                      x.get_rect().height/2 - self.__edit.get_rect().h/2))
                 self.blit(s, (x.get_rect().x, x.get_rect().y))
-                contornar(self, x.get_rect().x,x.get_rect().y,x.get_rect().w,x.get_rect().h,tam=3,cor=Cores.CORPRINCIPAL)
-                # pygame.draw.line(self, Cores.VERMELHO, (x.get_rect().x, x.get_rect().y), (
-                #    x.get_rect().x + x.get_rect().width, x.get_rect().y + x.get_rect().height + repetajuste), 5)
-                # pygame.draw.line(self, Cores.VERMELHO, (x.get_rect().x + x.get_rect().width, x.get_rect().y),
-                #                (x.get_rect().x, x.get_rect().y + x.get_rect().height + repetajuste), 5)
+                contornar(self, x.get_rect().x, x.get_rect().y, x.get_rect(
+                ).w, x.get_rect().h, tam=3, cor=Cores.CORPRINCIPAL)
 
     def desenharCaixaBlocos(self, fase):
         pygame.gfxdraw.box(self, escalar(
@@ -425,10 +402,6 @@ class PainelJogo(Painel):
             x[i].desenhar(self)
             if x[i].get_tipo() == "selecionar_cor":
                 pos = x[i].get_rect()
-                pygame.draw.rect(self, Util.get_cor(x[i].get_Valor(
-                )), (pos.x + escalarX(28), pos.y + escalarY(23), escalarX(25), escalarY(25)))
-                contornarRect(self, (pos.x + escalarX(28), pos.y +
-                                     escalarY(23), escalarX(25), escalarY(25)))
                 if x[i].get_Valor() < 0:
                     pygame.draw.rect(
                         self, Cores.ROXO, (pos.x, pos.y + escalarY(75), escalarX(300), escalarY(100)))
@@ -541,7 +514,7 @@ class PainelJogo(Painel):
         return self.__boxExecucao
 
     def get_seta(self):
-        return self.__seta
+        return self.seta
 
     def get_seta2(self):
-        return self.__seta2
+        return self.seta2

@@ -17,6 +17,7 @@ from util.Util import gravar_saves, gravar_fase, ler_fases, ReproduzirSons, cria
     ESCALAX
 from util.Util import ler_saves
 from view.Tela import Tela
+from view.PainelJogo import escalarX, escalarY
 
 TOCAREMLOOP = -1
 
@@ -29,18 +30,18 @@ class Controlador:
         info = pygame.display.Info()
         self.largura, self.altura = info.current_w, info.current_h
         print("TELA: largura: ", self.largura, " altura: ", self.altura)
-        #largura = 1000
-        #altura = 768
-        #(largura,altura), pygame.FULLSCREEN
+        # largura = 1000
+        # altura = 768
+        # (largura,altura), pygame.FULLSCREEN
         self.window = self.janela = Util.WINDOW
         self.window.fill(Cores.BRANCO)
         self.splash = carrega_imagem("splash.png", escala=2)
-        #self.gif = GIFImage("loading.gif")
+        # self.gif = GIFImage("loading.gif")
         print("splash")
         self.window.blit(self.splash, ((self.largura/2) -
                                        (self.splash.get_width()/2), 150))
         #####
-        #self.fps = 120
+        # self.fps = 120
         self.TICKS_PER_SECOND = 40
         self.SKIP_TICKS = 1000 / self.TICKS_PER_SECOND
         self.MAX_FRAMESKIP = 5
@@ -69,7 +70,7 @@ class Controlador:
         self.verificandodesenho = False
         self.exibindoperda = False
         ###
-        #self.gif.executar(self.window, 950, 350)
+        # self.gif.executar(self.window, 950, 350)
         self.inicializar()
         # self.gif.pause()
 
@@ -381,44 +382,53 @@ class Controlador:
             elif x.colisao_point(posicaomouse):
                 self.sons.PEGAR.play()
                 x.pressionado = True
-
+        i = 0
         for x in self.comando:
-            remove = True
-            if x.get_tipo() == "repetir" and x.blocos is not None:
-                seta1 = x.seta1  # self.tela.jogoPane.get_seta()
-                seta2 = x.seta2  # self.tela.jogoPane.get_seta2()
-                if seta1.collidepoint(posicaomouse) or seta2.collidepoint(posicaomouse):
-                    remove = False
-                if seta1.collidepoint(posicaomouse) and x.Value > 2:
-                    x.Value -= 1
-                elif seta2.collidepoint(posicaomouse) and x.Value < 9:
-                    x.Value += 1
-            if x.get_tipo() == "selecionar_cor" and x.get_Valor() < 0:
-                vl = 0
-                tambl = 70
-                posi = x.get_rect()
-                for cor in self.fase.coresdisponiveis:
-                    rect = pygame.Rect(
-                        (posi.x + 5 + self.tela.escalarX(tambl + 2) * vl, posi.y + self.tela.escalarY(87), self.tela.escalarX(tambl), self.tela.escalarY(tambl)))
-                    if rect.collidepoint(posicaomouse):
-                        x.set_Valor(cor)
-                    vl += 1
-            elif x.colisao_point(posicaomouse) and x.get_tipo() != "inicio":
-                pos = pygame.Rect(
-                    (x.get_rect().x + 11, x.get_rect().y + 58, x.get_rect().w - 30, x.get_rect().h - 58))
-                if x.get_tipo() == "selecionar_cor" and pos.collidepoint(posicaomouse):
-                    if x.get_Valor() < 0:
-                        x.set_Valor(0)
-                    else:
-                        x.set_Valor(-1)
-
-                elif remove:
+            if x.selecionado:
+                if self.tela.jogoPane.lixo.colisao_point(posicaomouse):
                     self.sons.DELETE.play()
                     if x.get_tipo() == "repetir" and x.blocos is not None:
                         for sb in x.blocos:
                             self.tam -= 1
                     self.comando.remove(x)
                     self.tam -= 1
+                    break
+                if self.tela.jogoPane.moverEsquerda.colisao_point(posicaomouse) and i > 1:
+                    aux = self.comando[i - 1]
+                    self.comando[i - 1] = x
+                    self.comando[i] = aux
+                    break
+                if self.tela.jogoPane.moverDireita.colisao_point(posicaomouse) and (i + 1) < len(self.comando):
+                    aux = self.comando[i + 1]
+                    self.comando[i + 1] = x
+                    self.comando[i] = aux
+                    break
+                if x.get_tipo() == "repetir":
+                    if self.tela.jogoPane.seta.colisao_point(posicaomouse) and x.Value > 2:
+                        x.Value -= 1
+                    elif self.tela.jogoPane.seta2.colisao_point(posicaomouse) and x.Value < 9:
+                        x.Value += 1
+                if x.get_tipo() == "selecionar_cor":
+                    vl = 0
+                    tambl = 70
+                    posi = x.get_rect()
+                    for cor in self.fase.coresdisponiveis:
+                        rect = pygame.Rect(
+                            (
+                                posi.x + 5 + escalarX(tambl + 2) * vl, posi.y - escalarY(157), escalarX(tambl), escalarY(tambl)))
+                        if rect.collidepoint(posicaomouse):
+                            x.set_Valor(cor)
+                        vl += 1
+
+            if x.get_rect().collidepoint(posicaomouse) and x.get_tipo() != "inicio":
+                x.selecionado = not x.selecionado
+            elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(200), escalarY(70)).collidepoint(posicaomouse):
+                pass
+            elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
+                pass
+            else:
+                x.selecionado = False
+            i += 1
 
     def _VerificarTelaCriar(self, posicaomouse):
         if self.tela.btCimaEx.colisao_point(posicaomouse) and self.tela.execucoes < 9:
