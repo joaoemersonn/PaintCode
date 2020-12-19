@@ -330,15 +330,15 @@ class PainelJogo(Painel):
                           escalarX(tamx - 1), escalarY(tamy - 1), 4, Cores.CORPRINCIPAL)
 
                 self.lixo.definirPosicao(
-                    (pos.x + (80), pos.y - (60)))
+                    (pos.x + escalarX(80), pos.y - escalarY(60)), False)
                 self.lixo.desenharBt(self)
 
                 self.moverEsquerda.definirPosicao(
-                    (pos.x + (10), pos.y - (60)))
+                    (pos.x + escalarX(10), pos.y - escalarY(60)), False)
                 self.moverEsquerda.desenharBt(self)
 
                 self.moverDireita.definirPosicao(
-                    (pos.x + (150), pos.y - (60)))
+                    (pos.x + escalarX(150), pos.y - escalarY(60)), False)
                 self.moverDireita.desenharBt(self)
 
                 if x.get_tipo() == "repetir":
@@ -352,11 +352,11 @@ class PainelJogo(Painel):
                     self.blit(numRepet, (pos.x + escalarX(140),
                                          pos.y - escalarY(145)))
                     self.seta.definirPosicao(
-                        (pos.x + (20), pos.y - (160)))
+                        (pos.x + escalarX(20), pos.y - escalarY(160)), False)
                     self.seta.desenharBt(self)
 
                     self.seta2.definirPosicao(
-                        (pos.x + (210), pos.y - (160)))
+                        (pos.x + escalarX(210), pos.y - escalarY(160)), False)
                     self.seta2.desenharBt(self)
 
                 elif x.get_tipo() == "selecionar_cor":

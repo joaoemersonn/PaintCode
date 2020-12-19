@@ -68,9 +68,12 @@ class Sprite:
     def mover(self, posicao):
         self.rect.move_ip((posicao[0], posicao[1]))
 
-    def definirPosicao(self, posicao):
-        (self.rect.left, self.rect.top) = (
-            int(posicao[0]*ESCALAX), posicao[1]*ESCALAY)
+    def definirPosicao(self, posicao, escalar=True):
+        if escalar:
+            (self.rect.left, self.rect.top) = (
+                int(posicao[0] * ESCALAX), posicao[1] * ESCALAY)
+        else:
+            (self.rect.left, self.rect.top) = (posicao[0], posicao[1])
 
     def colisao_point(self, point):
         if self.rect.collidepoint((point[0] - self.posicaoRelativa[0], point[1] - self.posicaoRelativa[1])):

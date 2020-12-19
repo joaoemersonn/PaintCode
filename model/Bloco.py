@@ -3,7 +3,7 @@ import pygame
 from view.Painel import Painel
 from util.Util import carrega_imagem, ESCALAY, ESCALAX
 from util import Util
-from view.PainelJogo import contornarRect, escalar
+from view.PainelJogo import contornarRect, escalar, escalarX, escalarY
 
 
 class Bloco:
@@ -54,8 +54,9 @@ class Bloco:
         if self.__tipo == "selecionar_cor":
             pos = self.get_rect()
             pygame.draw.rect(surface, Util.get_cor(self.get_Valor()),
-                             escalar(pos.x + 28, pos.y + 23, 25, 25))
-            contornarRect(surface, (pos.x + 28, pos.y + 23, 25, 25))
+                             (pos.x + escalarX(28), pos.y + escalarY(23), escalarX(25), escalarY(25)))
+            contornarRect(surface, (pos.x + escalarX(28), pos.y +
+                                    escalarY(23), escalarX(25), escalarY(25)))
 
     def definirPosicao(self, posicao):
         (self.rect.left, self.rect.top) = (
