@@ -98,11 +98,11 @@ class Controlador:
                 self.desenharaviso()
                 self.tela.jogoPane.desenhar(
                     self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
+                self.verificardesenho()
             while pygame.time.get_ticks() > self.next_game_tick and loops < self.MAX_FRAMESKIP:
                 if self.executandoComando:
                     self.executarcomando()
                 self.tratarEventos()
-                self.verificardesenho()
                 self.next_game_tick += self.SKIP_TICKS
                 loops += 1
             # Desenha Animação
