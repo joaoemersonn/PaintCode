@@ -204,6 +204,8 @@ class Controlador:
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.rodando = False
                 sys.exit(1)
+            if event.type == pygame.MOUSEMOTION and self.tela.telaJogo and self.tela.jogoPane.criando and pygame.mouse.get_pressed()[0]:
+                self.colisaoDesenho(self.fase.desenhoDesafio)
             # CLIQUE MOUSE
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao and not self.tela.jogoPane.exibindoTutorial:
@@ -234,6 +236,8 @@ class Controlador:
                             self.saves.append(self.jogador)
                             gravar_saves(self.saves)
                             self.fase = self.fases[self.jogador.getNivel()]
+                            if self.fase.tutorial is not None:
+                                self.tela.jogoPane.exibindoTutorial = True
                             self.pincel.posicaoInicial()
                             self.tela.botaoPlay.append(
                                 Sprite("BOTAOPLAY.PNG", 1, 2))
@@ -304,7 +308,7 @@ class Controlador:
     def _VerificarTelaJogo(self, posicaomouse):
 
         if self.tela.jogoPane.criando:
-            self.colisaoDesenho(self.fase.desenhoDesafio)
+            # self.colisaoDesenho(self.fase.desenhoDesafio)
             lista = self.tela.jogoPane.coresEdicao
             for i in range(0, len(lista)):
                 if lista[i].collidepoint(posicaomouse):
@@ -450,8 +454,6 @@ class Controlador:
         elif self.tela.botaoProximo.colisao_point(posicaomouse) and not self.botaoclicado:
             self.tela.jogoPane.modoCriar()
             self.fase = Fase()
-            if self.fase.tutorial is not None:
-                self.tela.jogoPane.exibindoTutorial = True
             self.fase.desenhoDesafio = Desenho(
                 self.tela.linhas, self.tela.colunas, 0)
             self.fase.tentativas = self.tela.execucoes

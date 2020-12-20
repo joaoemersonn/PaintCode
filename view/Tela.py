@@ -31,7 +31,7 @@ class Tela:
         self.janela = window
         self.__janela = carrega_imagem("janela.png")
         self.__janela2 = pygame.transform.smoothscale(
-            self.__janela.convert_alpha(), (int(60 * self.scala_x), int(60 * self.scala_y)))
+            self.__janela.convert_alpha(), (int(30 * self.scala_x), int(30 * self.scala_y)))
 
         # FONTES
         self.fonteGrande = pygame.font.Font(fontearquivo, int(22*self.scala_x))
