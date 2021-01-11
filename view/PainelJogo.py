@@ -105,7 +105,7 @@ class PainelJogo(Painel):
         self.transparent = pygame.Surface(
             (self.__tela.largura, self.__tela.altura), pygame.SRCALPHA)
 
-        self.exibindoTutorial = True
+        self.exibindoTutorial = False
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
         self.botaoDireita = Sprite("BOTAODIREITA.png", 1, 2)
         self.botaoEsquerda.definirPosicao((60, 350))

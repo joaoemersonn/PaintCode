@@ -6,18 +6,22 @@ from util.Util import carrega_imagem
 
 def gerarFases(listaFases):
     l = listaFases
+    tf = carrega_imagem("tf.png")
     l.clear()
 
     # fase 1
     fase = Fase()
     fase.blocosdisponiveis.append(Bloco("mover"))
-    fase.blocosdisponiveis.append(Bloco("girar_esquerda"))
-    fase.blocosdisponiveis.append(Bloco("girar_direita"))
+    # fase.blocosdisponiveis.append(Bloco("girar_esquerda"))
+    # fase.blocosdisponiveis.append(Bloco("girar_direita"))
     fase.blocosdisponiveis.append(Bloco("pintar"))
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.tutorial = list()
-    fase.tutorial.append(carrega_imagem("t1.jpg"))
+    fase.tutorial.append(carrega_imagem("t1.png"))
     fase.tutorial.append(carrega_imagem("t2.png"))
+    fase.tutorial.append(carrega_imagem("t3.png"))
+    fase.tutorial.append(carrega_imagem("t3.2.png"))
+    fase.tutorial.append(tf)
     fase.desenhoDesafio.tiles[0][2] = 0
     fase.desenhoDesafio.tiles[2][3] = -1
     fase.desenhoResposta = Desenho(4, 5, 1)
@@ -37,7 +41,10 @@ def gerarFases(listaFases):
     fase.desenhoResposta = Desenho(4, 5, 1)
 
     fase.tutorial = list()
-    fase.tutorial.append(carrega_imagem("t1.jpg"))
+    fase.tutorial.append(carrega_imagem("t4.png"))
+    fase.tutorial.append(carrega_imagem("t5.png"))
+    fase.tutorial.append(carrega_imagem("t6.png"))
+    fase.tutorial.append(tf)
 
     fase.desenhoDesafio.tiles[2][2] = 0
 
@@ -91,7 +98,9 @@ def gerarFases(listaFases):
     fase.blocosdisponiveis.append(Bloco("girar_esquerda"))
     fase.blocosdisponiveis.append(Bloco("girar_direita"))
     fase.blocosdisponiveis.append(Bloco("pintar"))
-
+    fase.tutorial = list()
+    fase.tutorial.append(carrega_imagem("t7.png"))
+    fase.tutorial.append(tf)
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.desenhoResposta = Desenho(4, 5, 1)
 
@@ -112,7 +121,11 @@ def gerarFases(listaFases):
     fase.blocosdisponiveis.append(Bloco("girar_direita"))
     fase.blocosdisponiveis.append(Bloco("pintar"))
     fase.blocosdisponiveis.append(Bloco("repetir"))
-
+    fase.tutorial = list()
+    fase.tutorial.append(carrega_imagem("t8.png"))
+    fase.tutorial.append(carrega_imagem("t9.png"))
+    fase.tutorial.append(carrega_imagem("t10.png"))
+    fase.tutorial.append(tf)
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.desenhoResposta = Desenho(4, 5, 1)
 
@@ -159,7 +172,10 @@ def gerarFases(listaFases):
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
     fase.coresdisponiveis.append(3)
-
+    fase.tutorial = list()
+    fase.tutorial.append(carrega_imagem("t11.png"))
+    fase.tutorial.append(carrega_imagem("t12.png"))
+    fase.tutorial.append(tf)
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.desenhoResposta = Desenho(4, 5, 1)
 

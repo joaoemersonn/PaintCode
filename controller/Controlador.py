@@ -211,9 +211,11 @@ class Controlador:
                 if self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao and not self.tela.jogoPane.exibindoTutorial:
                     self._VerificarTelaJogo(posicaomaouse)
                 elif self.tela.jogoPane.exibindoTutorial:
+                    img = self.fase.tutorial[self.tela.jogoPane.indexTutorial]
                     if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial > 0:
                         self.tela.jogoPane.indexTutorial -= 1
-                    elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse):
+                    elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse) or (img is not None and pygame.Rect((
+                            self.largura/2)-(img.get_rect().w/2), (self.altura/2)-(img.get_rect().h/2), img.get_rect().w, img.get_rect().h).collidepoint(posicaomaouse)):
                         self.tela.jogoPane.indexTutorial += 1
 
             if event.type == pygame.MOUSEBUTTONUP:
