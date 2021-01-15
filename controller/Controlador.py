@@ -42,8 +42,8 @@ class Controlador:
                                        (self.splash.get_width()/2), 150))
         #####
         # self.fps = 120
-        self.TICKS_PER_SECOND = 40
-        self.SKIP_TICKS = 1000 / self.TICKS_PER_SECOND
+        #self.TICKS_PER_SECOND = Util.Config.VELOCIDADE
+        self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
         self.MAX_FRAMESKIP = 5
         self.next_game_tick = pygame.time.get_ticks()
 
@@ -248,7 +248,7 @@ class Controlador:
 
                 elif self.tela.desenhaAlerta and self.tela.ok.colisao_point(posicaomaouse):
                     self.tela.desenhaAlerta = not self.tela.desenhaAlerta
-                    if self.fase.tentativas is not None:
+                    if self.fase is not None and self.fase.tentativas is not None:
                         self.tela.jogoPane.exibindoTutorial = True
                     if self.jogandoFasePersonalizada:
                         self.jogandoFasePersonalizada = False
@@ -260,6 +260,8 @@ class Controlador:
 
                 elif self.tela.telaCriar:
                     self._VerificarTelaCriar(posicaomaouse)
+                elif self.tela.telaConfig:
+                    self._VerificarTelaConfig(posicaomaouse)
                 elif self.tela.telaInicio:
                     self._VerificarTelaInicio(posicaomaouse)
                 elif self.tela.telaSaves:
@@ -307,6 +309,15 @@ class Controlador:
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
 
+    def _VerificarTelaConfig(self,posicaomouse):
+        if self.tela.btCimaVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE < 150:
+            Util.Config.VELOCIDADE += 10
+        elif self.tela.btBaixoVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE > 20:
+            Util.Config.VELOCIDADE -= 10
+        elif self.tela.botaoConfirmar.colisao_point(posicaomouse):
+            self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
+            self.tela.telaConfig = False
+            self.tela.telaInicio = True
     def _VerificarTelaJogo(self, posicaomouse):
 
         if self.tela.jogoPane.criando:
@@ -578,8 +589,11 @@ class Controlador:
                         self.tela.jogoPane.exibeAviso = True
 
     def _VerificarTelaInicio(self, posicaomouse):
+        if self.tela.btConfig.colisao_point(posicaomouse):
+            self.tela.telaInicio = False
+            self.tela.telaConfig = True
         # BOTÃO VOLUME
-        if self.tela.botaoVolume.colisao_point(posicaomouse):
+        elif self.tela.botaoVolume.colisao_point(posicaomouse):
             if self.volume:
                 self.tela.botaoVolume.mudarImg("BOTAOVOLUMEOFF.PNG")
                 self.volume = False

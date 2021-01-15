@@ -49,7 +49,9 @@ def get_cor(valor):
     else:
         return Cores.BRANCO
 
-
+class Config:
+    VELOCIDADE = 60
+    TELACHEIA = True
 class Cores:
     BRANCO = pygame.Color("#FFFFFF")
     CORFUNDO = pygame.Color("#F2EFEA")

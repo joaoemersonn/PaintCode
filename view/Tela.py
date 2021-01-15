@@ -45,7 +45,8 @@ class Tela:
         self.corSecundaria = Cores.CORSECUNDARIA
         self.corTexto = Cores.CORSECUNDARIA
         self.cor1Elemento = Cores.CORELEMENTO
-        self.telaInicio = True
+        self.telaInicio =  False
+        self.telaConfig = True
         self.telaSaves = self.telaJogo = self.telaCriar = self.telaFases = False
         self.rolagem = 0
         pygame.display.set_icon(carrega_imagem("icon.png"))
@@ -62,6 +63,7 @@ class Tela:
         self.botaoCriar = Sprite("BOTAOCRIAR.PNG", 1, 2)
         self.botaoSair = Sprite("BOTAOSAIR.PNG", 1, 2)
         self.botaoVolume = Sprite("BOTAOVOLUMEON.PNG", 1, 2)
+        self.btConfig = Sprite("engrenagem.png", 1, 2)
         self.img = carrega_imagem("img2.png")
         self.c1 = carrega_imagem("c1.png")
         self.c2 = carrega_imagem("c2.png")
@@ -72,7 +74,8 @@ class Tela:
         # self.botaoCriar.definirPosicao((((largura / 2) - self.botaoCriar.rect.h), 450))
         # self.botaoSair.definirPosicao((((largura / 2) - self.botaoSair.rect.h), 590))
         self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 590))
-        self.botaoVolume.definirPosicao((1290, 50))
+        self.botaoVolume.definirPosicao((1210, 50))
+        self.btConfig.definirPosicao((1290, 50))
         # ESCOLHERSAVE
         self.botaoNovoJogo = Sprite("BOTAONOVOJOGO.PNG", 1, 2)
         self.botaoFasesPersonalizadas = Sprite("BOTAOCRIACOES.PNG", 1, 2)
@@ -109,9 +112,17 @@ class Tela:
         self.btCimaEx.definirPosicao((250, 380))
         self.btBaixoEx.definirPosicao((250, 450))
         self.botaoProximo = Sprite("BOTAOPROX.PNG", 1, 2)
-        self.botaoVoltarCriar = Sprite("VOLTAR.png", 1, 2)
+        self.botaoVoltarCriar = Sprite("VOLTAR.png", 1, 2)        
         self.botaoVoltarCriar.definirPosicao((750 + (self.ajuste / 2), 580))
         self.botaoProximo.definirPosicao((500 + (self.ajuste / 2), 580))
+        
+        #config     
+        self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
+        self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
+        self.btCimaVel.definirPosicao((250, 280))
+        self.btBaixoVel.definirPosicao((250, 350))
+        self.botaoConfirmar = Sprite("confirmar.png", 1, 2,0.6)
+        self.botaoConfirmar.definirPosicao((750 + (self.ajuste / 2), 580))
 
         # TELA FASES PERSONALIZADAS
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
@@ -154,6 +165,13 @@ class Tela:
             "Selecione a Quantidade de Execuções Disponíveis Para concluir o desenho:", True, self.corTexto)
         self.txt_ex = self.fonteGrande.render(
             "Nº Execuções:", True, self.corPrincipal)
+        
+        self.txt_CONFIG = self.fonteTitulo.render(
+            "CONFIGURAÇÕES ", True, self.corTexto)
+        self.txt_descVelocidade = self.fonteGrande.render(
+            "Selecione a velocidade do Jogo:", True, self.corTexto)
+        self.txt_velocidade = self.fonteGrande.render(
+            "VELOCIDADE:", True, self.corPrincipal)    
 
     def desenhar(self):
 
@@ -164,12 +182,12 @@ class Tela:
             if self.telaInicio:
                 # BOTÕES
                 self.botaoVolume.desenharBt(self.janela)
+                self.btConfig.desenharBt(self.janela)
                 self.janela.blit(
                     self.img, (((self.largura / 2) - (self.img.get_width()/2)), 0))
                 self.botaostart.desenharBt(self.janela)
                 self.botaoCriar.desenharBt(self.janela)
-                self.botaoSair.desenharBt(self.janela)
-
+                self.botaoSair.desenharBt(self.janela)            
             # TELA SAVES
             elif self.telaSaves:
                 self.savesPane.fill(self.corfundo)
@@ -203,6 +221,8 @@ class Tela:
 
         elif self.telaCriar:
             self.desenharPainelCriar()
+        elif self.telaConfig:
+            self.desenharPainelConfig()
 
         if self.desenhaAlerta:
             self.deesenharAlerta(self.textoAlerta)
@@ -242,6 +262,17 @@ class Tela:
         contornar(self.janela, 250, 425, 50, 30, eX=ESCALAX, eY=ESCALAY)
         self.botaoVoltarCriar.desenharBt(self.janela)
         self.botaoProximo.desenharBt(self.janela)
+    def desenharPainelConfig(self):
+        self.janela.blit(self.txt_CONFIG, self.escalarXY(20, 50)) #TITULO
+        self.janela.blit(self.txt_descVelocidade, self.escalarXY(50, 250))#DESC VELOCIDADE
+        self.janela.blit(self.txt_velocidade, self.escalarXY(70, 330))#V
+        self.btCimaVel.desenharBt(self.janela)
+        self.btBaixoVel.desenharBt(self.janela)
+        txt_vel = self.fonteGrande.render(
+            str(Util.Config.VELOCIDADE), True, self.corTexto)
+        self.janela.blit(txt_vel, self.escalarXY(260, 330))
+        contornar(self.janela, 250, 325, 50, 30, eX=ESCALAX, eY=ESCALAY)
+        self.botaoConfirmar.desenharBt(self.janela)
 
     def escalar(self, x, y, tamx, tamy):
         return int(ESCALAX*x), int(y*ESCALAY), int(ESCALAX*tamx), int(ESCALAY*tamy)
