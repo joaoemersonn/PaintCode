@@ -198,7 +198,11 @@ class Controlador:
 
     def tratarEventos(self):
         events = pygame.event.get()
-        self.tela.caixaTexto.listen(events)
+        if self.pressNovojogo:
+            self.tela.caixaTexto.listen(events)
+        elif self.tela.telaConfig:
+            self.tela.sliderVl.listen(events)
+            Util.Config.VELOCIDADE = self.tela.sliderVl.value
         for event in events:
             posicaomaouse = pygame.mouse.get_pos()
             self.botaoclicado = False
@@ -212,6 +216,9 @@ class Controlador:
                 if self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao and not self.tela.jogoPane.exibindoTutorial:
                     self._VerificarTelaJogo(posicaomaouse)
                 elif self.tela.jogoPane.exibindoTutorial:
+                    if self.fase.tutorial is None:
+                        self.tela.jogoPane.exibindoTutorial = False
+                        break
                     img = self.fase.tutorial[self.tela.jogoPane.indexTutorial]
                     if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial > 0:
                         self.tela.jogoPane.indexTutorial -= 1
@@ -234,7 +241,8 @@ class Controlador:
                         if self.pressNovojogo:
                             self.tela.desenhaNovoJogo = self.pressNovojogo = False
                             gerarFases(self.fases)
-                            self.jogador = Jogador("".join(self.tela.caixaTexto.text))
+                            self.jogador = Jogador(
+                                "".join(self.tela.caixaTexto.text))
                             self.tela.caixaTexto.text = ""
                             self.saves.append(self.jogador)
                             gravar_saves(self.saves)
@@ -311,11 +319,11 @@ class Controlador:
                         self.fase.blocosdisponiveis, True)
 
     def _VerificarTelaConfig(self, posicaomouse):
-        if self.tela.btCimaVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE < 150:
-            Util.Config.VELOCIDADE += 10
-        elif self.tela.btBaixoVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE > 20:
-            Util.Config.VELOCIDADE -= 10
-        elif self.tela.botaoConfirmar.colisao_point(posicaomouse):
+        # if self.tela.btCimaVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE < 150:
+        #     Util.Config.VELOCIDADE += 10
+        # elif self.tela.btBaixoVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE > 20:
+        #     Util.Config.VELOCIDADE -= 10
+        if self.tela.botaoConfirmar.colisao_point(posicaomouse):
             self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
             self.tela.telaConfig = False
             self.tela.telaInicio = True
@@ -651,7 +659,7 @@ class Controlador:
         if self.verificandodesenho:
             if self.i < self.fase.desenhoDesafio.colunas:
                 self.tela.jogoPane.desenharVerificacao(self.i, self.j)
-            if self.espera > 4:
+            if self.espera >= 0:
                 # print("Teste["+str(self.i)+","+str(self.j)+"]")
                 self.espera = 0
                 if self.i < self.fase.desenhoDesafio.colunas:

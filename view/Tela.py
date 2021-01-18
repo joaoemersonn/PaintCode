@@ -5,7 +5,7 @@ from util import Util
 from util.Util import Cores, get_cor, ESCALAX, ESCALAY
 from view.Painel import Painel
 from model.Sprite import Sprite
-from pygame_widgets import TextBox
+from pygame_widgets import TextBox, Slider
 from view.PainelJogo import PainelJogo
 from util.Util import carrega_imagem
 from view.PainelJogo import contornarRect
@@ -117,10 +117,13 @@ class Tela:
         self.botaoProximo.definirPosicao((500 + (self.ajuste / 2), 580))
 
         # config
-        self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
-        self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
-        self.btCimaVel.definirPosicao((250, 280))
-        self.btBaixoVel.definirPosicao((250, 350))
+        self.sliderVl = Slider(self.janela, self.escalarX(170), self.escalarY(450), self.escalarX(400),
+                               self.escalarY(20), min=20, max=300, step=1, colour=Cores.CORSECUNDARIA, handleColour=Cores.CORPRINCIPAL)
+        self.sliderVl.value = 80
+        #self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
+        #self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
+        #self.btCimaVel.definirPosicao((250, 280))
+        #self.btBaixoVel.definirPosicao((250, 350))
         self.botaoConfirmar = Sprite("confirmar.png", 1, 2, 0.6)
         self.botaoConfirmar.definirPosicao((750 + (self.ajuste / 2), 580))
 
@@ -268,8 +271,9 @@ class Tela:
         self.janela.blit(self.txt_descVelocidade,
                          self.escalarXY(50, 250))  # DESC VELOCIDADE
         self.janela.blit(self.txt_velocidade, self.escalarXY(70, 330))  # V
-        self.btCimaVel.desenharBt(self.janela)
-        self.btBaixoVel.desenharBt(self.janela)
+        self.sliderVl.draw()
+        # self.btCimaVel.desenharBt(self.janela)
+        # self.btBaixoVel.desenharBt(self.janela)
         txt_vel = self.fonteGrande.render(
             str(Util.Config.VELOCIDADE), True, self.corTexto)
         self.janela.blit(txt_vel, self.escalarXY(260, 330))

@@ -184,9 +184,10 @@ class PainelJogo(Painel):
                 self.botaoDireita.desenharBt(self.__tela.jogoPane)
                 self.botaoEsquerda.desenharBt(self.__tela.jogoPane)
 
-    def desenharAnimacaoWin(self, fase, jogador, comando, pincel, fps=0):
-
-        self.__tela.jogoPane.desenhar(fase, jogador, comando, pincel=pincel)
+    def desenharAnimacaoWin(self, fase=None, jogador=None, comando=None, pincel=None, fps=0):
+        if fase is None:
+            self.__tela.jogoPane.desenhar(
+                fase, jogador, comando, pincel=pincel)
         self.tempoAnGanhou = self.confete.animar(
             self, self.tempoAnGanhou, fps=fps)
         self.tempoAnGanhou = self.confete2.animar(
