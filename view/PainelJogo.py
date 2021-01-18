@@ -184,18 +184,32 @@ class PainelJogo(Painel):
                 self.botaoDireita.desenharBt(self.__tela.jogoPane)
                 self.botaoEsquerda.desenharBt(self.__tela.jogoPane)
 
-    def desenharAnimacaoWin(self, fase=None, jogador=None, comando=None, pincel=None, fps=0):
-        if fase is None:
+    def reinicarAnimacaoConfete(self):
+        self.confete.spriteativo =self.confete2.spriteativo =self.confete3.spriteativo = self.confete4.spriteativo = 0 
+    def desenharAnimacaoWin(self, fase=None, jogador=None, comando=None, pincel=None, fps=0, sc=None):
+        if sc is None:
+            sc = self
+            self.confete.definirPosicao((-100, 450))
+            self.confete2.definirPosicao((1100, 450))
+            self.confete3.definirPosicao((-100, -150))
+            self.confete4.definirPosicao((1100, -150))
+        else:
+            self.confete.definirPosicao((800, 80))
+            self.confete2.definirPosicao((850, 80))
+            self.confete3.definirPosicao((800, 80))
+            self.confete4.definirPosicao((850, 80))
+        if fase is not None:
             self.__tela.jogoPane.desenhar(
                 fase, jogador, comando, pincel=pincel)
+
         self.tempoAnGanhou = self.confete.animar(
-            self, self.tempoAnGanhou, fps=fps)
+            sc, self.tempoAnGanhou, fps=fps)
         self.tempoAnGanhou = self.confete2.animar(
-            self, self.tempoAnGanhou, fps=fps)
+            sc, self.tempoAnGanhou, fps=fps)
         self.tempoAnGanhou = self.confete3.animar(
-            self, self.tempoAnGanhou, fps=fps)
+            sc, self.tempoAnGanhou, fps=fps)
         self.tempoAnGanhou = self.confete4.animar(
-            self, self.tempoAnGanhou, fps=fps)
+            sc, self.tempoAnGanhou, fps=fps)
 
     def desenharInfo(self, fase, jogador):
         cor = Cores.BRANCO

@@ -207,6 +207,47 @@ def gravar_fase(fase):
     arquivo.close()
 
 
+def lerConfig():
+    if SISTEMA == "Windows":
+        diretorio = os.path.join(Path.home(), ".PaintCode")
+    else:
+        diretorio = os.path.dirname(os.path.abspath(__file__)).replace("view", "").replace("model", "").replace(
+            "controller",
+            "").replace("util",
+                        "").replace("lib",
+                                    "")
+        diretorio = os.path.join(diretorio, ".PaintCode")
+    path = os.path.join(diretorio, "config.cfg")
+    print(path)
+    print(os.path.isfile(path))
+    if not os.path.isfile(path):
+        return False
+    else:
+        arquivo = open(os.path.join(diretorio, "config.cfg"), 'r')
+
+        for linha in arquivo:
+            linha = linha.rstrip()
+            cfg = linha.split("$")
+            Config.VELOCIDADE = int(cfg[1])
+        arquivo.close()
+        return True
+
+
+def gravarConfig(velocidade=80):
+    if SISTEMA == "Windows":
+        diretorio = os.path.join(Path.home(), ".PaintCode")
+    else:
+        diretorio = os.path.dirname(os.path.abspath(__file__)).replace("view", "").replace("model", "").replace(
+            "controller",
+            "").replace("util",
+                        "").replace("lib",
+                                    "")
+        diretorio = os.path.join(diretorio, ".PaintCode")
+    arquivo = open(os.path.join(diretorio, "config.cfg"), 'w')
+    arquivo.write(str("VELOCIDADE") + "$" + str(velocidade) + "\n")
+    arquivo.close()
+
+
 def criarPastas():
     animarLoad()
     if SISTEMA == "Windows":

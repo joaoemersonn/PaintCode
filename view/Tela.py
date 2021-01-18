@@ -119,7 +119,7 @@ class Tela:
         # config
         self.sliderVl = Slider(self.janela, self.escalarX(170), self.escalarY(450), self.escalarX(400),
                                self.escalarY(20), min=20, max=300, step=1, colour=Cores.CORSECUNDARIA, handleColour=Cores.CORPRINCIPAL)
-        self.sliderVl.value = 80
+        self.sliderVl.value = Util.Config.VELOCIDADE
         #self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
         #self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
         #self.btCimaVel.definirPosicao((250, 280))

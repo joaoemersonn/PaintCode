@@ -43,7 +43,7 @@ class Controlador:
                                        (self.splash.get_width()/2), 150))
         #####
         # self.fps = 120
-        #self.TICKS_PER_SECOND = Util.Config.VELOCIDADE
+        # self.TICKS_PER_SECOND = Util.Config.VELOCIDADE
         self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
         self.MAX_FRAMESKIP = 5
         self.next_game_tick = pygame.time.get_ticks()
@@ -70,6 +70,7 @@ class Controlador:
         self.contaviso = self.j = self.i = 0
         self.verificandodesenho = False
         self.exibindoperda = False
+        self.animarTesteVl = 0
         ###
         # self.gif.executar(self.window, 950, 350)
         self.inicializar()
@@ -87,8 +88,9 @@ class Controlador:
         self.comando.append(self.__inicio)
         Util.CARREGANDO = False
         gerarFases(self.fases)
-        self.sons.BACKGROUND.set_volume(0.2)
+        self.sons.BACKGROUND.set_volume(1)
         self.sons.BACKGROUND.play(TOCAREMLOOP)
+        self.carregarConfig()
         self._carregando = False
 
     def start(self):
@@ -100,19 +102,36 @@ class Controlador:
                 self.tela.jogoPane.desenhar(
                     self.fase, self.jogador, self.comando, self.pincel, self.tela.desenhaAlerta)
                 self.verificardesenho()
-            while pygame.time.get_ticks() > self.next_game_tick and loops < self.MAX_FRAMESKIP:
-                if self.executandoComando:
-                    self.executarcomando()
-                self.tratarEventos()
-                self.next_game_tick += self.SKIP_TICKS
-                loops += 1
+            # while pygame.time.get_ticks() > self.next_game_tick and loops < self.MAX_FRAMESKIP:
+            #     if self.tela.telaConfig:
+            #         pass
+            #     if self.executandoComando:
+            #         self.executarcomando()
+            #     self.tratarEventos()
+            #     self.next_game_tick += self.SKIP_TICKS
+            #     loops += 1
+
+            if self.executandoComando:
+                self.executarcomando()
+            self.tratarEventos()
             # Desenha Animação
+            # if self.animarTesteVl > 0 and self.tela.telaConfig:
+            #     print("animarVl: ", self.animarTesteVl)
+            #     for i in range(0, 10):
+            #         print("TesteAnimação: ", i)
+            #     self.tela.jogoPane.confete.animar(
+            #         self.tela.janela, 1)
             if self.tela.jogoPane.tempoAnGanhou > 0:
+                sc = None
+                if self.tela.telaConfig:
+                    sc = self.tela.janela
+                    for i in range(0, 50):
+                        pass
                 self.tela.jogoPane.desenharAnimacaoWin(
-                    self.faseanterior, self.jogador, self.comando, self.pincel)
+                    self.faseanterior, self.jogador, self.comando, self.pincel, sc=sc)
 
             pygame.display.update()
-            # self.relogio.tick(self.fps)
+            self.relogio.tick(Util.Config.VELOCIDADE)
 
     def jogoexecutando(self):
         if self.tela.telaJogo and not self.tela.desenhaConfirmacao:
@@ -162,7 +181,8 @@ class Controlador:
         if self.jogandoFasePersonalizada:
             self.sons.WIN.play()
             self.faseanterior = self.fase
-            self.tela.jogoPane.tempoAnGanhou = (50 * 4)
+            self.tela.jogoPane.reinicarAnimacaoConfete()
+            self.tela.jogoPane.tempoAnGanhou = (57 * 4)
             self.tela.textoAlerta = (
                 "Parabéns Você Concluiu a Fase!", "Pressione OK para Retornar!")
             self.pincel.posicaoInicial()
@@ -171,7 +191,8 @@ class Controlador:
         elif len(self.fases) > self.jogador.getNivel() + 1:
             self.sons.WIN.play()
             self.faseanterior = self.fase
-            self.tela.jogoPane.tempoAnGanhou = (50 * 4)
+            self.tela.jogoPane.reinicarAnimacaoConfete()
+            self.tela.jogoPane.tempoAnGanhou = (57 * 4)
             self.tela.textoAlerta = (
                 "Parabéns Você Passou de Nível!", "Pressione OK para continuar!")
             self.tela.desenhaAlerta = True
@@ -182,7 +203,8 @@ class Controlador:
         else:
             self.sons.WIN.play()
             self.faseanterior = self.fase
-            self.tela.jogoPane.tempoAnGanhou = (50 * 4)
+            self.tela.jogoPane.reinicarAnimacaoConfete()
+            self.tela.jogoPane.tempoAnGanhou = (57 * 4)
             self.tela.textoAlerta = (
                 "Parabéns Você Concluiu o Jogo!", "Pressione OK para continuar!")
             self.tela.desenhaAlerta = True
@@ -203,6 +225,8 @@ class Controlador:
         elif self.tela.telaConfig:
             self.tela.sliderVl.listen(events)
             Util.Config.VELOCIDADE = self.tela.sliderVl.value
+            if self.tela.jogoPane.tempoAnGanhou <= 0:
+                self.tela.jogoPane.tempoAnGanhou = (60 * 4)
         for event in events:
             posicaomaouse = pygame.mouse.get_pos()
             self.botaoclicado = False
@@ -324,7 +348,8 @@ class Controlador:
         # elif self.tela.btBaixoVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE > 20:
         #     Util.Config.VELOCIDADE -= 10
         if self.tela.botaoConfirmar.colisao_point(posicaomouse):
-            self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
+            Util.gravarConfig(Util.Config.VELOCIDADE)
+            #self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
             self.tela.telaConfig = False
             self.tela.telaInicio = True
 
@@ -655,11 +680,17 @@ class Controlador:
                     self.tela.telaJogo = True
                     break
 
+    def carregarConfig(self):
+        if Util.lerConfig():
+            self.tela.sliderVl.value = Util.Config.VELOCIDADE
+            self.tela.telaConfig = False
+            self.tela.telaInicio = True
+
     def verificardesenho(self):
         if self.verificandodesenho:
             if self.i < self.fase.desenhoDesafio.colunas:
                 self.tela.jogoPane.desenharVerificacao(self.i, self.j)
-            if self.espera >= 0:
+            if self.espera > 2:
                 # print("Teste["+str(self.i)+","+str(self.j)+"]")
                 self.espera = 0
                 if self.i < self.fase.desenhoDesafio.colunas:
