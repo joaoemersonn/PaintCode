@@ -115,7 +115,7 @@ def gravar_saves(saves):
     texopath = os.path.join(diretorio, "saves.saves")
     arquivo = open(texopath, 'w')
     for j in saves:
-        arquivo.write(j.getNome() + "$" + str(j.getNivel()) + "\n")
+        arquivo.write(str(j.getNome()) + "$" + str(j.getNivel()) + "\n")
     arquivo.close()
 
 

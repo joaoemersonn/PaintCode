@@ -1,4 +1,5 @@
 import os
+from os.path import join
 import sys
 from copy import deepcopy
 
@@ -196,11 +197,11 @@ class Controlador:
         pygame.display.update()
 
     def tratarEventos(self):
-        for event in pygame.event.get():
+        events = pygame.event.get()
+        self.tela.caixaTexto.listen(events)
+        for event in events:
             posicaomaouse = pygame.mouse.get_pos()
             self.botaoclicado = False
-            if self.tela.caixaTexto.active:
-                self.tela.caixaTexto.handle_event(event)
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.rodando = False
                 sys.exit(1)
@@ -231,9 +232,9 @@ class Controlador:
                         self.tela.desenhaNovoJogo = False
                     if self.tela.confirmarbotao.colisao_point(posicaomaouse):
                         if self.pressNovojogo:
-                            self.tela.caixaTexto.active = self.tela.desenhaNovoJogo = self.pressNovojogo = False
+                            self.tela.desenhaNovoJogo = self.pressNovojogo = False
                             gerarFases(self.fases)
-                            self.jogador = Jogador(self.tela.caixaTexto.text)
+                            self.jogador = Jogador("".join(self.tela.caixaTexto.text))
                             self.tela.caixaTexto.text = ""
                             self.saves.append(self.jogador)
                             gravar_saves(self.saves)
@@ -309,7 +310,7 @@ class Controlador:
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
 
-    def _VerificarTelaConfig(self,posicaomouse):
+    def _VerificarTelaConfig(self, posicaomouse):
         if self.tela.btCimaVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE < 150:
             Util.Config.VELOCIDADE += 10
         elif self.tela.btBaixoVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE > 20:
@@ -318,6 +319,7 @@ class Controlador:
             self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
             self.tela.telaConfig = False
             self.tela.telaInicio = True
+
     def _VerificarTelaJogo(self, posicaomouse):
 
         if self.tela.jogoPane.criando:
@@ -482,6 +484,7 @@ class Controlador:
             self.tela.botaolixeira.append(Sprite("lixeira.png", 1, 2))
             self.tela.desenhaNovoJogo = self.tela.caixaTexto.active = True
             self.pressNovojogo = True
+            self.tela.caixaTexto.selected = True
         elif self.tela.botaoFasesPersonalizadas.colisao_point(posicaomouse):
             self.tela.fasespersonalizadas = ler_fases()
             if self.tela.fasespersonalizadas is not None:

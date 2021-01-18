@@ -5,7 +5,7 @@ from util import Util
 from util.Util import Cores, get_cor, ESCALAX, ESCALAY
 from view.Painel import Painel
 from model.Sprite import Sprite
-from model.TextInput import InputBox
+from pygame_widgets import TextBox
 from view.PainelJogo import PainelJogo
 from util.Util import carrega_imagem
 from view.PainelJogo import contornarRect
@@ -45,7 +45,7 @@ class Tela:
         self.corSecundaria = Cores.CORSECUNDARIA
         self.corTexto = Cores.CORSECUNDARIA
         self.cor1Elemento = Cores.CORELEMENTO
-        self.telaInicio =  False
+        self.telaInicio = False
         self.telaConfig = True
         self.telaSaves = self.telaJogo = self.telaCriar = self.telaFases = False
         self.rolagem = 0
@@ -56,8 +56,8 @@ class Tela:
         self.ok.definirPosicao((760, 380))
         self.desenhaAlerta = self.desenhaNovoJogo = False
         self.textoAlerta = ("TEXTO TITULO!", "PRESSIONE OK PARA CONTINUAR!")
-        self.caixaTexto = InputBox(
-            100*ESCALAX, 30, int(550*ESCALAX), int(300*ESCALAX))
+        self.caixaTexto = TextBox(self.janela, int(550*ESCALAX), int(300*ESCALAY), 250*ESCALAX, 40*ESCALAY, fontSize=20,
+                                  borderColour=Cores.CORPRINCIPAL, radius=10, borderThickness=5)
         # INICIO
         self.botaostart = Sprite("BOTAOJOGAR.PNG", 1, 2)
         self.botaoCriar = Sprite("BOTAOCRIAR.PNG", 1, 2)
@@ -112,16 +112,16 @@ class Tela:
         self.btCimaEx.definirPosicao((250, 380))
         self.btBaixoEx.definirPosicao((250, 450))
         self.botaoProximo = Sprite("BOTAOPROX.PNG", 1, 2)
-        self.botaoVoltarCriar = Sprite("VOLTAR.png", 1, 2)        
+        self.botaoVoltarCriar = Sprite("VOLTAR.png", 1, 2)
         self.botaoVoltarCriar.definirPosicao((750 + (self.ajuste / 2), 580))
         self.botaoProximo.definirPosicao((500 + (self.ajuste / 2), 580))
-        
-        #config     
+
+        # config
         self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
         self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
         self.btCimaVel.definirPosicao((250, 280))
         self.btBaixoVel.definirPosicao((250, 350))
-        self.botaoConfirmar = Sprite("confirmar.png", 1, 2,0.6)
+        self.botaoConfirmar = Sprite("confirmar.png", 1, 2, 0.6)
         self.botaoConfirmar.definirPosicao((750 + (self.ajuste / 2), 580))
 
         # TELA FASES PERSONALIZADAS
@@ -165,13 +165,13 @@ class Tela:
             "Selecione a Quantidade de Execuções Disponíveis Para concluir o desenho:", True, self.corTexto)
         self.txt_ex = self.fonteGrande.render(
             "Nº Execuções:", True, self.corPrincipal)
-        
+
         self.txt_CONFIG = self.fonteTitulo.render(
             "CONFIGURAÇÕES ", True, self.corTexto)
         self.txt_descVelocidade = self.fonteGrande.render(
             "Selecione a velocidade do Jogo:", True, self.corTexto)
         self.txt_velocidade = self.fonteGrande.render(
-            "VELOCIDADE:", True, self.corPrincipal)    
+            "VELOCIDADE:", True, self.corPrincipal)
 
     def desenhar(self):
 
@@ -187,7 +187,7 @@ class Tela:
                     self.img, (((self.largura / 2) - (self.img.get_width()/2)), 0))
                 self.botaostart.desenharBt(self.janela)
                 self.botaoCriar.desenharBt(self.janela)
-                self.botaoSair.desenharBt(self.janela)            
+                self.botaoSair.desenharBt(self.janela)
             # TELA SAVES
             elif self.telaSaves:
                 self.savesPane.fill(self.corfundo)
@@ -262,10 +262,12 @@ class Tela:
         contornar(self.janela, 250, 425, 50, 30, eX=ESCALAX, eY=ESCALAY)
         self.botaoVoltarCriar.desenharBt(self.janela)
         self.botaoProximo.desenharBt(self.janela)
+
     def desenharPainelConfig(self):
-        self.janela.blit(self.txt_CONFIG, self.escalarXY(20, 50)) #TITULO
-        self.janela.blit(self.txt_descVelocidade, self.escalarXY(50, 250))#DESC VELOCIDADE
-        self.janela.blit(self.txt_velocidade, self.escalarXY(70, 330))#V
+        self.janela.blit(self.txt_CONFIG, self.escalarXY(20, 50))  # TITULO
+        self.janela.blit(self.txt_descVelocidade,
+                         self.escalarXY(50, 250))  # DESC VELOCIDADE
+        self.janela.blit(self.txt_velocidade, self.escalarXY(70, 330))  # V
         self.btCimaVel.desenharBt(self.janela)
         self.btBaixoVel.desenharBt(self.janela)
         txt_vel = self.fonteGrande.render(
@@ -347,8 +349,7 @@ class Tela:
         superfice.blit(self.c1, rect)
         superfice.blit(novojogo, self.escalarXY(650, 230))
         superfice.blit(textod2, self.escalarXY(400, 305))
-        self.caixaTexto.update()
-        self.caixaTexto.draw(superfice)
+        self.caixaTexto.draw()
         self.confirmarbotao.desenharBt(superfice)
         self.cancelarbotao.desenharBt(superfice)
 
