@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from util.GIFImage import GIFImage
 import pygame
 from pygame import mixer
 from model.Desenho import Desenho
@@ -10,7 +9,6 @@ import platform
 SISTEMA = platform.system()
 WINDOW = pygame.display.set_mode((0, 0),
                                  flags=pygame.FULLSCREEN)
-GIF = GIFImage("loading.gif")
 CARREGANDO = True
 STATUSCARREGAMENTO = 0
 ESCALAX = WINDOW.get_width()/1366
@@ -28,7 +26,7 @@ def animarLoad():
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
                          (int(338*ESCALAX), int(645*ESCALAY), int(800*ESCALAX), int(40*ESCALAY)))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
-                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*10*STATUSCARREGAMENTO), int(30*ESCALAY)))
+                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*5*STATUSCARREGAMENTO), int(30*ESCALAY)))
         pygame.display.update()
         STATUSCARREGAMENTO += 1
         # print(STATUSCARREGAMENTO)

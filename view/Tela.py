@@ -1,3 +1,4 @@
+from util.Gerador import getTutorials
 import pygame
 import os
 
@@ -27,6 +28,7 @@ class Tela:
         self.scala_x = self.largura / 1366
         self.scala_y = self.altura / 768
         self.tamanho = (self.largura, self.altura)
+        self.indexAjuda = 1
         # pygame.display.set_mode(self.tamanho,pygame.SCALED)
         self.janela = window
         self.__janela = carrega_imagem("janela.png")
@@ -47,7 +49,7 @@ class Tela:
         self.cor1Elemento = Cores.CORELEMENTO
         self.telaInicio = False
         self.telaConfig = True
-        self.telaSaves = self.telaJogo = self.telaCriar = self.telaFases = False
+        self.telaSaves = self.telaJogo = self.telaCriar = self.telaFases = self.telaAjuda = False
         self.rolagem = 0
         pygame.display.set_icon(carrega_imagem("icon.png"))
         pygame.display.set_caption("PaintCoding")
@@ -75,9 +77,9 @@ class Tela:
         # self.botaoCriar.definirPosicao((((largura / 2) - self.botaoCriar.rect.h), 450))
         # self.botaoSair.definirPosicao((((largura / 2) - self.botaoSair.rect.h), 590))
         self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 590))
-        self.btAjuda.definirPosicao((1150, 50))
-        self.botaoVolume.definirPosicao((1210, 50))
-        self.btConfig.definirPosicao((1290, 50))
+        self.btAjuda.definirPosicao((1130, 50))
+        self.btConfig.definirPosicao((1210, 50))
+        self.botaoVolume.definirPosicao((1290, 50))
         # ESCOLHERSAVE
         self.botaoNovoJogo = Sprite("BOTAONOVOJOGO.PNG", 1, 2)
         self.botaoFasesPersonalizadas = Sprite("BOTAOCRIACOES.PNG", 1, 2)
@@ -230,6 +232,14 @@ class Tela:
         elif self.telaConfig:
             self.desenharPainelConfig()
 
+        elif self.telaAjuda:
+            t = getTutorials()
+            if len(t) <= self.indexAjuda:
+                self.telaAjuda = False
+                self.telaInicio = True
+            else:
+                self.jogoPane.desenharTutorial(
+                    t[self.indexAjuda], self.janela, c=Cores.CORFUNDO)
         if self.desenhaAlerta:
             self.deesenharAlerta(self.textoAlerta)
 

@@ -158,6 +158,7 @@ class PainelJogo(Painel):
             if fase.tutorial is None or len(fase.tutorial) <= self.indexTutorial:
                 self.exibindoTutorial = False
                 self.indexTutorial = 0
+                img = None
             else:
                 img = fase.tutorial[self.indexTutorial]
 
@@ -179,13 +180,16 @@ class PainelJogo(Painel):
             if self.exibeAviso:
                 self.aviso(self.textoaviso[0], self.textoaviso[1])
             if self.exibindoTutorial:
-                self.transparent.fill((0, 0, 0, 180))
-                self.__tela.jogoPane.blit(self.transparent, (0, 0))
-                self.__tela.jogoPane.blit(img, ((
-                    self.__tela.largura/2)-(img.get_rect().w/2), (self.__tela.altura/2)-(img.get_rect().h/2)))
-                self.botaoDireita.desenharBt(self.__tela.jogoPane)
-                self.botaoEsquerda.desenharBt(self.__tela.jogoPane)
-                self.botaoPularTutorial.desenharBt(self.__tela.jogoPane)
+                self.desenharTutorial(img, self)
+
+    def desenharTutorial(self, img, s,c=(0, 0, 0, 180)):
+        self.transparent.fill(c)
+        s.blit(self.transparent, (0, 0))
+        s.blit(img, ((
+            self.__tela.largura/2)-(img.get_rect().w/2), (self.__tela.altura/2)-(img.get_rect().h/2)))
+        self.botaoDireita.desenharBt(s)
+        self.botaoEsquerda.desenharBt(s)
+        self.botaoPularTutorial.desenharBt(s)
 
     def reinicarAnimacaoConfete(self):
         self.confete.spriteativo = self.confete2.spriteativo = self.confete3.spriteativo = self.confete4.spriteativo = 0

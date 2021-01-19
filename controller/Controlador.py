@@ -12,8 +12,7 @@ from model.Jogador import Jogador
 from model.Pincel import Pincel
 from model.Sprite import Sprite
 from util import Util
-from util.GIFImage import GIFImage
-from util.Gerador import gerarFases
+from util.Gerador import gerarFases, getTutorials
 from util.Util import gravar_saves, gravar_fase, ler_fases, ReproduzirSons, criarPastas, Cores, carrega_imagem, SONS, \
     ESCALAX
 from util.Util import ler_saves
@@ -88,7 +87,7 @@ class Controlador:
         self.comando.append(self.__inicio)
         Util.CARREGANDO = False
         gerarFases(self.fases)
-        self.sons.BACKGROUND.set_volume(1)
+        self.sons.BACKGROUND.set_volume(0.2)
         self.sons.BACKGROUND.play(TOCAREMLOOP)
         self.carregarConfig()
         self._carregando = False
@@ -172,9 +171,11 @@ class Controlador:
         if self.jogandoFasePersonalizada:
             self.tela.fasespersonalizadas = ler_fases()
             self.fase = self.tela.fasespersonalizadas[self.index]
+            self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         else:
             gerarFases(self.fases)
             self.fase = self.fases[self.jogador.getNivel()]
+            self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
 
     def ganhou(self):
         self.i = self.j = 0
@@ -199,6 +200,7 @@ class Controlador:
             self.jogador.subirNivel()
             self.pincel.posicaoInicial()
             self.fase = self.fases[self.jogador.getNivel()]
+            self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
             gravar_saves(self.saves)
         else:
             self.sons.WIN.play()
@@ -273,6 +275,8 @@ class Controlador:
                             self.saves.append(self.jogador)
                             gravar_saves(self.saves)
                             self.fase = self.fases[self.jogador.getNivel()]
+                            self.atualizarListaBlMover(
+                                self.fase.blocosdisponiveis, True)
                             if self.fase.tutorial is not None:
                                 self.tela.jogoPane.exibindoTutorial = True
                             self.pincel.posicaoInicial()
@@ -299,6 +303,8 @@ class Controlador:
                     self._VerificarTelaConfig(posicaomaouse)
                 elif self.tela.telaInicio:
                     self._VerificarTelaInicio(posicaomaouse)
+                elif self.tela.telaAjuda:
+                    self._verificarTelaAjuda(posicaomaouse)
                 elif self.tela.telaSaves:
                     self._VerificarTelaSaves(posicaomaouse)
                 elif self.tela.telaFases:
@@ -344,6 +350,19 @@ class Controlador:
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
 
+    def _verificarTelaAjuda(self, posicaomaouse):
+        tutoriais = getTutorials()
+        img = tutoriais[self.tela.indexAjuda]
+        if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.indexAjuda > 1:
+            self.tela.indexAjuda -= 1
+        elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse) or (img is not None and pygame.Rect((
+                self.largura/2)-(img.get_rect().w/2), (self.altura/2)-(img.get_rect().h/2), img.get_rect().w, img.get_rect().h).collidepoint(posicaomaouse)):
+            self.tela.indexAjuda += 1
+        if self.tela.jogoPane.botaoPularTutorial.colisao_point(posicaomaouse) or len(tutoriais) < self.tela.indexAjuda:
+            self.tela.telaAjuda = False
+            self.tela.telaInicio = True
+            self.tela.indexAjuda = 1
+
     def _VerificarTelaConfig(self, posicaomouse):
         # if self.tela.btCimaVel.colisao_point(posicaomouse) and Util.Config.VELOCIDADE < 150:
         #     Util.Config.VELOCIDADE += 10
@@ -351,7 +370,7 @@ class Controlador:
         #     Util.Config.VELOCIDADE -= 10
         if self.tela.botaoConfirmar.colisao_point(posicaomouse):
             Util.gravarConfig(Util.Config.VELOCIDADE)
-            #self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
+            # self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
             self.tela.telaConfig = False
             self.tela.telaInicio = True
 
@@ -395,9 +414,11 @@ class Controlador:
             if self.jogandoFasePersonalizada:
                 self.tela.fasespersonalizadas = ler_fases()
                 self.fase = self.tela.fasespersonalizadas[self.index]
+                self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
             else:
                 gerarFases(self.fases)
                 self.fase = self.fases[self.jogador.getNivel()]
+                self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         if self.tela.jogoPane.botaoVoltar.colisao_point(posicaomouse):
             self.botaoclicado = True
             if self.tela.jogoPane.criando:
@@ -554,6 +575,8 @@ class Controlador:
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()
                     self.fase = self.fases[self.jogador.getNivel()]
+                    self.atualizarListaBlMover(
+                        self.fase.blocosdisponiveis, True)
                     if self.fase.tutorial is not None:
                         self.tela.jogoPane.exibindoTutorial = True
                     self.tela.telaJogo = True
@@ -631,6 +654,10 @@ class Controlador:
             self.tela.telaInicio = False
             self.tela.telaConfig = True
         # BOTÃO VOLUME
+        elif self.tela.btAjuda.colisao_point(posicaomouse):
+            self.tela.indexAjuda = 1
+            self.tela.telaInicio = False
+            self.tela.telaAjuda = True
         elif self.tela.botaoVolume.colisao_point(posicaomouse):
             if self.volume:
                 self.tela.botaoVolume.mudarImg("BOTAOVOLUMEOFF.PNG")
@@ -676,6 +703,8 @@ class Controlador:
                 if self.tela.contornoFase[i].colisao_point(posicaomaouse):
                     self.index = i
                     self.fase = self.tela.fasespersonalizadas[i]
+                    self.atualizarListaBlMover(
+                        self.fase.blocosdisponiveis, True)
                     self.jogandoFasePersonalizada = True
                     self.jogador = None
                     self.tela.telaFases = False
