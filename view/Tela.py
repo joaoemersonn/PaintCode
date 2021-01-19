@@ -63,6 +63,7 @@ class Tela:
         self.botaoCriar = Sprite("BOTAOCRIAR.PNG", 1, 2)
         self.botaoSair = Sprite("BOTAOSAIR.PNG", 1, 2)
         self.botaoVolume = Sprite("BOTAOVOLUMEON.PNG", 1, 2)
+        self.btAjuda = Sprite("ajuda.png", 1, 2)
         self.btConfig = Sprite("engrenagem.png", 1, 2)
         self.img = carrega_imagem("img2.png")
         self.c1 = carrega_imagem("c1.png")
@@ -74,6 +75,7 @@ class Tela:
         # self.botaoCriar.definirPosicao((((largura / 2) - self.botaoCriar.rect.h), 450))
         # self.botaoSair.definirPosicao((((largura / 2) - self.botaoSair.rect.h), 590))
         self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 590))
+        self.btAjuda.definirPosicao((1150, 50))
         self.botaoVolume.definirPosicao((1210, 50))
         self.btConfig.definirPosicao((1290, 50))
         # ESCOLHERSAVE
@@ -185,6 +187,7 @@ class Tela:
             if self.telaInicio:
                 # BOTÕES
                 self.botaoVolume.desenharBt(self.janela)
+                self.btAjuda.desenharBt(self.janela)
                 self.btConfig.desenharBt(self.janela)
                 self.janela.blit(
                     self.img, (((self.largura / 2) - (self.img.get_width()/2)), 0))

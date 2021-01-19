@@ -106,10 +106,12 @@ class PainelJogo(Painel):
             (self.__tela.largura, self.__tela.altura), pygame.SRCALPHA)
 
         self.exibindoTutorial = False
+        self.botaoPularTutorial = Sprite("BOTAOPULAR.png", 1, 2)
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
         self.botaoDireita = Sprite("BOTAODIREITA.png", 1, 2)
         self.botaoEsquerda.definirPosicao((60, 350))
         self.botaoDireita.definirPosicao((1220, 350))
+        self.botaoPularTutorial.definirPosicao((590, 650))
         self.indexTutorial = 0
 
         self.destaque = False
@@ -183,9 +185,11 @@ class PainelJogo(Painel):
                     self.__tela.largura/2)-(img.get_rect().w/2), (self.__tela.altura/2)-(img.get_rect().h/2)))
                 self.botaoDireita.desenharBt(self.__tela.jogoPane)
                 self.botaoEsquerda.desenharBt(self.__tela.jogoPane)
+                self.botaoPularTutorial.desenharBt(self.__tela.jogoPane)
 
     def reinicarAnimacaoConfete(self):
-        self.confete.spriteativo =self.confete2.spriteativo =self.confete3.spriteativo = self.confete4.spriteativo = 0 
+        self.confete.spriteativo = self.confete2.spriteativo = self.confete3.spriteativo = self.confete4.spriteativo = 0
+
     def desenharAnimacaoWin(self, fase=None, jogador=None, comando=None, pincel=None, fps=0, sc=None):
         if sc is None:
             sc = self
