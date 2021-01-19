@@ -89,7 +89,6 @@ class Tela:
         self.botaoNovoJogo.definirPosicao((90 + (self.ajuste / 2), 580))
         self.botaoFasesPersonalizadas.definirPosicao(
             (350 + (self.ajuste / 2), 580))
-        self.botaoVoltar.definirPosicao((650 + (self.ajuste / 2), 580))
         self.botaoCima.definirPosicao((860 + (self.ajuste / 2), 54))
         self.botaoBaixo.definirPosicao((860 + (self.ajuste / 2), 480))
         self.savesPane = Painel(self.escalarX(943), self.escalarY(
@@ -128,8 +127,8 @@ class Tela:
         #self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
         #self.btCimaVel.definirPosicao((250, 280))
         #self.btBaixoVel.definirPosicao((250, 350))
-        self.botaoConfirmar = Sprite("confirmar.png", 1, 2, 0.6)
-        self.botaoConfirmar.definirPosicao((750 + (self.ajuste / 2), 580))
+        self.botaoConfirmar = Sprite("BOTAOGRAVAR.PNG", 1, 2)
+        self.botaoConfirmar.definirPosicao((830 + (self.ajuste / 2), 580))
 
         # TELA FASES PERSONALIZADAS
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
@@ -210,6 +209,7 @@ class Tela:
                 # BOTÕES
                 self.botaoNovoJogo.desenharBt(self.janela)
                 self.botaoFasesPersonalizadas.desenharBt(self.janela)
+                self.botaoVoltar.definirPosicao((650 + (self.ajuste / 2), 580))
                 self.botaoVoltar.desenharBt(self.janela)
                 self.botaoCima.desenharBt(self.janela)
                 self.botaoBaixo.desenharBt(self.janela)
@@ -292,6 +292,8 @@ class Tela:
         self.janela.blit(txt_vel, self.escalarXY(260, 330))
         contornar(self.janela, 250, 325, 50, 30, eX=ESCALAX, eY=ESCALAY)
         self.botaoConfirmar.desenharBt(self.janela)
+        self.botaoVoltar.definirPosicao((580 + (self.ajuste / 2), 580))
+        self.botaoVoltar.desenharBt(self.janela)
 
     def escalar(self, x, y, tamx, tamy):
         return int(ESCALAX*x), int(y*ESCALAY), int(ESCALAX*tamx), int(ESCALAY*tamy)

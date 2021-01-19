@@ -49,6 +49,7 @@ class Controlador:
 
         self.tela = None
         self.i = self.index = 0
+        self._velociadeAnterior = 60
         self.relogio = pygame.time.Clock()
         self.rodando = True
         self.pressNovojogo = self.executandoComando = False
@@ -373,6 +374,10 @@ class Controlador:
             # self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
             self.tela.telaConfig = False
             self.tela.telaInicio = True
+        elif self.tela.botaoVoltar.colisao_point(posicaomouse):
+            self.tela.telaConfig = False
+            self.tela.telaInicio = True
+            self.tela.sliderVl.value = Util.Config.VELOCIDADE = self._velociadeAnterior
 
     def _VerificarTelaJogo(self, posicaomouse):
 
@@ -419,7 +424,7 @@ class Controlador:
                 gerarFases(self.fases)
                 self.fase = self.fases[self.jogador.getNivel()]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
-        if self.tela.jogoPane.botaoVoltar.colisao_point(posicaomouse):
+        elif self.tela.jogoPane.botaoVoltar.colisao_point(posicaomouse):
             self.botaoclicado = True
             if self.tela.jogoPane.criando:
                 self.tela.telaCriar = True
@@ -433,7 +438,7 @@ class Controlador:
                     self.tela.telaSaves = True
             self.tela.telaJogo = False
         # Executar
-        if self.tela.jogoPane.get_executarButton().colisao_point(posicaomouse) and len(self.comando) > 1:
+        elif self.tela.jogoPane.get_executarButton().colisao_point(posicaomouse) and len(self.comando) > 1:
             self.executandoComando = True
         #  Arrastar BLoco comando
         for x in self.fase.blocosdisponiveis:
@@ -478,12 +483,16 @@ class Controlador:
                     self.comando[i + 1] = x
                     self.comando[i] = aux
                     break
-                if x.get_tipo() == "repetir":
+                if self.tela.jogoPane.repetir.colisao_point(posicaomouse):
+                    self.tela.jogoPane.mostrarEditBlRepetir = not self.tela.jogoPane.mostrarEditBlRepetir
+                if self.tela.jogoPane.corOpcao.colisao_point(posicaomouse):
+                    self.tela.jogoPane.mostrarEditBlCor = not self.tela.jogoPane.mostrarEditBlCor
+                if x.get_tipo() == "repetir" and self.tela.jogoPane.mostrarEditBlRepetir:
                     if self.tela.jogoPane.seta.colisao_point(posicaomouse) and x.Value > 2:
                         x.Value -= 1
                     elif self.tela.jogoPane.seta2.colisao_point(posicaomouse) and x.Value < 9:
                         x.Value += 1
-                if x.get_tipo() == "selecionar_cor":
+                if x.get_tipo() == "selecionar_cor" and self.tela.jogoPane.mostrarEditBlCor:
                     vl = 0
                     tambl = 70
                     posi = x.get_rect()
@@ -651,6 +660,7 @@ class Controlador:
 
     def _VerificarTelaInicio(self, posicaomouse):
         if self.tela.btConfig.colisao_point(posicaomouse):
+            self._velociadeAnterior = Util.Config.VELOCIDADE
             self.tela.telaInicio = False
             self.tela.telaConfig = True
         # BOTÃO VOLUME
