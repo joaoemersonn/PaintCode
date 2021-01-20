@@ -5,3 +5,4 @@ settings.json
 .ropeproject
 .vscode
 MakeExe(PyInstaller).cmd
+build

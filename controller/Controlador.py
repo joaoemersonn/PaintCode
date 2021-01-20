@@ -71,6 +71,7 @@ class Controlador:
         self.verificandodesenho = False
         self.exibindoperda = False
         self.animarTesteVl = 0
+        self.blOpcaoTrue = None
         ###
         # self.gif.executar(self.window, 950, 350)
         self.inicializar()
@@ -485,8 +486,12 @@ class Controlador:
                     break
                 if self.tela.jogoPane.repetir.colisao_point(posicaomouse):
                     self.tela.jogoPane.mostrarEditBlRepetir = not self.tela.jogoPane.mostrarEditBlRepetir
+                    if self.tela.jogoPane.mostrarEditBlRepetir:
+                        self.blOpcaoTrue = x
                 if self.tela.jogoPane.corOpcao.colisao_point(posicaomouse):
                     self.tela.jogoPane.mostrarEditBlCor = not self.tela.jogoPane.mostrarEditBlCor
+                    if self.tela.jogoPane.mostrarEditBlCor:
+                        self.blOpcaoTrue = x
                 if x.get_tipo() == "repetir" and self.tela.jogoPane.mostrarEditBlRepetir:
                     if self.tela.jogoPane.seta.colisao_point(posicaomouse) and x.Value > 2:
                         x.Value -= 1
@@ -503,14 +508,21 @@ class Controlador:
                         if rect.collidepoint(posicaomouse):
                             x.set_Valor(cor)
                         vl += 1
-
+            auxy = 0
+            if x.get_tipo() == "repetir" or x.get_tipo() == "selecionar_cor":
+                auxy = 60
+            tamx = 200 + auxy
             if x.get_rect().collidepoint(posicaomouse) and x.get_tipo() != "inicio":
                 x.selecionado = not x.selecionado
-            elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(200), escalarY(70)).collidepoint(posicaomouse):
+            elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(tamx), escalarY(70)).collidepoint(posicaomouse):
                 pass
             elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
                 pass
             else:
+                if self.blOpcaoTrue == x:
+                    print("olha condicional deu certo@:D")
+                    self.tela.jogoPane.mostrarEditBlCor = self.tela.jogoPane.mostrarEditBlRepetir = False
+                    self.blOpcaoTrue = None
                 x.selecionado = False
             i += 1
 
