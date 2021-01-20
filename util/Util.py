@@ -275,39 +275,6 @@ def carregar_som(nome):
     return som
 
 
-class ImgBlocos:
-    def __init__(self):
-        self.bl01 = None
-        self.bl02 = None
-        self.bl03 = None
-        self.baixo = None
-        self.cima = None
-        self.direita = None
-        self.esquerda = None
-        self.girar_direita = None
-        self.girar_esquerda = None
-        self.inicio = None
-        self.mover = None
-        self.repetir = None
-        self.selecionar_cor = None
-
-    def iniciar(self):
-        self.bl01 = carregar_som('01.png')
-        self.bl02 = carregar_som('02.png')
-        self.bl03 = carregar_som('03.png')
-        self.baixo = carregar_som('baixo.png')
-        self.cima = carregar_som('cima.png')
-        self.direita = carregar_som('direita.png')
-        self.esquerda = carregar_som('esquerda.png')
-        self.girar_esquerda = carregar_som('girar_esquerda.png')
-        self.girar_direita = carregar_som('girar_direita.png')
-        self.inicio = carregar_som('inicio.png')
-        self.mover = carregar_som('mover.png')
-        self.pintar = carregar_som('pintar.png')
-        self.repetir = carregar_som('repetir.png')
-        self.selecionar_cor = carregar_som('selecionar_cor.png')
-
-
 def carrega_imagem(imagem_nome, subdir="", escala=1):
     animarLoad()
     diretorio = get_path_projeto()
@@ -326,6 +293,79 @@ def carrega_imagem(imagem_nome, subdir="", escala=1):
         print("Não foi possivel carregar Imagem:", iagempath)
         raise SystemExit
     return image
+
+
+class ImgBlocos:
+    def __init__(self):
+        self.bl01 = None
+        self.bl02 = None
+        self.bl03 = None
+        self.baixo = None
+        self.cima = None
+        self.direita = None
+        self.esquerda = None
+        self.girar_direita = None
+        self.girar_esquerda = None
+        self.inicio = None
+        self.mover = None
+        self.repetir = None
+        self.selecionar_cor = None
+
+    def iniciar(self):
+        self.bl01 = carrega_imagem('01.png', "blocos")
+        self.bl02 = carrega_imagem('02.png', "blocos")
+        self.bl03 = carrega_imagem('03.png', "blocos")
+        self.baixo = carrega_imagem('baixo.png', "blocos")
+        self.cima = carrega_imagem('cima.png', "blocos")
+        self.direita = carrega_imagem('direita.png', "blocos")
+        self.esquerda = carrega_imagem('esquerda.png', "blocos")
+        self.girar_esquerda = carrega_imagem('girar_esquerda.png', "blocos")
+        self.girar_direita = carrega_imagem('girar_direita.png', "blocos")
+        self.inicio = carrega_imagem('inicio.png', "blocos")
+        self.mover = carrega_imagem('mover.png', "blocos")
+        self.pintar = carrega_imagem('pintar.png', "blocos")
+        self.repetir = carrega_imagem('repetir.png', "blocos")
+        self.selecionar_cor = carrega_imagem('selecionar_cor.png', "blocos")
+
+
+IMGBLOCOS = ImgBlocos()
+
+
+def carregar_imagem_blocos(imagem_nome):
+    global IMGBLOCOS
+    if IMGBLOCOS.mover is None:
+        print("BLOCOS IMG COLETADAS")
+        IMGBLOCOS.iniciar()
+    if imagem_nome == "mover.png":
+        return IMGBLOCOS.mover
+    elif imagem_nome == "baixo.png":
+        return IMGBLOCOS.baixo
+    elif imagem_nome == "cima.png":
+        return IMGBLOCOS.cima
+    elif imagem_nome == "direita.png":
+        return IMGBLOCOS.direita
+    elif imagem_nome == "esquerda.png":
+        return IMGBLOCOS.esquerda
+    elif imagem_nome == "inicio.png":
+        return IMGBLOCOS.inicio
+    elif imagem_nome == "girar_direita.png":
+        return IMGBLOCOS.girar_direita
+    elif imagem_nome == "girar_esquerda.png":
+        return IMGBLOCOS.girar_esquerda
+    elif imagem_nome == "inicio.png":
+        return IMGBLOCOS.inicio
+    elif imagem_nome == "pintar.png":
+        return IMGBLOCOS.pintar
+    elif imagem_nome == "selecionar_cor.png":
+        return IMGBLOCOS.selecionar_cor
+    elif imagem_nome == "repetir.png":
+        return IMGBLOCOS.repetir
+    elif imagem_nome == "01.png":
+        return IMGBLOCOS.bl01
+    elif imagem_nome == "02.png":
+        return IMGBLOCOS.bl02
+    elif imagem_nome == "03.png":
+        return IMGBLOCOS.bl03
 
 
 def ReproduzirSons(somativo, sons):

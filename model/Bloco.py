@@ -1,14 +1,15 @@
 import pygame
+from pygame.constants import PREALLOC
 
 from view.Painel import Painel
-from util.Util import carrega_imagem, ESCALAY, ESCALAX
+from util.Util import ESCALAY, ESCALAX, carregar_imagem_blocos
 from util import Util
 from view.PainelJogo import contornarRect, escalar, escalarX, escalarY
 
 
 class Bloco:
     def __init__(self, tipo, value=0):
-        self.imagem = carrega_imagem(str(tipo) + ".png", "blocos")
+        self.imagem = carregar_imagem_blocos(str(tipo) + ".png")
         self.imagem = pygame.transform.scale(self.imagem,
                                              (int(self.imagem.get_rect().w / 2), int(self.imagem.get_rect().h / 2)))
         self.__tipo = tipo
@@ -23,7 +24,7 @@ class Bloco:
             self.atualizaImgMover()
 
     def atualizaImgMover(self):
-        self.imagem = carrega_imagem(str(self.Value) + ".png", "blocos")
+        self.imagem = carregar_imagem_blocos(str(self.Value) + ".png")
         self.imagem = pygame.transform.scale(self.imagem,
                                              (int(self.imagem.get_rect().w / 2), int(self.imagem.get_rect().h / 2)))
         self.rect = self.imagem.get_rect()

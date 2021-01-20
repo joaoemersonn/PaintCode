@@ -70,6 +70,7 @@ class Controlador:
         self.exibindoperda = False
         self.animarTesteVl = 0
         self.blOpcaoTrue = None
+        self.lixeira = self.play = None
         ###
         # self.gif.executar(self.window, 950, 350)
         self.inicializar()
@@ -83,6 +84,8 @@ class Controlador:
         self.sons = Util.SONS
         self.tela.saves = self.carregarSaves()
         self.__inicio = Bloco("inicio")
+        self.play = Sprite("BOTAOPLAY.PNG", 1, 2)
+        self.lixeira = Sprite("lixeira.png", 1, 2)
         self.pincel = Pincel()
         self.comando.append(self.__inicio)
         gerarFases(self.fases, getTutorials())
@@ -281,7 +284,7 @@ class Controlador:
                                 self.tela.jogoPane.exibindoTutorial = True
                             self.pincel.posicaoInicial()
                             self.tela.botaoPlay.append(
-                                Sprite("BOTAOPLAY.PNG", 1, 2))
+                                self.play)
                             self.tela.telaSaves = False
                             self.tela.telaJogo = True
 
@@ -554,8 +557,8 @@ class Controlador:
         if self.tela.botaoNovoJogo.colisao_point(posicaomouse):
             self.tela.textoAlerta = (
                 "Digite Seu Nome: ", "Pressione OK para continuar")
-            self.tela.botaoPlay.append(Sprite("BOTAOPLAY.PNG", 1, 2))
-            self.tela.botaolixeira.append(Sprite("lixeira.png", 1, 2))
+            self.tela.botaoPlay.append(self.play)
+            self.tela.botaolixeira.append(self.lixeira)
             self.tela.desenhaNovoJogo = self.tela.caixaTexto.active = True
             self.pressNovojogo = True
             self.tela.caixaTexto.selected = True
@@ -696,8 +699,8 @@ class Controlador:
             self.tela.botaoPlay.clear()
             self.tela.botaolixeira.clear()
             for x in self.tela.saves:
-                self.tela.botaoPlay.append(Sprite("BOTAOPLAY.PNG", 1, 2))
-                self.tela.botaolixeira.append(Sprite("lixeira.png", 1, 2))
+                self.tela.botaoPlay.append(self.play)
+                self.tela.botaolixeira.append(self.lixeira)
             self.tela.telaSaves = True
         # BOTAO Criar
         elif self.tela.botaoCriar.colisao_point(posicaomouse):
