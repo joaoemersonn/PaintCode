@@ -341,7 +341,6 @@ class PainelJogo(Painel):
                 xspace += 100*ESCALAX
             else:
                 x.definirPosicao(((xspace + 80)/ESCALAX, y))
-                ##print("Bloco/largura: ", x.get_tipo(), x.get_rect().w)
                 xspace += x.get_rect().w - (ESCALAX*15)
                 x.desenhar(self)
 

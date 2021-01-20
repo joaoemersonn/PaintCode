@@ -47,7 +47,7 @@ def getTutorials():
     return tutoriais
 
 
-def gerarFases(listaFases, t=getTutorials()):
+def gerarFases(listaFases, t):
     l = listaFases
     global blocos
     if blocos is None:

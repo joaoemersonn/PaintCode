@@ -26,7 +26,7 @@ def animarLoad():
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
                          (int(338*ESCALAX), int(645*ESCALAY), int(800*ESCALAX), int(40*ESCALAY)))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
-                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*5*STATUSCARREGAMENTO), int(30*ESCALAY)))
+                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*7*STATUSCARREGAMENTO), int(30*ESCALAY)))
         pygame.display.update()
         STATUSCARREGAMENTO += 1
         # print(STATUSCARREGAMENTO)
@@ -216,8 +216,6 @@ def lerConfig():
                                     "")
         diretorio = os.path.join(diretorio, ".PaintCode")
     path = os.path.join(diretorio, "config.cfg")
-    print(path)
-    print(os.path.isfile(path))
     if not os.path.isfile(path):
         return False
     else:
@@ -272,7 +270,7 @@ def carregar_som(nome):
     diretorio = os.path.join(diretorio, 'lib')
     diretorio = os.path.join(diretorio, 'sons')
     sompath = os.path.join(diretorio, nome)
-    print("tentando carregar: ", sompath)
+    print("tentando carregar Som: ", sompath)
     som = mixer.Sound(sompath)
     return som
 
@@ -289,7 +287,6 @@ def carrega_imagem(imagem_nome, subdir="", escala=1):
         image = pygame.image.load(iagempath)
         if escala > 1 or (ESCALAX != 1 and imagem_nome != "confete.png" and imagem_nome != "confete2.png"):
             img1 = image
-            #print("o ESCALAX É: ", ESCALAX)
             image = pygame.transform.smoothscale(
                 img1.convert_alpha(), (int((img1.get_rect().w / escala) * ESCALAX), int((img1.get_rect().h / escala) * ESCALAY)))
     except pygame.error:
