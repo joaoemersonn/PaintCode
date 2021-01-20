@@ -235,6 +235,12 @@ class Controlador:
                 if x.clicked and int(x.string) <= int(self.jogador.getNivel())+1:
                     self.faseSelecionada = int(x.string)-1
                     self.fase = self.fases[self.faseSelecionada]
+                    self.atualizarListaBlMover(
+                        self.fase.blocosdisponiveis, True)
+                    if self.fase.tutorial is not None:
+                        self.tela.jogoPane.exibindoTutorial = True
+                        self.tela.jogoPane.indexTutorial = 0
+                    self.tela.nivelJogador = int(self.jogador.getNivel())
                     x.clicked = False
                     self.tela.telaMenuFases = False
                     self.tela.telaJogo = True
@@ -295,6 +301,7 @@ class Controlador:
                                 self.fase.blocosdisponiveis, True)
                             if self.fase.tutorial is not None:
                                 self.tela.jogoPane.exibindoTutorial = True
+                                self.tela.jogoPane.indexTutorial = 0
                             self.pincel.posicaoInicial()
                             self.tela.botaoPlay.append(
                                 Sprite("BOTAOPLAY.PNG", 1, 2))
@@ -307,6 +314,7 @@ class Controlador:
                     self.tela.desenhaAlerta = not self.tela.desenhaAlerta
                     if self.fase is not None and self.fase.tentativas is not None:
                         self.tela.jogoPane.exibindoTutorial = True
+                        self.tela.jogoPane.indexTutorial = 0
                     if self.jogandoFasePersonalizada:
                         self.jogandoFasePersonalizada = False
                         self.tela.telaFases = True
@@ -452,6 +460,8 @@ class Controlador:
                     self.tela.telaFases = True
                     self.jogandoFasePersonalizada = False
                 else:
+                    self.tela.nivelJogador = int(
+                                self.jogador.getNivel())
                     self.tela.telaMenuFases = True
             self.tela.telaJogo = False
         # Executar
@@ -610,13 +620,10 @@ class Controlador:
                     self.tela.telaSaves = False
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()
-                    self.fase = self.fases[self.jogador.getNivel()]
-                    self.atualizarListaBlMover(
-                        self.fase.blocosdisponiveis, True)
-                    if self.fase.tutorial is not None:
-                        self.tela.jogoPane.exibindoTutorial = True
-                    self.tela.nivelJogador = int(self.jogador.getNivel())
+                    #self.fase = self.fases[self.jogador.getNivel()]
                     self.tela.telaSaves = False
+                    self.tela.nivelJogador = int(
+                                self.jogador.getNivel())
                     self.tela.telaMenuFases = True
 
     def atualizarListaBlMover(self, blocos, fase=False):
