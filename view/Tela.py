@@ -3,17 +3,18 @@ import pygame
 import os
 
 from util import Util
-from util.Util import Cores, get_cor, ESCALAX, ESCALAY
+from util.Util import Cores, gerarBotaoFase, get_cor, ESCALAX, ESCALAY
 from view.Painel import Painel
 from model.Sprite import Sprite
-from pygame_widgets import TextBox, Slider
-from view.PainelJogo import PainelJogo
+from pygame_widgets import TextBox, Slider, Button
+from view.PainelJogo import PainelJogo, escalarX, escalarXY, escalarY
 from util.Util import carrega_imagem
 from view.PainelJogo import contornarRect
 from view.PainelJogo import contornar
 
 
 class Tela:
+
     def __init__(self, window, largura, altura):
         pygame.init()
         fontearquivo = os.path.dirname(os.path.abspath(
@@ -32,6 +33,8 @@ class Tela:
         # pygame.display.set_mode(self.tamanho,pygame.SCALED)
         self.janela = window
         self.__janela = carrega_imagem("janela.png")
+        self.cadeado = carrega_imagem("cadeado.png")
+        self.imgVazia = carrega_imagem("rect.png")
         self.__janela2 = pygame.transform.smoothscale(
             self.__janela.convert_alpha(), (int(30 * self.scala_x), int(30 * self.scala_y)))
 
@@ -152,12 +155,17 @@ class Tela:
         # JOGO
         # 943, 493, 25, 70)
         self.jogoPane = PainelJogo(self, self.largura, self.altura, 0, 0)
+        self.botoesFases = gerarBotaoFase(janela=self.janela)
+        self.nivelJogador = 0
+        self.telaMenuFases = False
 
         # IMAGEM
         self.imagemConteiner = carrega_imagem("conteiner.png")
         # TEXTOS
         self.tituloTelaSave = self.fonteTitulo.render(
             "Jogar", True, self.corPrincipal)
+        self.tituloTelaMenuFase = self.fonteTitulo.render(
+            "Escolha um nível para jogar", True, self.corPrincipal)
         self.tituloTelaFases = self.fonteTitulo.render(
             "Fases Personalizadas", True, self.corPrincipal)
         self.txt_pane = self.fonteTitulo.render(
@@ -215,6 +223,8 @@ class Tela:
                 self.botaoBaixo.desenharBt(self.janela)
 
             # TELA FASES PERS
+            elif self.telaMenuFases:
+                self.desenharMenuFases(self.nivelJogador)
             elif self.telaFases:
                 self.janela.blit(self.tituloTelaFases,
                                  self.escalarXY(375, 35))
@@ -248,6 +258,22 @@ class Tela:
 
         if self.desenhaNovoJogo:
             self.desenharNovoJogo()
+
+    def desenharMenuFases(self, nivel):
+        self.janela.blit(self.tituloTelaMenuFase, escalarXY(320, 25))
+        self.botaoVoltar.definirPosicao((1100, 600))
+        self.botaoVoltar.desenharBt(self.janela)
+        i = 0
+        for bt in self.botoesFases:
+            if int(bt.string) <= (int(nivel)+1):
+                bt.setInactiveColour((0, 205, 255))
+                bt.setHoverColour((0, 0, 255))
+                bt.setImage(self.imgVazia)
+            else:
+                bt.setInactiveColour((153, 153, 153))
+                bt.setHoverColour((153, 153, 153))
+                bt.setImage(self.cadeado)
+            bt.draw()
 
     def desenharPainelCriar(self):
         self.janela.blit(self.txt_pane, self.escalarXY(20, 50))

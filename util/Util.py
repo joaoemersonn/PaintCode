@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import pygame
 from pygame import mixer
+from pygame_widgets.button import Button
 from model.Desenho import Desenho
 from model.Jogador import Jogador
 from model.Fase import Fase
@@ -51,6 +52,30 @@ def get_cor(valor):
 class Config:
     VELOCIDADE = 60
     TELACHEIA = True
+
+
+def criarBotaoFase(janela, x, y, texto):
+    bt = Button(
+        janela, int(x*ESCALAX), int(y*ESCALAY), int(100*ESCALAX), int(140*ESCALAY), text=texto,
+        fontSize=50, margin=20,
+        inactiveColour=(0, 205, 255),
+        hoverColour=(0, 0, 255), radius=20,
+    )
+    return bt
+
+
+def gerarBotaoFase(janela, t=15):
+    l = list()
+    y = 1
+    x = 0
+    for i in range(0, t):
+        if i >= (y*5):
+            y += 1
+            x = 0
+        l.append(criarBotaoFase(
+            janela, (200+(200*(x))), 150+((y-1)*150), str(i+1)))
+        x += 1
+    return l
 
 
 class Cores:
@@ -255,7 +280,7 @@ def criarPastas():
                         "").replace("lib",
                                     "")
         diretorio = os.path.join(diretorio, ".PaintCode")
-    #diretorio = os.path.join(Path.home(), ".PaintCode")
+    # diretorio = os.path.join(Path.home(), ".PaintCode")
     print("Diretorio criado: ", diretorio)
     if not os.path.isdir(diretorio):
         os.mkdir(diretorio)

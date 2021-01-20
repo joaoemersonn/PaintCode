@@ -4,7 +4,7 @@ from view.Painel import Painel
 
 
 class Sprite:
-    def __init__(self, nomearquivo, colunas, linhas, escala=None, rotacao=None):
+    def __init__(self, nomearquivo, colunas, linhas, escala=None, rotacao=None, som=True):
         self.sheet = carrega_imagem(nomearquivo).convert_alpha()
         if escala is not None:
             self.sheet = pygame.transform.smoothscale(self.sheet, (
@@ -14,6 +14,7 @@ class Sprite:
         self.colunas = colunas
         self.spriteativo = self.aux = 0
         self.animacao = None
+        self.som = som
         self.linhas = linhas
         self.posicaoRelativa = (0, 0)
         self.totalCellCount = colunas * linhas
@@ -57,7 +58,7 @@ class Sprite:
         cellIndex = 0
         if self.colisao_point(pygame.mouse.get_pos()):
             cellIndex = 1
-            if self.spriteativo == 0:
+            if self.spriteativo == 0 and self.som:
                 SONS.TICK.play()
             self.spriteativo = 1
         else:
