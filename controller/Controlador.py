@@ -287,6 +287,8 @@ class Controlador:
                         self.tela.desenhaConfirmacao = False
                 elif self.tela.desenhaNovoJogo:
                     if self.tela.cancelarbotao.colisao_point(posicaomaouse):
+                        self.tela.caixaTexto.cursorPosition = 0
+                        self.tela.caixaTexto.setText("")
                         self.tela.desenhaNovoJogo = False
                     if self.tela.confirmarbotao.colisao_point(posicaomaouse):
                         if self.pressNovojogo:
@@ -294,14 +296,10 @@ class Controlador:
                             gerarFases(self.fases, getTutorials())
                             self.jogador = Jogador(
                                 "".join(self.tela.caixaTexto.text))
-                            self.tela.caixaTexto.text = ""
+                            self.tela.caixaTexto.cursorPosition = 0
+                            self.tela.caixaTexto.setText("")
                             self.saves.append(self.jogador)
                             gravar_saves(self.saves)
-                            self.atualizarListaBlMover(
-                                self.fase.blocosdisponiveis, True)
-                            if self.fase.tutorial is not None:
-                                self.tela.jogoPane.exibindoTutorial = True
-                                self.tela.jogoPane.indexTutorial = 0
                             self.pincel.posicaoInicial()
                             self.tela.botaoPlay.append(
                                 Sprite("BOTAOPLAY.PNG", 1, 2))
