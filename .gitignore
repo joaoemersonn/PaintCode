@@ -6,3 +6,5 @@ settings.json
 .vscode
 MakeExe(PyInstaller).cmd
 build
+dist
+main.spec
