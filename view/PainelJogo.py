@@ -101,6 +101,11 @@ class PainelJogo(Painel):
         self.fonten = pygame.font.Font(fontearquivo, escalarX(17))
         self.fonteg = pygame.font.Font(fontearquivo, escalarX(32))
         self.fontexg = pygame.font.Font(fontearquivo, escalarX(52))
+        self.fontexxg = pygame.font.Font(fontearquivo, escalarX(150))
+        self.infoCriando = self.fonteg.render(
+            "Utilize as ferramentas para pintar a casa que será o objetivo da fase criada!", True, Cores.PRETO)
+        self.infoCriando2 = self.fonteg.render(
+            "Agora modifique o desenho para definir como a casa estará inicialmente!", True, Cores.PRETO)
         self.back = carrega_imagem("back.png")
         self.exibeAviso = False
         self.mostrarEditBlRepetir = self.mostrarEditBlCor = False
@@ -177,9 +182,14 @@ class PainelJogo(Painel):
                 self.desenharInfo(fase, jogador)
 
             else:
+                if not self.finalizacriacao:
+                    self.blit(self.infoCriando, (20, 540))
+                else:
+                    self.blit(self.infoCriando2, (20, 540))
                 self.botaoSalvar.desenharBt(self)
                 self.desenharFerramentasEdicao()
                 self.desenharPincelWidget()
+
             if self.exibeAviso:
                 self.aviso(self.textoaviso[0], self.textoaviso[1])
             if self.exibindoTutorial:
@@ -234,7 +244,8 @@ class PainelJogo(Painel):
             self.blit(faserender, escalarXY(70, 60))
         tentativas = self.fonten.render("Tentativas Restantes:", True, cor)
         if self.destaque:
-            tentativas2 = self.fontexg.render(str(fase.tentativas), True, cor)
+            tentativas2 = self.fontexxg.render(
+                str(fase.tentativas), True, Cores.VERMELHO)
         else:
             tentativas2 = self.fonteg.render(str(fase.tentativas), True, cor)
         self.blit(tentativas, escalarXY(70, 90))
