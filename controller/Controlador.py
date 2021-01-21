@@ -71,7 +71,7 @@ class Controlador:
         self.animarTesteVl = 0
         self.blOpcaoTrue = None
         self.faseSelecionada = 0
-        #self.lixeira = self.play = None
+        # self.lixeira = self.play = None
         ###
         # self.gif.executar(self.window, 950, 350)
         self.inicializar()
@@ -199,11 +199,13 @@ class Controlador:
             self.tela.jogoPane.reinicarAnimacaoConfete()
             self.tela.jogoPane.tempoAnGanhou = (57 * 4)
             self.tela.textoAlerta = (
-                "Parabéns Você Passou de Nível!", "Pressione OK para continuar!")
+                "Parabéns Você Concluiu o Nível!", "Pressione OK para continuar!")
             self.tela.desenhaAlerta = True
-            self.jogador.subirNivel()
+            if self.fase.nivel > int(self.jogador.getNivel()):
+                self.jogador.subirNivel()
+                self.fase = self.fases[self.jogador.getNivel()]
             self.pincel.posicaoInicial()
-            self.fase = self.fases[self.jogador.getNivel()]
+            # self.fase = self.fases[self.jogador.getNivel()]
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
             gravar_saves(self.saves)
         else:
@@ -234,12 +236,13 @@ class Controlador:
                 x.listen(events)
                 if x.clicked and int(x.string) <= int(self.jogador.getNivel())+1:
                     self.faseSelecionada = int(x.string)-1
+                    gerarFases(self.fases, getTutorials())
                     self.fase = self.fases[self.faseSelecionada]
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
-                    if self.fase.tutorial is not None:
-                        self.tela.jogoPane.exibindoTutorial = True
-                        self.tela.jogoPane.indexTutorial = 0
+                    self.tela.jogoPane.exibindoTutorial = (
+                        self.fase.tutorial is not None)
+                    self.tela.jogoPane.indexTutorial = 0
                     self.tela.nivelJogador = int(self.jogador.getNivel())
                     x.clicked = False
                     self.tela.telaMenuFases = False
@@ -309,6 +312,7 @@ class Controlador:
                             self.tela.telaMenuFases = True
 
                 elif self.tela.desenhaAlerta and self.tela.ok.colisao_point(posicaomaouse):
+                    self.tela.jogoPane.tempoAnGanhou = 0
                     self.tela.desenhaAlerta = not self.tela.desenhaAlerta
                     if self.fase is not None and self.fase.tentativas is not None:
                         self.tela.jogoPane.exibindoTutorial = True
@@ -317,9 +321,9 @@ class Controlador:
                         self.jogandoFasePersonalizada = False
                         self.tela.telaFases = True
                         self.tela.telaJogo = False
-                    elif self.fimdejogo:
+                    elif self.fimdejogo or self.fase.nivel <= int(self.jogador.getNivel()):
                         self.fimdejogo = self.tela.telaJogo = False
-                        self.tela.telaSaves = True
+                        self.tela.telaMenuFases = True
 
                 elif self.tela.telaCriar:
                     self._VerificarTelaCriar(posicaomaouse)
@@ -618,7 +622,7 @@ class Controlador:
                     self.tela.telaSaves = False
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()
-                    #self.fase = self.fases[self.jogador.getNivel()]
+                    # self.fase = self.fases[self.jogador.getNivel()]
                     self.tela.telaSaves = False
                     self.tela.nivelJogador = int(
                         self.jogador.getNivel())
