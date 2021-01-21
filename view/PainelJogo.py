@@ -101,6 +101,7 @@ class PainelJogo(Painel):
         self.fonten = pygame.font.Font(fontearquivo, escalarX(17))
         self.fonteg = pygame.font.Font(fontearquivo, escalarX(32))
         self.fontexg = pygame.font.Font(fontearquivo, escalarX(52))
+        self.fontexxg = pygame.font.Font(fontearquivo, escalarX(150))
         self.back = carrega_imagem("back.png")
         self.exibeAviso = False
         self.mostrarEditBlRepetir = self.mostrarEditBlCor = False
@@ -234,7 +235,7 @@ class PainelJogo(Painel):
             self.blit(faserender, escalarXY(70, 60))
         tentativas = self.fonten.render("Tentativas Restantes:", True, cor)
         if self.destaque:
-            tentativas2 = self.fontexg.render(str(fase.tentativas), True, cor)
+            tentativas2 = self.fontexxg.render(str(fase.tentativas), True, Cores.VERMELHO)
         else:
             tentativas2 = self.fonteg.render(str(fase.tentativas), True, cor)
         self.blit(tentativas, escalarXY(70, 90))

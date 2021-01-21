@@ -447,7 +447,7 @@ class Controlador:
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
             else:
                 gerarFases(self.fases, getTutorials())
-                self.fase = self.fases[self.jogador.getNivel()]
+                self.fase = self.fases[self.faseSelecionada]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         elif self.tela.jogoPane.botaoVoltar.colisao_point(posicaomouse):
             self.botaoclicado = True
@@ -461,7 +461,7 @@ class Controlador:
                     self.jogandoFasePersonalizada = False
                 else:
                     self.tela.nivelJogador = int(
-                                self.jogador.getNivel())
+                        self.jogador.getNivel())
                     self.tela.telaMenuFases = True
             self.tela.telaJogo = False
         # Executar
@@ -623,7 +623,7 @@ class Controlador:
                     #self.fase = self.fases[self.jogador.getNivel()]
                     self.tela.telaSaves = False
                     self.tela.nivelJogador = int(
-                                self.jogador.getNivel())
+                        self.jogador.getNivel())
                     self.tela.telaMenuFases = True
 
     def atualizarListaBlMover(self, blocos, fase=False):
