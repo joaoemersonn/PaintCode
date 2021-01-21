@@ -71,7 +71,7 @@ class Controlador:
         self.animarTesteVl = 0
         self.blOpcaoTrue = None
         self.faseSelecionada = 0
-        #self.lixeira = self.play = None
+        # self.lixeira = self.play = None
         ###
         # self.gif.executar(self.window, 950, 350)
         self.inicializar()
@@ -290,25 +290,7 @@ class Controlador:
                         self.tela.desenhaNovoJogo = False
                     if self.tela.confirmarbotao.colisao_point(posicaomaouse):
                         if self.pressNovojogo:
-                            self.tela.desenhaNovoJogo = self.pressNovojogo = False
-                            gerarFases(self.fases, getTutorials())
-                            self.jogador = Jogador(
-                                "".join(self.tela.caixaTexto.text))
-                            self.tela.caixaTexto.text = ""
-                            self.saves.append(self.jogador)
-                            gravar_saves(self.saves)
-                            self.atualizarListaBlMover(
-                                self.fase.blocosdisponiveis, True)
-                            if self.fase.tutorial is not None:
-                                self.tela.jogoPane.exibindoTutorial = True
-                                self.tela.jogoPane.indexTutorial = 0
-                            self.pincel.posicaoInicial()
-                            self.tela.botaoPlay.append(
-                                Sprite("BOTAOPLAY.PNG", 1, 2))
-                            self.tela.nivelJogador = int(
-                                self.jogador.getNivel())
-                            self.tela.telaSaves = False
-                            self.tela.telaMenuFases = True
+                            self.gerarNovoJogo()
 
                 elif self.tela.desenhaAlerta and self.tela.ok.colisao_point(posicaomaouse):
                     self.tela.desenhaAlerta = not self.tela.desenhaAlerta
@@ -375,6 +357,29 @@ class Controlador:
                     self.atualizarListaBlMover(self.comando)
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
+
+    def gerarNovoJogo(self):
+        self.tela.desenhaNovoJogo = self.pressNovojogo = False
+        gerarFases(self.fases, getTutorials())
+        if Util.Config.MOBILE:
+            self.jogador = Jogador(("Save ", (len(self.saves)+1)))
+        self.jogador = Jogador(
+            "".join(self.tela.caixaTexto.text))
+        self.tela.caixaTexto.text = ""
+        self.saves.append(self.jogador)
+        gravar_saves(self.saves)
+        self.atualizarListaBlMover(
+            self.fase.blocosdisponiveis, True)
+        if self.fase.tutorial is not None:
+            self.tela.jogoPane.exibindoTutorial = True
+            self.tela.jogoPane.indexTutorial = 0
+        self.pincel.posicaoInicial()
+        self.tela.botaoPlay.append(
+            Sprite("BOTAOPLAY.PNG", 1, 2))
+        self.tela.nivelJogador = int(
+            self.jogador.getNivel())
+        self.tela.telaSaves = False
+        self.tela.telaMenuFases = True
 
     def _verificarTelaAjuda(self, posicaomaouse):
         tutoriais = getTutorials()
@@ -461,7 +466,7 @@ class Controlador:
                     self.jogandoFasePersonalizada = False
                 else:
                     self.tela.nivelJogador = int(
-                                self.jogador.getNivel())
+                        self.jogador.getNivel())
                     self.tela.telaMenuFases = True
             self.tela.telaJogo = False
         # Executar
@@ -580,13 +585,18 @@ class Controlador:
 
     def _VerificarTelaSaves(self, posicaomouse):
         if self.tela.botaoNovoJogo.colisao_point(posicaomouse):
-            self.tela.textoAlerta = (
-                "Digite Seu Nome: ", "Pressione OK para continuar")
+            if not Util.Config.MOBILE:
+                self.tela.textoAlerta = (
+                    "Digite Seu Nome: ", "Pressione OK para continuar")
+                self.tela.caixaTexto.active = True
+                self.tela.caixaTexto.selected = True
+                self.tela.desenhaNovoJogo = True
+                self.pressNovojogo = True
+            else:
+                self.gerarNovoJogo()
             self.tela.botaoPlay.append(Sprite("BOTAOPLAY.PNG", 1, 2))
             self.tela.botaolixeira.append(Sprite("lixeira.png", 1, 2))
-            self.tela.desenhaNovoJogo = self.tela.caixaTexto.active = True
-            self.pressNovojogo = True
-            self.tela.caixaTexto.selected = True
+
         elif self.tela.botaoFasesPersonalizadas.colisao_point(posicaomouse):
             self.tela.fasespersonalizadas = ler_fases()
             if self.tela.fasespersonalizadas is not None:
@@ -620,10 +630,10 @@ class Controlador:
                     self.tela.telaSaves = False
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()
-                    #self.fase = self.fases[self.jogador.getNivel()]
+                    # self.fase = self.fases[self.jogador.getNivel()]
                     self.tela.telaSaves = False
                     self.tela.nivelJogador = int(
-                                self.jogador.getNivel())
+                        self.jogador.getNivel())
                     self.tela.telaMenuFases = True
 
     def atualizarListaBlMover(self, blocos, fase=False):

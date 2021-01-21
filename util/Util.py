@@ -52,6 +52,7 @@ def get_cor(valor):
 class Config:
     VELOCIDADE = 60
     TELACHEIA = True
+    MOBILE = False
 
 
 def criarBotaoFase(janela, x, y, texto):

@@ -126,10 +126,10 @@ class Tela:
         self.sliderVl = Slider(self.janela, self.escalarX(170), self.escalarY(450), self.escalarX(400),
                                self.escalarY(20), min=20, max=300, step=1, colour=Cores.CORSECUNDARIA, handleColour=Cores.CORPRINCIPAL)
         self.sliderVl.value = Util.Config.VELOCIDADE
-        #self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
-        #self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
-        #self.btCimaVel.definirPosicao((250, 280))
-        #self.btBaixoVel.definirPosicao((250, 350))
+        # self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
+        # self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
+        # self.btCimaVel.definirPosicao((250, 280))
+        # self.btBaixoVel.definirPosicao((250, 350))
         self.botaoConfirmar = Sprite("BOTAOGRAVAR.PNG", 1, 2)
         self.botaoConfirmar.definirPosicao((830 + (self.ajuste / 2), 580))
 
@@ -188,7 +188,6 @@ class Tela:
             "VELOCIDADE:", True, self.corPrincipal)
 
     def desenhar(self):
-
         if not self.desenhaNovoJogo and not self.desenhaAlerta and not self.desenhaConfirmacao:
             self.janela.fill(self.corBranca)
 
