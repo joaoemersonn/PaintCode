@@ -296,21 +296,6 @@ class Controlador:
                     if self.tela.confirmarbotao.colisao_point(posicaomaouse):
                         if self.pressNovojogo:
                             self.gerarNovoJogo()
-                            self.tela.desenhaNovoJogo = self.pressNovojogo = False
-                            gerarFases(self.fases, getTutorials())
-                            self.jogador = Jogador(
-                                "".join(self.tela.caixaTexto.text))
-                            self.tela.caixaTexto.cursorPosition = 0
-                            self.tela.caixaTexto.setText("")
-                            self.saves.append(self.jogador)
-                            gravar_saves(self.saves)
-                            self.pincel.posicaoInicial()
-                            self.tela.botaoPlay.append(
-                                Sprite("BOTAOPLAY.PNG", 1, 2))
-                            self.tela.nivelJogador = int(
-                                self.jogador.getNivel())
-                            self.tela.telaSaves = False
-                            self.tela.telaMenuFases = True
 
                 elif self.tela.desenhaAlerta and self.tela.ok.colisao_point(posicaomaouse):
                     self.tela.jogoPane.tempoAnGanhou = 0
@@ -383,17 +368,14 @@ class Controlador:
         self.tela.desenhaNovoJogo = self.pressNovojogo = False
         gerarFases(self.fases, getTutorials())
         if Util.Config.MOBILE:
-            self.jogador = Jogador(("Save ", (len(self.saves)+1)))
-        self.jogador = Jogador(
-            "".join(self.tela.caixaTexto.text))
-        self.tela.caixaTexto.text = ""
+            self.jogador = Jogador("Save "+str(len(self.saves)+1))
+        else:
+            self.jogador = Jogador(
+                "".join(self.tela.caixaTexto.text))
+            self.tela.caixaTexto.cursorPosition = 0
+            self.tela.caixaTexto.setText("")
         self.saves.append(self.jogador)
         gravar_saves(self.saves)
-        self.atualizarListaBlMover(
-            self.fase.blocosdisponiveis, True)
-        if self.fase.tutorial is not None:
-            self.tela.jogoPane.exibindoTutorial = True
-            self.tela.jogoPane.indexTutorial = 0
         self.pincel.posicaoInicial()
         self.tela.botaoPlay.append(
             Sprite("BOTAOPLAY.PNG", 1, 2))
