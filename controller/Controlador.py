@@ -454,8 +454,9 @@ class Controlador:
                 self.fase = self.tela.fasespersonalizadas[self.index]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
             else:
+                faseindex = self.fase.nivel-1
                 gerarFases(self.fases, getTutorials())
-                self.fase = self.fases[self.faseSelecionada]
+                self.fase = self.fases[faseindex]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         elif self.tela.jogoPane.botaoVoltar.colisao_point(posicaomouse):
             self.botaoclicado = True
