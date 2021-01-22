@@ -183,7 +183,7 @@ class Tela:
         self.txt_CONFIG = self.fonteTitulo.render(
             "CONFIGURAÇÕES ", True, self.corTexto)
         self.txt_descVelocidade = self.fonteGrande.render(
-            "Selecione a velocidade do Jogo:", True, self.corTexto)
+            "Selecione a velocidade das animações do Jogo:", True, self.corTexto)
         self.txt_velocidade = self.fonteGrande.render(
             "VELOCIDADE:", True, self.corPrincipal)
 
