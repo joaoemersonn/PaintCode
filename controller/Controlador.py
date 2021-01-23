@@ -307,7 +307,7 @@ class Controlador:
                         self.jogandoFasePersonalizada = False
                         self.tela.telaFases = True
                         self.tela.telaJogo = False
-                    elif self.fimdejogo or self.fase.nivel <= int(self.jogador.getNivel()):
+                    elif self.fimdejogo or (self.jogador is not None and self.fase.nivel <= int(self.jogador.getNivel())):
                         self.fimdejogo = self.tela.telaJogo = False
                         self.tela.telaMenuFases = True
 
