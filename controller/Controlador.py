@@ -590,6 +590,24 @@ class Controlador:
         self.botaoclicado = False
 
     def _VerificarTelaSaves(self, posicaomouse):
+        if self.tela.saves is None or len(self.saves) <= 0:
+            if self.tela.btConfig.colisao_point(posicaomouse):
+                self._velociadeAnterior = Util.Config.VELOCIDADE
+                self.tela.telaInicio = self.tela.telaSaves = False
+                self.tela.telaConfig = True
+        # BOTÃO VOLUME
+            elif self.tela.btAjuda.colisao_point(posicaomouse):
+                self.tela.indexAjuda = 1
+                self.tela.telaInicio = False
+                self.tela.telaAjuda = True
+            elif self.tela.botaoVolume.colisao_point(posicaomouse):
+                if self.volume:
+                    self.tela.botaoVolume.mudarImg("BOTAOVOLUMEOFF.PNG")
+                    self.volume = False
+                else:
+                    self.tela.botaoVolume.mudarImg("BOTAOVOLUMEON.PNG")
+                    self.volume = True
+            ReproduzirSons(self.volume, SONS)
         if self.tela.botaoNovoJogo.colisao_point(posicaomouse):
             if not Util.Config.MOBILE:
                 self.tela.textoAlerta = (
