@@ -71,15 +71,16 @@ class Tela:
         self.btAjuda = Sprite("ajuda.png", 1, 2)
         self.btConfig = Sprite("engrenagem.png", 1, 2)
         self.img = carrega_imagem("img2.png")
+        self.logo = carrega_imagem("img2.png", escala=3)
         self.c1 = carrega_imagem("c1.png")
         self.c2 = carrega_imagem("c2.png")
         self.c4 = carrega_imagem("c4.png")
        # self.botaostart.definirPosicao((((largura/2)-self.botaostart.rect.h), 330))
         self.botaostart.definirPosicao((350 + (self.ajuste / 2), 330))
         self.botaoCriar.definirPosicao((350 + (self.ajuste / 2), 450))
+        self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 570))
         # self.botaoCriar.definirPosicao((((largura / 2) - self.botaoCriar.rect.h), 450))
         # self.botaoSair.definirPosicao((((largura / 2) - self.botaoSair.rect.h), 590))
-        self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 570))
         self.btAjuda.definirPosicao((1130, 50))
         self.btConfig.definirPosicao((1210, 50))
         self.botaoVolume.definirPosicao((1290, 50))
@@ -89,13 +90,13 @@ class Tela:
         self.botaoVoltar = Sprite("VOLTAR.png", 1, 2)
         self.botaoCima = Sprite("BOTAOCIMA.png", 1, 2)
         self.botaoBaixo = Sprite("BOTAOBAIXO.png", 1, 2)
-        self.botaoNovoJogo.definirPosicao((90 + (self.ajuste / 2), 580))
+        self.botaoNovoJogo.definirPosicao((90 + (self.ajuste / 2), 610))
         self.botaoFasesPersonalizadas.definirPosicao(
-            (350 + (self.ajuste / 2), 580))
-        self.botaoCima.definirPosicao((860 + (self.ajuste / 2), 54))
-        self.botaoBaixo.definirPosicao((860 + (self.ajuste / 2), 480))
+            (350 + (self.ajuste / 2), 610))
+        self.botaoCima.definirPosicao((860 + (self.ajuste / 2), 84))
+        self.botaoBaixo.definirPosicao((860 + (self.ajuste / 2), 510))
         self.savesPane = Painel(self.escalarX(943), self.escalarY(
-            493), self.escalarX(25 + (self.ajuste / 2)), self.escalarY(70))
+            493), self.escalarX(25 + (self.ajuste / 2)), self.escalarY(100))
         self.moverretangulo = False
         self.botaoPlay = []
         self.botaolixeira = []
@@ -119,8 +120,8 @@ class Tela:
         self.btBaixoEx.definirPosicao((250, 450))
         self.botaoProximo = Sprite("BOTAOPROX.PNG", 1, 2)
         self.botaoVoltarCriar = Sprite("VOLTAR.png", 1, 2)
-        self.botaoVoltarCriar.definirPosicao((750 + (self.ajuste / 2), 580))
-        self.botaoProximo.definirPosicao((500 + (self.ajuste / 2), 580))
+        self.botaoVoltarCriar.definirPosicao((1080, 580))
+        self.botaoProximo.definirPosicao((790, 580))
 
         # config
         self.sliderVl = Slider(self.janela, self.escalarX(170), self.escalarY(400), self.escalarX(400),
@@ -130,8 +131,8 @@ class Tela:
         # self.btBaixoVel = Sprite("BOTAOBAIXO.png", 1, 2, 2)
         # self.btCimaVel.definirPosicao((250, 280))
         # self.btBaixoVel.definirPosicao((250, 350))
-        self.botaoConfirmar = Sprite("BOTAOGRAVAR.PNG", 1, 2)
-        self.botaoConfirmar.definirPosicao((830 + (self.ajuste / 2), 580))
+        self.botaoConfirmar = Sprite("BOTAOSALVAR.PNG", 1, 2)
+        self.botaoConfirmar.definirPosicao((800 + (self.ajuste / 2), 580))
 
         # TELA FASES PERSONALIZADAS
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
@@ -143,7 +144,6 @@ class Tela:
         self.btVoltarFases.definirPosicao((950, 600))
         self.fasespersonalizadas = None
         self.rolagemCriacoes = 0
-
         # MSG PERRGUNTA
         self.desenhaConfirmacao = False
         self.textopergunta = (
@@ -183,9 +183,11 @@ class Tela:
         self.txt_CONFIG = self.fonteTitulo.render(
             "CONFIGURAÇÕES ", True, self.corTexto)
         self.txt_descVelocidade = self.fonteGrande.render(
-            "Selecione a velocidade das animações do Jogo:", True, self.corTexto)
+            "Ajuste com o slider abaixo a velocidade das animações dentro do PaintCode:", True, self.corTexto)
         self.txt_velocidade = self.fonteGrande.render(
             "VELOCIDADE:", True, self.corPrincipal)
+        self.txt_explicacaoVelocidade = self.fonteGrande.render(
+            "Deslize ", True, self.corPrincipal)
 
     def desenhar(self):
         if not self.desenhaNovoJogo and not self.desenhaAlerta and not self.desenhaConfirmacao:
@@ -204,29 +206,51 @@ class Tela:
                 self.botaoSair.desenharBt(self.janela)
             # TELA SAVES
             elif self.telaSaves:
-                self.savesPane.fill(self.corfundo)
-                # contornar(self.janela, self.escalar((25 + (self.ajuste / 2),70,943,493), 4)
-                contornar(self.janela, int(ESCALAX*(25 + (self.ajuste / 2))),
-                          int(70*ESCALAY), int(ESCALAX*943), int(ESCALAY*493), 4)
-                self.janela.blit(self.tituloTelaSave,
-                                 ((self.largura / 2) - 80, 7))
-                self.desenharPainelSaves(self.saves)
-                self.janela.blit(self.savesPane, self.savesPane.get_posicao())
+                if self.saves is None or len(self.saves) <= 0:
+                    self.botaoVolume.desenharBt(self.janela)
+                    self.btAjuda.desenharBt(self.janela)
+                    self.btConfig.desenharBt(self.janela)
+                    self.janela.blit(
+                        self.img, (((self.largura / 2) - (self.img.get_width()/2)), 0))
+                    self.botaoNovoJogo.definirPosicao(
+                        (350 + (self.ajuste / 2), 330))
+                    self.botaoFasesPersonalizadas.definirPosicao(
+                        (350 + (self.ajuste / 2), 450))
+                    self.botaoVoltar.definirPosicao(
+                        (350 + (self.ajuste / 2), 570))
+                else:
+                    self.savesPane.fill(self.corfundo)
+                    self.janela.blit(
+                        self.logo, (((self.largura / 2) - (self.logo.get_width()/2)), -20))
+                    # contornar(self.janela, self.escalar((25 + (self.ajuste / 2),70,943,493), 4)
+                    contornar(self.janela, int(ESCALAX*(25 + (self.ajuste / 2))),
+                              int(100*ESCALAY), int(ESCALAX*943), int(ESCALAY*493), 4)
+                    #self.janela.blit(self.tituloTelaSave,((self.largura / 2) - 80, 7))
+                    self.desenharPainelSaves(self.saves)
+                    self.janela.blit(
+                        self.savesPane, self.savesPane.get_posicao())
 
-                # BOTÕES
+                    # BOTÕES
+                    self.botaoNovoJogo.definirPosicao(
+                        (50 + (self.ajuste / 2), 610))
+                    self.botaoFasesPersonalizadas.definirPosicao(
+                        (360 + (self.ajuste / 2), 610))
+                    self.botaoVoltar.definirPosicao(
+                        (670 + (self.ajuste / 2), 610))
+
+                    self.botaoCima.desenharBt(self.janela)
+                    self.botaoBaixo.desenharBt(self.janela)
                 self.botaoNovoJogo.desenharBt(self.janela)
                 self.botaoFasesPersonalizadas.desenharBt(self.janela)
-                self.botaoVoltar.definirPosicao((650 + (self.ajuste / 2), 580))
                 self.botaoVoltar.desenharBt(self.janela)
-                self.botaoCima.desenharBt(self.janela)
-                self.botaoBaixo.desenharBt(self.janela)
 
             # TELA FASES PERS
             elif self.telaMenuFases:
                 self.desenharMenuFases(self.nivelJogador)
             elif self.telaFases:
-                self.janela.blit(self.tituloTelaFases,
-                                 self.escalarXY(375, 35))
+                #self.janela.blit(self.tituloTelaFases,self.escalarXY(375, 35))
+                self.janela.blit(
+                    self.logo, (((self.largura / 2) - (self.logo.get_width()/2)), -20))
                 self.botaoEsquerda.desenharBt(self.janela)
                 self.botaoDireita.desenharBt(self.janela)
                 self.desenharDesenhoGuia(
@@ -259,8 +283,10 @@ class Tela:
             self.desenharNovoJogo()
 
     def desenharMenuFases(self, nivel):
-        self.janela.blit(self.tituloTelaMenuFase, escalarXY(320, 25))
-        self.botaoVoltar.definirPosicao((1100, 600))
+        self.janela.blit(
+            self.logo, (((self.largura / 2) - (self.logo.get_width()/2)), -20))
+        #self.janela.blit(self.tituloTelaMenuFase, escalarXY(320, 25))
+        self.botaoVoltar.definirPosicao((1070, 600))
         self.botaoVoltar.desenharBt(self.janela)
         i = 0
         for bt in self.botoesFases:
@@ -317,7 +343,7 @@ class Tela:
         # self.janela.blit(txt_vel, self.escalarXY(260, 330))
         #contornar(self.janela, 250, 325, 50, 30, eX=ESCALAX, eY=ESCALAY)
         self.botaoConfirmar.desenharBt(self.janela)
-        self.botaoVoltar.definirPosicao((580 + (self.ajuste / 2), 580))
+        self.botaoVoltar.definirPosicao((470 + (self.ajuste / 2), 580))
         self.botaoVoltar.desenharBt(self.janela)
 
     def escalar(self, x, y, tamx, tamy):
@@ -338,7 +364,7 @@ class Tela:
 
         text2 = self.fontePequena.render(
             "PROGRESSO: ", True, self.corSecundaria)
-        text3 = self.fontePequena.render("Jogar ", True, self.corSecundaria)
+        #text3 = self.fontePequena.render("Jogar ", True, self.corSecundaria)
         for x in jogador:
             text = self.fonteGrande.render(
                 "NOME: " + x.getNome(), True, self.corSecundaria)
@@ -348,8 +374,8 @@ class Tela:
                 text, (self.escalarX(55), self.escalarY((espaco * qntsaves) + 25 + self.rolagem)))
             self.savesPane.blit(
                 text2, (self.escalarX(75), self.escalarY((espaco * qntsaves) + 60 + self.rolagem)))
-            self.savesPane.blit(
-                text3, (self.escalarX(710), self.escalarY((espaco * qntsaves) + self.escalarY(90) + self.rolagem)))
+            # self.savesPane.blit(
+            #     text3, (self.escalarX(710), self.escalarY((espaco * qntsaves) + self.escalarY(90) + self.rolagem)))
             pygame.draw.rect(self.savesPane, self.corSecundaria,
                              (self.escalarX(75), self.escalarY((espaco * qntsaves) + 75 + self.rolagem), self.escalarX(580), self.escalarY(30)))
             pygame.draw.rect(self.savesPane, self.corPrincipal,
@@ -378,7 +404,7 @@ class Tela:
         superfice.blit(textod, (self.escalarX(421), self.escalarY(282)))
         superfice.blit(textod2, (self.escalarX(421), self.escalarX(302)))
         if len(textolist) > 2:
-            font = pygame.font.Font(self.fa, self.escalarX(12))
+            font = pygame.font.Font(self.fa, self.escalarX(17))
             textod3 = font.render(textolist[2], True, Cores.PRETO)
             superfice.blit(textod3, (self.escalarX(441), self.escalarY(372)))
         self.ok.desenharBt(superfice)
