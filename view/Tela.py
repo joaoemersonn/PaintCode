@@ -79,7 +79,7 @@ class Tela:
         self.botaoCriar.definirPosicao((350 + (self.ajuste / 2), 450))
         # self.botaoCriar.definirPosicao((((largura / 2) - self.botaoCriar.rect.h), 450))
         # self.botaoSair.definirPosicao((((largura / 2) - self.botaoSair.rect.h), 590))
-        self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 590))
+        self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 570))
         self.btAjuda.definirPosicao((1130, 50))
         self.btConfig.definirPosicao((1210, 50))
         self.botaoVolume.definirPosicao((1290, 50))
@@ -123,7 +123,7 @@ class Tela:
         self.botaoProximo.definirPosicao((500 + (self.ajuste / 2), 580))
 
         # config
-        self.sliderVl = Slider(self.janela, self.escalarX(170), self.escalarY(450), self.escalarX(400),
+        self.sliderVl = Slider(self.janela, self.escalarX(170), self.escalarY(400), self.escalarX(400),
                                self.escalarY(20), min=20, max=300, step=1, colour=Cores.CORSECUNDARIA, handleColour=Cores.CORPRINCIPAL)
         self.sliderVl.value = Util.Config.VELOCIDADE
         # self.btCimaVel = Sprite("BOTAOCIMA.png", 1, 2, 2)
@@ -167,16 +167,16 @@ class Tela:
         self.tituloTelaMenuFase = self.fonteTitulo.render(
             "Escolha um nível para jogar", True, self.corPrincipal)
         self.tituloTelaFases = self.fonteTitulo.render(
-            "Fases Personalizadas", True, self.corPrincipal)
+            "Fases personalizadas", True, self.corPrincipal)
         self.txt_pane = self.fonteTitulo.render(
-            "Selecione as Carateristicas da Fase: ", True, self.corTexto)
-        self.txt_desenho = self.fonteGrande.render("Selecione a Quantidade de Linhas e Colunas do Desenho: ", True,
+            "Selecione as características da fase: ", True, self.corTexto)
+        self.txt_desenho = self.fonteGrande.render("Selecione a quantidade de linhas e colunas do desenho: ", True,
                                                    self.corTexto)
         self.txt_col_lin = self.fonteGrande.render(
             "Colunas  x  Linhas: ", True, self.corPrincipal)
         self.txt_X = self.fonteGrande.render("X", True, self.corPrincipal)
         self.txt_qntvidas = self.fonteGrande.render(
-            "Selecione a Quantidade de Execuções Disponíveis Para concluir o desenho:", True, self.corTexto)
+            "Selecione a quantidade de execuções disponíveis para concluir o desenho:", True, self.corTexto)
         self.txt_ex = self.fonteGrande.render(
             "Nº Execuções:", True, self.corPrincipal)
 
@@ -312,10 +312,10 @@ class Tela:
         self.sliderVl.draw()
         # self.btCimaVel.desenharBt(self.janela)
         # self.btBaixoVel.desenharBt(self.janela)
-        txt_vel = self.fonteGrande.render(
-            str(Util.Config.VELOCIDADE), True, self.corTexto)
-        self.janela.blit(txt_vel, self.escalarXY(260, 330))
-        contornar(self.janela, 250, 325, 50, 30, eX=ESCALAX, eY=ESCALAY)
+        # txt_vel = self.fonteGrande.render(
+        #     str(Util.Config.VELOCIDADE), True, self.corTexto)
+        # self.janela.blit(txt_vel, self.escalarXY(260, 330))
+        #contornar(self.janela, 250, 325, 50, 30, eX=ESCALAX, eY=ESCALAY)
         self.botaoConfirmar.desenharBt(self.janela)
         self.botaoVoltar.definirPosicao((580 + (self.ajuste / 2), 580))
         self.botaoVoltar.desenharBt(self.janela)

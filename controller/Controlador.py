@@ -422,12 +422,12 @@ class Controlador:
                     self.pinceledicao = i - 1
             self.tela.jogoPane.trocarimgPincel(self.pinceledicao)
             if self.tela.jogoPane.botaoSalvar.colisao_point(posicaomouse) and not self.tela.jogoPane.finalizacriacao:
-                self.tela.textoAlerta = (
-                    "PRONTO!", "", "Agora Modifique o desenho para ser o desafio a ser cumprido")
+                # self.tela.textoAlerta = (
+                #    "PRONTO!", "", "Agora Modifique o desenho para ser o desafio a ser cumprido")
                 self.pinceledicao = 0
                 self.tela.jogoPane.trocarimgPincel(self.pinceledicao)
                 self.tela.jogoPane.botaoSalvar.mudarImg("BOTAOSALVAR.PNG")
-                self.tela.desenhaAlerta = True
+                #self.tela.desenhaAlerta = True
                 self.tela.jogoPane.finalizacriacao = True
                 self.fase.desenhoResposta = deepcopy(self.fase.desenhoDesafio)
             elif self.tela.jogoPane.botaoSalvar.colisao_point(posicaomouse):
@@ -462,6 +462,7 @@ class Controlador:
             self.botaoclicado = True
             if self.tela.jogoPane.criando:
                 self.tela.telaCriar = True
+                self.tela.jogoPane.finalizacriacao = False
             else:
                 self.comando.clear()
                 self.comando.append(self.__inicio)
@@ -576,6 +577,7 @@ class Controlador:
 
         elif self.tela.botaoVoltarCriar.colisao_point(posicaomouse) and not self.botaoclicado:
             self.tela.telaCriar = False
+            self.tela.jogoPane.finalizacriacao = False
             self.tela.telaInicio = True
         elif self.tela.botaoProximo.colisao_point(posicaomouse) and not self.botaoclicado:
             self.tela.jogoPane.modoCriar()

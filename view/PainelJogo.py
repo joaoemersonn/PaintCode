@@ -103,9 +103,9 @@ class PainelJogo(Painel):
         self.fontexg = pygame.font.Font(fontearquivo, escalarX(52))
         self.fontexxg = pygame.font.Font(fontearquivo, escalarX(150))
         self.infoCriando = self.fonteg.render(
-            "Utilize as ferramentas para pintar a casa que será o objetivo da fase criada!", True, Cores.PRETO)
+            "Utilize as ferramentas para pintar a casa que será o desafio da fase criada!", True, Cores.PRETO)
         self.infoCriando2 = self.fonteg.render(
-            "Agora modifique o desenho para definir como a casa estará inicialmente!", True, Cores.PRETO)
+            "Agora modifique o desenho para definir como a casa aparecerá inicialmente!", True, Cores.PRETO)
         self.back = carrega_imagem("back.png")
         self.exibeAviso = False
         self.mostrarEditBlRepetir = self.mostrarEditBlCor = False
@@ -435,9 +435,9 @@ class PainelJogo(Painel):
 
     def desenharCaixaBlocos(self, fase):
         pygame.gfxdraw.box(self, escalar(
-            680 + self.__tela.ajuste, 20, 300, 380), Cores.BRANCO)
+            680 + self.__tela.ajuste, 20, 300, 510), Cores.BRANCO)
         contornar(self, 680 + self.__tela.ajuste, 20,
-                  300, 380, eX=ESCALAX, eY=ESCALAY)
+                  300, 510, eX=ESCALAX, eY=ESCALAY)
         x = fase.blocosdisponiveis
         xspace = escalarX(300)
         ajustex = ajustey = 0
