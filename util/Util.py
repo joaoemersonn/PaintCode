@@ -8,8 +8,8 @@ from model.Jogador import Jogador
 from model.Fase import Fase
 import platform
 SISTEMA = platform.system()
-WINDOW = pygame.display.set_mode((0, 0),
-                                 flags=pygame.FULLSCREEN)
+WINDOW = pygame.display.set_mode((1366, 768),
+                                 flags=pygame.NOFRAME)
 CARREGANDO = True
 STATUSCARREGAMENTO = 0
 ESCALAX = WINDOW.get_width()/1366
