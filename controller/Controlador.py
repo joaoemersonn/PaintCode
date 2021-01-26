@@ -44,7 +44,7 @@ class Controlador:
         self.SKIP_TICKS = 1000 / Util.Config.VELOCIDADE
         self.MAX_FRAMESKIP = 5
         self.next_game_tick = pygame.time.get_ticks()
-
+        self.segurandoBloco = False
         self.tela = None
         self.i = self.index = 0
         self._velociadeAnterior = 60
@@ -344,6 +344,18 @@ class Controlador:
                                         self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                         self.tela.jogoPane.exibeAviso = True
                                 x.pressionado = False
+                        if x.pressionado and x.colisao_rect(self.tela.jogoPane.boxFuncao) and self.tela.jogoPane.funcaoOpcaoAtiva:
+                            if x.blocos is None:
+                                x.blocos = list()
+                            if len(x.blocos) >= 5:
+                                self.sons.COLOCAR.play()
+                                bloco = Bloco(x.get_tipo(), x.get_Valor())
+                                x.blocos.append(bloco)
+                            else:
+                                self.sons.ALERT.play(1)
+                                self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
+                                self.tela.jogoPane.exibeAviso = True
+
                         if x.pressionado and x.colisao_rect(self.tela.jogoPane.get_boxExecucao()):
                             if self.tam <= 12:
                                 self.sons.COLOCAR.play()
@@ -498,6 +510,7 @@ class Controlador:
             elif x.colisao_point(posicaomouse):
                 self.sons.PEGAR.play()
                 x.pressionado = True
+                self.segurandoBloco = True
         i = 0
         for x in self.comando:
             if x.selecionado:
@@ -552,6 +565,9 @@ class Controlador:
             elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(tamx), escalarY(70)).collidepoint(posicaomouse):
                 pass
             elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
+                pass
+            # and (self.tela.jogoPane.boxFuncao.collidepoint(posicaomouse) or self.segurandoBloco):
+            elif x.selecionado and x.get_tipo() == "botaoF":
                 pass
             else:
                 if self.blOpcaoTrue == x:

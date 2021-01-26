@@ -19,6 +19,7 @@ class Blocos():
         self.girar_direita = Bloco("girar_direita")
         self.repetir = Bloco("repetir")
         self.mudarCor = Bloco("selecionar_cor")
+        self.blocoF = Bloco("blocoF")
 
 
 def getTutorials():
@@ -59,6 +60,7 @@ def gerarFases(listaFases, t):
     fase = Fase()
     fase.blocosdisponiveis.append(blocos.mover)
     fase.blocosdisponiveis.append(blocos.pintar)
+    fase.blocosdisponiveis.append(blocos.blocoF)
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.tutorial = list()
     fase.tutorial.append(t[1])
@@ -147,10 +149,10 @@ def gerarFases(listaFases, t):
     fase.tutorial.append(t[0])
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.desenhoResposta = Desenho(4, 5, 1)
-
-    for i in range(0, 5):
-        for j in range(0, 2):
-            fase.desenhoDesafio.tiles[i][j] = 0
+    fase.desenhoDesafio.tiles[0][3] = 0
+    # for i in range(0, 5):
+    #     for j in range(0, 2):
+    #         fase.desenhoDesafio.tiles[i][j] = 0
 
     fase.desenhoDesafio.tiles[0][2] = -1
     fase.desenhoResposta.tiles[0][2] = -1
