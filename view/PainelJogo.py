@@ -82,6 +82,10 @@ class PainelJogo(Painel):
         self.lixo = Sprite("lixo.png", 1, 2)
         self.repetir = Sprite("repetir.png", 1, 2)
         self.corOpcao = Sprite("cor.png", 1, 2)
+        self.funcaoOpcao = Sprite("funcao.png", 1, 2)
+        self.funcaoOpcaoAtiva = True
+        self.boxFuncao = pygame.Rect(
+            0, escalarY(175), escalarX(600), escalarY(100))
         self.moverEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2, 2)
         self.moverDireita = Sprite("BOTAODIREITA.png", 1, 2, 2)
         #self.lixo.definirPosicao((1150, 410))
@@ -357,7 +361,7 @@ class PainelJogo(Painel):
 
             if x.selecionado:
                 auxy = 0
-                if x.get_tipo() == "repetir" or x.get_tipo() == "selecionar_cor":
+                if x.get_tipo() == "repetir" or x.get_tipo() == "selecionar_cor" or x.get_tipo() == "blocoF":
                     auxy = 60
                 pos = x.get_rect()
                 tamx = 200 + auxy
@@ -401,6 +405,22 @@ class PainelJogo(Painel):
                         self.seta2.definirPosicao(
                             (pos.x + escalarX(210), pos.y - escalarY(160)), False)
                         self.seta2.desenharBt(self)
+                elif x.get_tipo() == "blocoF":
+                    self.funcaoOpcao.definirPosicao(
+                        (pos.x + escalarX(140), pos.y - escalarY(65)), False)
+                    self.funcaoOpcao.desenharBt(self)
+                    if self.funcaoOpcaoAtiva:
+                        self.boxFuncao = pygame.Rect(
+                            pos.x, pos.y - escalarY(175), escalarX(600), escalarY(100))
+                        pygame.draw.rect(
+                            self, Cores.BRANCO, self.boxFuncao)
+                        contornar(self, pos.x, pos.y - escalarY(175),
+                                  escalarX(599), escalarY(99), 4, Cores.VERMELHO)
+                        if x.blocos is not None:
+                            for bl in x.blocos:
+                                bl.definirPosicao(
+                                    ((pos.x + 30)/ESCALAX, pos.y - 115))
+                                bl.desenhar(self)
 
                 elif x.get_tipo() == "selecionar_cor":
                     self.corOpcao.definirPosicao(
