@@ -83,12 +83,12 @@ class PainelJogo(Painel):
         self.repetir = Sprite("repetir.png", 1, 2)
         self.corOpcao = Sprite("cor.png", 1, 2)
         self.funcaoOpcao = Sprite("funcao.png", 1, 2)
-        self.funcaoOpcaoAtiva = True
+        self.funcaoOpcaoAtiva = False
         self.boxFuncao = pygame.Rect(
             0, escalarY(175), escalarX(600), escalarY(100))
         self.moverEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2, 2)
         self.moverDireita = Sprite("BOTAODIREITA.png", 1, 2, 2)
-        #self.lixo.definirPosicao((1150, 410))
+        # self.lixo.definirPosicao((1150, 410))
         self._img1 = pygame.transform.scale(
             self._img1, (int(self._img1.get_rect().w / 2), int(self._img1.get_rect().h / 2)))
         self._img2 = pygame.transform.scale(
@@ -366,7 +366,7 @@ class PainelJogo(Painel):
                 pos = x.get_rect()
                 tamx = 200 + auxy
                 tamy = 70
-                #x.get_rect().width/2 - tamx/2
+                # x.get_rect().width/2 - tamx/2
                 pygame.draw.rect(
                     self, Cores.BRANCO, (pos.x, pos.y - escalarY(75), escalarX(tamx), escalarY(tamy)))
                 contornar(self, pos.x, pos.y - escalarY(75),
@@ -417,10 +417,12 @@ class PainelJogo(Painel):
                         contornar(self, pos.x, pos.y - escalarY(175),
                                   escalarX(599), escalarY(99), 4, Cores.VERMELHO)
                         if x.blocos is not None:
+                            xrelativo = 0
                             for bl in x.blocos:
                                 bl.definirPosicao(
-                                    ((pos.x + 30)/ESCALAX, pos.y - 115))
+                                    ((pos.x + xrelativo)/ESCALAX, (pos.y - 160)/ESCALAY))
                                 bl.desenhar(self)
+                                xrelativo += bl.get_rect().w - (ESCALAX*15)
 
                 elif x.get_tipo() == "selecionar_cor":
                     self.corOpcao.definirPosicao(

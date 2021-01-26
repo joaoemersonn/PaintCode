@@ -344,17 +344,20 @@ class Controlador:
                                         self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                         self.tela.jogoPane.exibeAviso = True
                                 x.pressionado = False
+                                self.segurandoBloco = False
                         if x.pressionado and x.colisao_rect(self.tela.jogoPane.boxFuncao) and self.tela.jogoPane.funcaoOpcaoAtiva:
-                            if x.blocos is None:
-                                x.blocos = list()
-                            if len(x.blocos) >= 5:
-                                self.sons.COLOCAR.play()
-                                bloco = Bloco(x.get_tipo(), x.get_Valor())
-                                x.blocos.append(bloco)
-                            else:
-                                self.sons.ALERT.play(1)
-                                self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
-                                self.tela.jogoPane.exibeAviso = True
+                            for c in self.comando:
+                                if c.get_tipo() == "blocoF" and c.selecionado:
+                                    print("tamanho funcao: ", len(c.blocos))
+                                    if len(c.blocos) <= 5:
+                                        self.sons.COLOCAR.play()
+                                        bloco = Bloco(
+                                            x.get_tipo(), x.get_Valor())
+                                        c.blocos.append(bloco)
+                                    else:
+                                        self.sons.ALERT.play(1)
+                                        self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Função atingiu limite máximo de blocos!"
+                                        self.tela.jogoPane.exibeAviso = True
 
                         if x.pressionado and x.colisao_rect(self.tela.jogoPane.get_boxExecucao()):
                             if self.tam <= 12:
@@ -363,6 +366,10 @@ class Controlador:
                                 if bloco.get_tipo() == "repetir":
                                     # self.tam += 1
                                     bloco.set_Valor(3)
+                                elif bloco.get_tipo() == "blocoF":
+                                    if bloco.blocos is None:
+                                        bloco.blocos = list()
+                                        bloco.blocos.append(Bloco("inicioF"))
                                 # bloco = self.atualizarblMover(bloco)
                                 self.comando.append(bloco)
                                 self.tam += 1
@@ -370,7 +377,7 @@ class Controlador:
                                 self.sons.ALERT.play(1)
                                 self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                 self.tela.jogoPane.exibeAviso = True
-                        x.pressionado = False
+                        x.pressionado = self.segurandoBloco = False
                     self.atualizarListaBlMover(self.comando)
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
@@ -536,6 +543,10 @@ class Controlador:
                     self.tela.jogoPane.mostrarEditBlRepetir = not self.tela.jogoPane.mostrarEditBlRepetir
                     if self.tela.jogoPane.mostrarEditBlRepetir:
                         self.blOpcaoTrue = x
+                if self.tela.jogoPane.funcaoOpcao.colisao_point(posicaomouse):
+                    self.tela.jogoPane.funcaoOpcaoAtiva = not self.tela.jogoPane.funcaoOpcaoAtiva
+                    if self.tela.jogoPane.funcaoOpcaoAtiva:
+                        self.blOpcaoTrue = x
                 if self.tela.jogoPane.corOpcao.colisao_point(posicaomouse):
                     self.tela.jogoPane.mostrarEditBlCor = not self.tela.jogoPane.mostrarEditBlCor
                     if self.tela.jogoPane.mostrarEditBlCor:
@@ -566,12 +577,12 @@ class Controlador:
                 pass
             elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
                 pass
-            # and (self.tela.jogoPane.boxFuncao.collidepoint(posicaomouse) or self.segurandoBloco):
-            elif x.selecionado and x.get_tipo() == "botaoF":
+            # :
+            elif x.selecionado and x.get_tipo() == "blocoF" and (self.tela.jogoPane.boxFuncao.collidepoint(posicaomouse) or self.segurandoBloco):
                 pass
             else:
                 if self.blOpcaoTrue == x:
-                    self.tela.jogoPane.mostrarEditBlCor = self.tela.jogoPane.mostrarEditBlRepetir = False
+                    self.tela.jogoPane.mostrarEditBlCor = self.tela.jogoPane.funcaoOpcaoAtiva = self.tela.jogoPane.mostrarEditBlRepetir = False
                     self.blOpcaoTrue = None
                 x.selecionado = False
             i += 1

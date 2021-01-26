@@ -7,7 +7,8 @@ class Pincel:
         self.posicaoX = 0
         self.posicaoY = 0
         self.cor = 1
-        self.image = pygame.transform.rotate(carrega_imagem("pincel" + str(self.cor) + ".png"), 0)
+        self.image = pygame.transform.rotate(
+            carrega_imagem("pincel" + str(self.cor) + ".png"), 0)
         self.rotacao = 0
 
     def posicaoInicial(self):
@@ -27,7 +28,7 @@ class Pincel:
             if x.get_tipo() == "mover":
                 SONS.MOVE.play()
                 if self.rotacao == 90 and self.posicaoX < desenho.colunas - 1 and int(desenho.tiles[self.posicaoX + 1][
-                    self.posicaoY]) >= 0:
+                        self.posicaoY]) >= 0:
                     self.posicaoX += 1
                 elif self.rotacao == 180 and self.posicaoY > 0 and int(desenho.tiles[self.posicaoX][self.posicaoY - 1]) >= 0:
                     self.posicaoY -= 1
@@ -62,3 +63,11 @@ class Pincel:
                             pygame.time.delay(100)
                         else:
                             self.mover(bloc, desenho)
+            elif x.get_tipo() == "blocoF" and x.blocos is not None:
+                for bloc in x.blocos:
+                    if controller is not None:
+                        controller.refreshDesenho()
+                        self.mover(bloc, desenho)
+                        pygame.time.delay(100)
+                    else:
+                        self.mover(bloc, desenho)

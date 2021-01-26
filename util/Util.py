@@ -337,6 +337,7 @@ class ImgBlocos:
         self.repetir = None
         self.selecionar_cor = None
         self.blocoF = None
+        self.inicioF = None
 
     def iniciar(self):
         self.bl01 = carrega_imagem('01.png', "blocos")
@@ -354,6 +355,7 @@ class ImgBlocos:
         self.repetir = carrega_imagem('repetir.png', "blocos")
         self.selecionar_cor = carrega_imagem('selecionar_cor.png', "blocos")
         self.blocoF = carrega_imagem('blocoF.png', "blocos")
+        self.inicioF = carrega_imagem('inicioF.png', "blocos")
 
 
 IMGBLOCOS = ImgBlocos()
@@ -388,6 +390,8 @@ def carregar_imagem_blocos(imagem_nome):
         return IMGBLOCOS.selecionar_cor
     elif imagem_nome == "blocoF.png":
         return IMGBLOCOS.blocoF
+    elif imagem_nome == "inicioF.png":
+        return IMGBLOCOS.inicioF
     elif imagem_nome == "repetir.png":
         return IMGBLOCOS.repetir
     elif imagem_nome == "01.png":
