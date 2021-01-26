@@ -90,6 +90,7 @@ class Cores:
     TELHADO = pygame.Color("#C4875E")
     CORELEMENTO = pygame.Color(2, 60, 64, 100)
     VERMELHO = pygame.Color("#DD1C1A")
+    VERMELHOCLARO = pygame.Color("#F39C9A")
     ROXO = pygame.Color(255, 117, 249, 100)
     LARANJA = pygame.Color(255, 250, 200)
     LARANJAESCURO = pygame.Color(255, 176, 32)

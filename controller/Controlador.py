@@ -71,6 +71,7 @@ class Controlador:
         self.animarTesteVl = 0
         self.blOpcaoTrue = None
         self.faseSelecionada = 0
+        self.__inicioF = None
         # self.lixeira = self.play = None
         ###
         # self.gif.executar(self.window, 950, 350)
@@ -85,10 +86,12 @@ class Controlador:
         self.sons = Util.SONS
         self.tela.saves = self.carregarSaves()
         self.__inicio = Bloco("inicio")
+        self.__inicioF = Bloco("inicioF")
         self.play = Sprite("BOTAOPLAY.PNG", 1, 2)
         self.lixeira = Sprite("lixeira.png", 1, 2)
         self.pincel = Pincel()
         self.comando.append(self.__inicio)
+        self.tela.jogoPane.funcaoComando.append(self.__inicioF)
         gerarFases(self.fases, getTutorials())
         self.sons.BACKGROUND.set_volume(0.2)
         self.sons.BACKGROUND.play(TOCAREMLOOP)
@@ -144,7 +147,7 @@ class Controlador:
     def executarcomando(self):
         if self.espera > 20:
             self.espera = 0
-            self.pincel.mover(self.comando[1], self.fase.desenhoDesafio, self)
+            self.pincel.mover(self.comando[1], self.fase.desenhoDesafio, self,comandofn=self.tela.jogoPane.funcaoComando)
             self.comando.pop(1)
             self.tam -= 1
             if self.tam < 1 or len(self.comando) <= 1:
@@ -178,6 +181,7 @@ class Controlador:
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         else:
             gerarFases(self.fases, getTutorials())
+            self.limparFnComando()
             self.fase = self.fases[self.faseSelecionada]
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
 
@@ -237,6 +241,7 @@ class Controlador:
                 if x.clicked and int(x.string) <= int(self.jogador.getNivel())+1:
                     self.faseSelecionada = int(x.string)-1
                     gerarFases(self.fases, getTutorials())
+                    self.limparFnComando()
                     self.fase = self.fases[self.faseSelecionada]
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
@@ -345,31 +350,57 @@ class Controlador:
                                         self.tela.jogoPane.exibeAviso = True
                                 x.pressionado = False
                                 self.segurandoBloco = False
-                        if x.pressionado and x.colisao_rect(self.tela.jogoPane.boxFuncao) and self.tela.jogoPane.funcaoOpcaoAtiva:
-                            for c in self.comando:
-                                if c.get_tipo() == "blocoF" and c.selecionado:
-                                    print("tamanho funcao: ", len(c.blocos))
-                                    if len(c.blocos) <= 5:
-                                        self.sons.COLOCAR.play()
-                                        bloco = Bloco(
-                                            x.get_tipo(), x.get_Valor())
-                                        c.blocos.append(bloco)
+                        for c in self.tela.jogoPane.funcaoComando:
+                            if x.pressionado and c.get_tipo() == "repetir" and c.colisao_rect(x.get_rect()):
+                                if x.get_tipo() == "repetir":
+                                    self.sons.ALERT.play(2)
+                                    self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Não é possível colocar um bloco de repetição em outro!"
+                                    self.tela.jogoPane.exibeAviso = True
+                                else:
+                                    if self.tam < 12:
+                                        if c.blocos is None:
+                                            c.blocos = list()
+                                        bl = Bloco(x.get_tipo(), x.get_Valor())
+                                        # bl = self.atualizarblMover(bl)
+                                        c.blocos.append(bl)
+                                        if len(c.blocos) > 1:
+                                            self.tam += 1
                                     else:
                                         self.sons.ALERT.play(1)
-                                        self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Função atingiu limite máximo de blocos!"
+                                        self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                         self.tela.jogoPane.exibeAviso = True
+                                x.pressionado = False
+                                self.segurandoBloco = False
+                        if x.pressionado and x.colisao_rect(self.tela.jogoPane.boxFuncao):
+                            if x.get_tipo() == "blocoF":
+                                self.sons.ALERT.play(1)
+                                self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Bloco de Função não pode fazer parte da função!"
+                                self.tela.jogoPane.exibeAviso = True
 
-                        if x.pressionado and x.colisao_rect(self.tela.jogoPane.get_boxExecucao()):
+                            elif len(self.tela.jogoPane.funcaoComando) <= 5:
+                                self.sons.COLOCAR.play()
+                                bloco = Bloco(
+                                    x.get_tipo(), x.get_Valor())
+                                self.tela.jogoPane.funcaoComando.append(bloco)
+                            else:
+                                self.sons.ALERT.play(1)
+                                self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Função atingiu limite máximo de blocos!"
+                                self.tela.jogoPane.exibeAviso = True
+                            if x.get_tipo() == "repetir":
+                                # self.tam += 1
+                                x.set_Valor(3)
+
+                        elif x.pressionado and x.colisao_rect(self.tela.jogoPane.get_boxExecucao()):
                             if self.tam <= 12:
                                 self.sons.COLOCAR.play()
                                 bloco = Bloco(x.get_tipo(), x.get_Valor())
                                 if bloco.get_tipo() == "repetir":
                                     # self.tam += 1
                                     bloco.set_Valor(3)
-                                elif bloco.get_tipo() == "blocoF":
-                                    if bloco.blocos is None:
-                                        bloco.blocos = list()
-                                        bloco.blocos.append(Bloco("inicioF"))
+                                # elif bloco.get_tipo() == "blocoF":
+                                #     if bloco.blocos is None:
+                                #         bloco.blocos = list()
+                                #         bloco.blocos.append(Bloco("inicioF"))
                                 # bloco = self.atualizarblMover(bloco)
                                 self.comando.append(bloco)
                                 self.tam += 1
@@ -381,10 +412,13 @@ class Controlador:
                     self.atualizarListaBlMover(self.comando)
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
-
+    def limparFnComando(self):
+        self.tela.jogoPane.funcaoComando.clear()
+        self.tela.jogoPane.funcaoComando.append(self.__inicioF)
     def gerarNovoJogo(self):
         self.tela.desenhaNovoJogo = self.pressNovojogo = False
         gerarFases(self.fases, getTutorials())
+        self.limparFnComando()
         if Util.Config.MOBILE:
             self.jogador = Jogador("Save "+str(len(self.saves)+1))
         else:
@@ -474,6 +508,7 @@ class Controlador:
             else:
                 faseindex = self.fase.nivel-1
                 gerarFases(self.fases, getTutorials())
+                self.limparFnComando()
                 self.fase = self.fases[faseindex]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         elif self.tela.jogoPane.botaoVoltar.colisao_point(posicaomouse):
@@ -519,25 +554,27 @@ class Controlador:
                 x.pressionado = True
                 self.segurandoBloco = True
         i = 0
-        for x in self.comando:
+
+        for x in self.tela.jogoPane.funcaoComando:
             if x.selecionado:
+                self.tela.jogoPane.funcaoOpcaoAtiva = True
                 if self.tela.jogoPane.lixo.colisao_point(posicaomouse):
                     self.sons.DELETE.play()
                     if x.get_tipo() == "repetir" and x.blocos is not None:
                         for sb in x.blocos:
                             self.tam -= 1
-                    self.comando.remove(x)
+                    self.tela.jogoPane.funcaoComando.remove(x)
                     self.tam -= 1
                     break
                 if self.tela.jogoPane.moverEsquerda.colisao_point(posicaomouse) and i > 1:
-                    aux = self.comando[i - 1]
-                    self.comando[i - 1] = x
-                    self.comando[i] = aux
+                    aux = self.tela.jogoPane.funcaoComando[i - 1]
+                    self.tela.jogoPane.funcaoComando[i - 1] = x
+                    self.tela.jogoPane.funcaoComando[i] = aux
                     break
-                if self.tela.jogoPane.moverDireita.colisao_point(posicaomouse) and (i + 1) < len(self.comando):
-                    aux = self.comando[i + 1]
-                    self.comando[i + 1] = x
-                    self.comando[i] = aux
+                if self.tela.jogoPane.moverDireita.colisao_point(posicaomouse) and (i + 1) < len(self.tela.jogoPane.funcaoComando):
+                    aux = self.tela.jogoPane.funcaoComando[i + 1]
+                    self.tela.jogoPane.funcaoComando[i + 1] = x
+                    self.tela.jogoPane.funcaoComando[i] = aux
                     break
                 if self.tela.jogoPane.repetir.colisao_point(posicaomouse):
                     self.tela.jogoPane.mostrarEditBlRepetir = not self.tela.jogoPane.mostrarEditBlRepetir
@@ -573,6 +610,10 @@ class Controlador:
             tamx = 200 + auxy
             if x.get_rect().collidepoint(posicaomouse) and x.get_tipo() != "inicio":
                 x.selecionado = not x.selecionado
+                if not x.selecionado:
+                    self.tela.jogoPane.funcaoOpcaoAtiva = False
+                if x.selecionado:
+                    self.tela.jogoPane.funcaoOpcaoAtiva = True
             elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(tamx), escalarY(70)).collidepoint(posicaomouse):
                 pass
             elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
@@ -584,8 +625,79 @@ class Controlador:
                 if self.blOpcaoTrue == x:
                     self.tela.jogoPane.mostrarEditBlCor = self.tela.jogoPane.funcaoOpcaoAtiva = self.tela.jogoPane.mostrarEditBlRepetir = False
                     self.blOpcaoTrue = None
+                self.tela.jogoPane.funcaoOpcaoAtiva = False
                 x.selecionado = False
+
             i += 1
+        i = 0
+        if not self.tela.jogoPane.funcaoOpcaoAtiva:
+            for x in self.comando:
+                if x.selecionado:
+                    if self.tela.jogoPane.lixo.colisao_point(posicaomouse):
+                        self.sons.DELETE.play()
+                        if x.get_tipo() == "repetir" and x.blocos is not None:
+                            for sb in x.blocos:
+                                self.tam -= 1
+                        self.comando.remove(x)
+                        self.tam -= 1
+                        break
+                    if self.tela.jogoPane.moverEsquerda.colisao_point(posicaomouse) and i > 1:
+                        aux = self.comando[i - 1]
+                        self.comando[i - 1] = x
+                        self.comando[i] = aux
+                        break
+                    if self.tela.jogoPane.moverDireita.colisao_point(posicaomouse) and (i + 1) < len(self.comando):
+                        aux = self.comando[i + 1]
+                        self.comando[i + 1] = x
+                        self.comando[i] = aux
+                        break
+                    if self.tela.jogoPane.repetir.colisao_point(posicaomouse):
+                        self.tela.jogoPane.mostrarEditBlRepetir = not self.tela.jogoPane.mostrarEditBlRepetir
+                        if self.tela.jogoPane.mostrarEditBlRepetir:
+                            self.blOpcaoTrue = x
+                    if self.tela.jogoPane.funcaoOpcao.colisao_point(posicaomouse):
+                        self.tela.jogoPane.funcaoOpcaoAtiva = not self.tela.jogoPane.funcaoOpcaoAtiva
+                        if self.tela.jogoPane.funcaoOpcaoAtiva:
+                            self.blOpcaoTrue = x
+                    if self.tela.jogoPane.corOpcao.colisao_point(posicaomouse):
+                        self.tela.jogoPane.mostrarEditBlCor = not self.tela.jogoPane.mostrarEditBlCor
+                        if self.tela.jogoPane.mostrarEditBlCor:
+                            self.blOpcaoTrue = x
+                    if x.get_tipo() == "repetir" and self.tela.jogoPane.mostrarEditBlRepetir:
+                        if self.tela.jogoPane.seta.colisao_point(posicaomouse) and x.Value > 2:
+                            x.Value -= 1
+                        elif self.tela.jogoPane.seta2.colisao_point(posicaomouse) and x.Value < 9:
+                            x.Value += 1
+                    if x.get_tipo() == "selecionar_cor" and self.tela.jogoPane.mostrarEditBlCor:
+                        vl = 0
+                        tambl = 70
+                        posi = x.get_rect()
+                        for cor in self.fase.coresdisponiveis:
+                            rect = pygame.Rect(
+                                (
+                                    posi.x + 5 + escalarX(tambl + 2) * vl, posi.y - escalarY(157), escalarX(tambl), escalarY(tambl)))
+                            if rect.collidepoint(posicaomouse):
+                                x.set_Valor(cor)
+                            vl += 1
+                auxy = 0
+                if x.get_tipo() == "repetir" or x.get_tipo() == "selecionar_cor":
+                    auxy = 60
+                tamx = 200 + auxy
+                if x.get_rect().collidepoint(posicaomouse) and x.get_tipo() != "inicio":
+                    x.selecionado = not x.selecionado
+                elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(tamx), escalarY(70)).collidepoint(posicaomouse):
+                    pass
+                elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
+                    pass
+                # :
+                elif x.selecionado and x.get_tipo() == "blocoF" and (self.tela.jogoPane.boxFuncao.collidepoint(posicaomouse) or self.segurandoBloco):
+                    pass
+                else:
+                    if self.blOpcaoTrue == x:
+                        self.tela.jogoPane.mostrarEditBlCor = self.tela.jogoPane.funcaoOpcaoAtiva = self.tela.jogoPane.mostrarEditBlRepetir = False
+                        self.blOpcaoTrue = None
+                    x.selecionado = False
+                i += 1
 
     def _VerificarTelaCriar(self, posicaomouse):
         if self.tela.btCimaEx.colisao_point(posicaomouse) and self.tela.execucoes < 9:
@@ -678,6 +790,7 @@ class Controlador:
                     self.saveaexcluir = self.saves[i]
                 if x.colisao_point(posicaomouse):
                     gerarFases(self.fases, getTutorials())
+                    self.limparFnComando()
                     self.tela.telaSaves = False
                     self.jogador = self.saves[i]
                     self.pincel.posicaoInicial()

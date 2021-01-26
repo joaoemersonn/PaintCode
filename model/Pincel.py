@@ -18,7 +18,7 @@ class Pincel:
         self.image = pygame.transform.rotate(carrega_imagem("pincel1.png"), 0)
         self.cor = 1
 
-    def mover(self, comando, desenho, controller=None):
+    def mover(self, comando, desenho, controller=None, comandofn=None):
         x = comando
         if x is not None:
             if self.rotacao < 0:
@@ -63,8 +63,8 @@ class Pincel:
                             pygame.time.delay(100)
                         else:
                             self.mover(bloc, desenho)
-            elif x.get_tipo() == "blocoF" and x.blocos is not None:
-                for bloc in x.blocos:
+            elif x.get_tipo() == "blocoF" and comandofn is not None:
+                for bloc in comandofn:#x.blocos:
                     if controller is not None:
                         controller.refreshDesenho()
                         self.mover(bloc, desenho)
