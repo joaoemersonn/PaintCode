@@ -34,6 +34,7 @@ class Controlador:
         # (largura,altura), pygame.FULLSCREEN
         self.window = self.janela = Util.WINDOW
         self.window.fill(Cores.BRANCO)
+        self.tamFuncaoComando = 0
         self.splash = carrega_imagem("splash.png", escala=2)
         # self.gif = GIFImage("loading.gif")
         self.window.blit(self.splash, ((self.largura/2) -
@@ -147,7 +148,8 @@ class Controlador:
     def executarcomando(self):
         if self.espera > 20:
             self.espera = 0
-            self.pincel.mover(self.comando[1], self.fase.desenhoDesafio, self,comandofn=self.tela.jogoPane.funcaoComando)
+            self.pincel.mover(self.comando[1], self.fase.desenhoDesafio,
+                              self, comandofn=self.tela.jogoPane.funcaoComando)
             self.comando.pop(1)
             self.tam -= 1
             if self.tam < 1 or len(self.comando) <= 1:
@@ -336,14 +338,13 @@ class Controlador:
                                     self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Não é possível colocar um bloco de repetição em outro!"
                                     self.tela.jogoPane.exibeAviso = True
                                 else:
-                                    if self.tam < 12:
+                                    if self.tam <= 12:
                                         if c.blocos is None:
                                             c.blocos = list()
                                         bl = Bloco(x.get_tipo(), x.get_Valor())
                                         # bl = self.atualizarblMover(bl)
                                         c.blocos.append(bl)
-                                        if len(c.blocos) > 1:
-                                            self.tam += 1
+                                        self.tam += 1
                                     else:
                                         self.sons.ALERT.play(1)
                                         self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
@@ -357,38 +358,39 @@ class Controlador:
                                     self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Não é possível colocar um bloco de repetição em outro!"
                                     self.tela.jogoPane.exibeAviso = True
                                 else:
-                                    if self.tam < 12:
+                                    if self.tamFuncaoComando <= 6:
                                         if c.blocos is None:
                                             c.blocos = list()
                                         bl = Bloco(x.get_tipo(), x.get_Valor())
                                         # bl = self.atualizarblMover(bl)
                                         c.blocos.append(bl)
-                                        if len(c.blocos) > 1:
-                                            self.tam += 1
+                                        self.tamFuncaoComando += 1
                                     else:
                                         self.sons.ALERT.play(1)
                                         self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Comando atingiu limite máximo de blocos!"
                                         self.tela.jogoPane.exibeAviso = True
                                 x.pressionado = False
                                 self.segurandoBloco = False
-                        if x.pressionado and x.colisao_rect(self.tela.jogoPane.boxFuncao):
+                        if x.pressionado and x.colisao_rect(self.tela.jogoPane.boxFuncao) and self.tela.jogoPane.fndesenha:
                             if x.get_tipo() == "blocoF":
                                 self.sons.ALERT.play(1)
                                 self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Bloco de Função não pode fazer parte da função!"
                                 self.tela.jogoPane.exibeAviso = True
 
-                            elif len(self.tela.jogoPane.funcaoComando) <= 5:
+                            elif self.tamFuncaoComando <= 6:
+                                if x.get_tipo() == "repetir":
+                                    x.set_Valor(3)
+                                    #self.tamFuncaoComando += 1
                                 self.sons.COLOCAR.play()
                                 bloco = Bloco(
                                     x.get_tipo(), x.get_Valor())
                                 self.tela.jogoPane.funcaoComando.append(bloco)
+                                self.tamFuncaoComando += 1
+
                             else:
                                 self.sons.ALERT.play(1)
                                 self.tela.jogoPane.textoaviso = "TAMANHO MÁXIMO!", "Função atingiu limite máximo de blocos!"
                                 self.tela.jogoPane.exibeAviso = True
-                            if x.get_tipo() == "repetir":
-                                # self.tam += 1
-                                x.set_Valor(3)
 
                         elif x.pressionado and x.colisao_rect(self.tela.jogoPane.get_boxExecucao()):
                             if self.tam <= 12:
@@ -412,9 +414,12 @@ class Controlador:
                     self.atualizarListaBlMover(self.comando)
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
+
     def limparFnComando(self):
+        self.tamFuncaoComando = 0
         self.tela.jogoPane.funcaoComando.clear()
         self.tela.jogoPane.funcaoComando.append(self.__inicioF)
+
     def gerarNovoJogo(self):
         self.tela.desenhaNovoJogo = self.pressNovojogo = False
         gerarFases(self.fases, getTutorials())
@@ -561,10 +566,11 @@ class Controlador:
                 if self.tela.jogoPane.lixo.colisao_point(posicaomouse):
                     self.sons.DELETE.play()
                     if x.get_tipo() == "repetir" and x.blocos is not None:
+                        #self.tamFuncaoComando -= 1
                         for sb in x.blocos:
-                            self.tam -= 1
+                            self.tamFuncaoComando -= 1
                     self.tela.jogoPane.funcaoComando.remove(x)
-                    self.tam -= 1
+                    self.tamFuncaoComando -= 1
                     break
                 if self.tela.jogoPane.moverEsquerda.colisao_point(posicaomouse) and i > 1:
                     aux = self.tela.jogoPane.funcaoComando[i - 1]
@@ -635,6 +641,7 @@ class Controlador:
                 if x.selecionado:
                     if self.tela.jogoPane.lixo.colisao_point(posicaomouse):
                         self.sons.DELETE.play()
+                        #self.tam -= 1
                         if x.get_tipo() == "repetir" and x.blocos is not None:
                             for sb in x.blocos:
                                 self.tam -= 1
@@ -807,6 +814,21 @@ class Controlador:
                 for x in self.comando:
                     if x == bl and not fase:
                         break
+                    if x.blocos is not None:
+                        if False:  # x.get_Valor() is not None:
+                            vl = x.get_Valor()
+                        else:
+                            vl = 1
+                        for i in x.blocos:
+                            if rotacao < 0:
+                                rotacao += 360
+                            if rotacao >= 360:
+                                rotacao -= 360
+                            if i.get_tipo() == "girar_esquerda":
+                                rotacao += 90*vl
+                            elif i.get_tipo() == "girar_direita":
+                                rotacao -= 90*vl
+
                     if rotacao < 0:
                         rotacao += 360
                     if rotacao >= 360:

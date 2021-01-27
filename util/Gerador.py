@@ -95,7 +95,7 @@ def gerarFases(listaFases, t):
 
     fase.desenhoDesafio.tiles[2][1] = -1
     fase.desenhoResposta.tiles[2][1] = -1
-    fase.tentativas = 2
+    fase.tentativas = 1
     fase.nivel = 2
     l.append(fase)
 
@@ -114,7 +114,7 @@ def gerarFases(listaFases, t):
 
     fase.desenhoDesafio.tiles[0][2] = -1
     fase.desenhoResposta.tiles[0][2] = -1
-    fase.tentativas = 3
+    fase.tentativas = 1
     fase.nivel = 3
     l.append(fase)
     #######################################################################
@@ -136,7 +136,7 @@ def gerarFases(listaFases, t):
 
     fase.desenhoDesafio.tiles[0][2] = -1
     fase.desenhoResposta.tiles[0][2] = -1
-    fase.tentativas = 3
+    fase.tentativas = 1
     fase.nivel = 4
     l.append(fase)
 
@@ -197,12 +197,13 @@ def gerarFases(listaFases, t):
     fase.desenhoResposta = Desenho(4, 5, 1)
 
     for i in range(1, 4):
-        for j in range(1, 3):
+        for j in range(0, 3):
             fase.desenhoDesafio.tiles[i][j] = 1
 
-    # fase.desenhoDesafio.tiles[0][2] = -1
     # fase.desenhoResposta.tiles[0][2] = -1
-    fase.tentativas = 2
+    fase.desenhoDesafio.tiles[0][0] = 1
+    fase.desenhoDesafio.tiles[4][0] = 1
+    fase.tentativas = 1
     fase.nivel = 7
     l.append(fase)
     #######################################################################
@@ -245,7 +246,7 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.blocosdisponiveis.append(blocos.repetir)
     fase.blocosdisponiveis.append(blocos.mudarCor)
-    fase.blocosdisponiveis.append(blocos.blocoF)
+    # fase.blocosdisponiveis.append(blocos.blocoF)
     fase.coresdisponiveis.append(0)
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
@@ -255,8 +256,8 @@ def gerarFases(listaFases, t):
     fase.desenhoResposta = Desenho(4, 5, 1)
 
     for i in range(0, 5):
-        fase.desenhoResposta.tiles[i][0] = 2
-        fase.desenhoResposta.tiles[i][2] = 2
+        fase.desenhoResposta.tiles[i][0] = 3
+        fase.desenhoResposta.tiles[i][2] = 3
 
     fase.desenhoDesafio.tiles[2][3] = -1
     fase.desenhoResposta.tiles[2][3] = -1
@@ -272,7 +273,6 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.blocosdisponiveis.append(blocos.repetir)
     fase.blocosdisponiveis.append(blocos.mudarCor)
-    fase.blocosdisponiveis.append(blocos.blocoF)
     fase.coresdisponiveis.append(0)
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
@@ -327,17 +327,18 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.blocosdisponiveis.append(blocos.repetir)
     fase.blocosdisponiveis.append(blocos.mudarCor)
+    fase.blocosdisponiveis.append(blocos.blocoF)
     fase.coresdisponiveis.append(0)
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
     fase.coresdisponiveis.append(3)
 
-    fase.desenhoDesafio = Desenho(5, 6, 0)
-    fase.desenhoResposta = Desenho(5, 6, 1)
+    fase.desenhoDesafio = Desenho(3, 3, 0)
+    fase.desenhoResposta = Desenho(3, 3, 1)
 
-    fase.desenhoDesafio.tiles[5][4] = -1
-    fase.desenhoResposta.tiles[5][4] = -1
-    fase.tentativas = 4
+    #fase.desenhoDesafio.tiles[5][4] = -1
+    #fase.desenhoResposta.tiles[5][4] = -1
+    fase.tentativas = 1
     fase.nivel = 12
     l.append(fase)
     #######################################################################
@@ -349,20 +350,24 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.blocosdisponiveis.append(blocos.repetir)
     fase.blocosdisponiveis.append(blocos.mudarCor)
+    fase.blocosdisponiveis.append(blocos.blocoF)
     fase.coresdisponiveis.append(0)
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
     fase.coresdisponiveis.append(3)
 
-    fase.desenhoDesafio = Desenho(5, 6, 0)
+    fase.desenhoDesafio = Desenho(5, 6, 1)
     fase.desenhoResposta = Desenho(5, 6, 1)
 
     for i in range(0, 6):
-        fase.desenhoResposta.tiles[i][2] = 2
+        fase.desenhoResposta.tiles[i][0] = 2
+    for i in range(0, 5):
+        fase.desenhoResposta.tiles[5][i] = 2
 
     fase.desenhoDesafio.tiles[5][4] = -1
     fase.desenhoResposta.tiles[5][4] = -1
-    fase.tentativas = 4
+    fase.desenhoResposta.tiles[4][4] = 2
+    fase.tentativas = 1
     fase.nivel = 13
     l.append(fase)
     #######################################################################
@@ -374,14 +379,25 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.blocosdisponiveis.append(blocos.repetir)
     fase.blocosdisponiveis.append(blocos.mudarCor)
+    fase.blocosdisponiveis.append(blocos.blocoF)
     fase.coresdisponiveis.append(0)
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
     fase.coresdisponiveis.append(3)
 
-    fase.desenhoDesafio = Desenho(5, 6, 0)
+    fase.desenhoDesafio = Desenho(5, 6, 1)
     fase.desenhoResposta = Desenho(5, 6, 1)
 
+    for i in range(0, 6):
+        fase.desenhoResposta.tiles[i][0] = 2
+        fase.desenhoResposta.tiles[i][4] = 2
+       # fase.desenhoResposta.tiles[0][i] = 2
+    fase.desenhoResposta.tiles[0][1] = 2
+    fase.desenhoResposta.tiles[0][2] = 2
+    fase.desenhoResposta.tiles[0][3] = 2
+    fase.desenhoResposta.tiles[5][1] = 2
+    fase.desenhoResposta.tiles[5][2] = 2
+    fase.desenhoResposta.tiles[5][3] = 2
     fase.desenhoDesafio.tiles[3][3] = -1
     fase.desenhoDesafio.tiles[2][3] = -1
     fase.desenhoDesafio.tiles[3][2] = -1
@@ -391,7 +407,7 @@ def gerarFases(listaFases, t):
     fase.desenhoResposta.tiles[3][2] = -1
     fase.desenhoResposta.tiles[2][2] = -1
 
-    fase.tentativas = 5
+    fase.tentativas = 1
     fase.nivel = 14
     l.append(fase)
     #######################################################################
@@ -403,27 +419,24 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.blocosdisponiveis.append(blocos.repetir)
     fase.blocosdisponiveis.append(blocos.mudarCor)
+    fase.blocosdisponiveis.append(blocos.blocoF)
     fase.coresdisponiveis.append(0)
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
     fase.coresdisponiveis.append(3)
 
-    fase.desenhoDesafio = Desenho(5, 6, 0)
+    fase.desenhoDesafio = Desenho(5, 6, 1)
     fase.desenhoResposta = Desenho(5, 6, 1)
 
-    for i in range(0, 6):
-        fase.desenhoResposta.tiles[i][2] = 2
-
     fase.desenhoDesafio.tiles[3][3] = -1
-    fase.desenhoDesafio.tiles[2][3] = -1
-    fase.desenhoDesafio.tiles[3][2] = -1
-    fase.desenhoDesafio.tiles[2][2] = -1
     fase.desenhoResposta.tiles[3][3] = -1
-    fase.desenhoResposta.tiles[2][3] = -1
-    fase.desenhoResposta.tiles[3][2] = -1
-    fase.desenhoResposta.tiles[2][2] = -1
+    for i in range(0, 6):
+        fase.desenhoResposta.tiles[i][1] = 2
+        fase.desenhoResposta.tiles[i][4] = 2
+    fase.desenhoResposta.tiles[5][2] = 3
+    fase.desenhoResposta.tiles[5][3] = 3
 
-    fase.tentativas = 5
+    fase.tentativas = 1
     fase.nivel = 15
     l.append(fase)
 

@@ -319,14 +319,14 @@ class Tela:
         contornar(self.janela, 90, 225, 50, 30, eX=ESCALAX, eY=ESCALAY)
         contornar(self.janela, 200, 225, 50, 30, eX=ESCALAX, eY=ESCALAY)
 
-        self.janela.blit(self.txt_qntvidas, self.escalarXY(50, 350))
-        self.janela.blit(self.txt_ex, self.escalarXY(70, 430))
-        self.btCimaEx.desenharBt(self.janela)
-        self.btBaixoEx.desenharBt(self.janela)
-        txt_execucoes = self.fonteGrande.render(
-            str(self.execucoes), True, self.corTexto)
-        self.janela.blit(txt_execucoes, self.escalarXY(270, 430))
-        contornar(self.janela, 250, 425, 50, 30, eX=ESCALAX, eY=ESCALAY)
+        #self.janela.blit(self.txt_qntvidas, self.escalarXY(50, 350))
+        #self.janela.blit(self.txt_ex, self.escalarXY(70, 430))
+        # self.btCimaEx.desenharBt(self.janela)
+        # self.btBaixoEx.desenharBt(self.janela)
+        # txt_execucoes = self.fonteGrande.render(
+        #    str(self.execucoes), True, self.corTexto)
+        #self.janela.blit(txt_execucoes, self.escalarXY(270, 430))
+        #contornar(self.janela, 250, 425, 50, 30, eX=ESCALAX, eY=ESCALAY)
         self.botaoVoltarCriar.desenharBt(self.janela)
         self.botaoProximo.desenharBt(self.janela)
 

@@ -126,7 +126,7 @@ class PainelJogo(Painel):
         self.botaoDireita.definirPosicao((1220, 350))
         self.botaoPularTutorial.definirPosicao((590, 650))
         self.indexTutorial = 0
-
+        self.fndesenha = False
         self.destaque = False
         self.c3 = carrega_imagem("c3.png")
         self.textoaviso = "", ""  # self.tituloaviso = ""
@@ -238,23 +238,23 @@ class PainelJogo(Painel):
             sc, self.tempoAnGanhou, fps=fps)
 
     def desenharInfo(self, fase, jogador):
-        cor = Cores.BRANCO
-        self.blit(self.__tinta, escalarXY(20, 20))
         if jogador is not None:
-            nome = self.fontePequena.render(
+            cor = Cores.BRANCO
+            self.blit(self.__tinta, escalarXY(20, 20))
+            nome = self.fonten.render(
                 ("Jogador: " + jogador.getNome()), True, cor)
-            faserender = self.fontePequena.render(
+            faserender = self.fonteg.render(
                 ("Fase: " + str(fase.nivel)), True, cor)
             self.blit(nome, escalarXY(70, 40))
-            self.blit(faserender, escalarXY(70, 60))
-        tentativas = self.fonten.render("Tentativas Restantes:", True, cor)
-        if self.destaque:
-            tentativas2 = self.fontexxg.render(
-                str(fase.tentativas), True, Cores.VERMELHO)
-        else:
-            tentativas2 = self.fonteg.render(str(fase.tentativas), True, cor)
-        self.blit(tentativas, escalarXY(70, 90))
-        self.blit(tentativas2, escalarXY(150, 110))
+            self.blit(faserender, escalarXY(80, 80))
+        # tentativas = self.fonten.render("Tentativas Restantes:", True, cor)
+        # if self.destaque:
+        #     tentativas2 = self.fontexxg.render(
+        #         str(fase.tentativas), True, Cores.VERMELHO)
+        # else:
+        #     tentativas2 = self.fonteg.render(str(fase.tentativas), True, cor)
+        # self.blit(tentativas, escalarXY(70, 90))
+        # self.blit(tentativas2, escalarXY(150, 110))
 
     def aviso(self, titulo, texto):
         self.blit(self.c3, escalar(400, 200, 500, 150))
@@ -462,8 +462,10 @@ class PainelJogo(Painel):
                 ).w, x.get_rect().h, tam=3, cor=Cores.CORPRINCIPAL)
         y = 680
         xspace = -60
+        self.fndesenha = False
         for f in fase.blocosdisponiveis:
             if f.get_tipo() == "blocoF":
+                self.fndesenha = True
                 self.boxFuncao = pygame.Rect(
                     25, escalarY(660), escalarX(600), escalarY(100))
                 pygame.draw.rect(
@@ -486,18 +488,23 @@ class PainelJogo(Painel):
                                 aux = self._img3
                                 aux = pygame.transform.scale(
                                     aux, (int(aux.get_rect().w / 2), int(aux.get_rect().h / 2)))
-                                self.blit(img, (xspace + 120, escalarY(y - 14)))
-                                self.blit(aux, (xspace + 140, escalarY(y - 14)))
-                                bl.definirPosicao(((xspace + 115) / ESCALAX, y))
+                                self.blit(
+                                    img, (xspace + 120, escalarY(y - 14)))
+                                self.blit(
+                                    aux, (xspace + 140, escalarY(y - 14)))
+                                bl.definirPosicao(
+                                    ((xspace + 115) / ESCALAX, y))
                                 bl.desenhar(self)
                                 xspace += bl.get_rect().w - (12 * ESCALAX)
                             x.set_rect(pygame.rect.Rect(x.get_rect().x, x.get_rect().y, (65 * x.blocos.__len__()) + 105,
                                                         img2.get_rect().h))
                             self.blit(img2, (xspace + 60, escalarY(y - 15)))
-                            self.blit(numRepet, escalarXY(xspace + 147, (y + 70)))
+                            self.blit(numRepet, escalarXY(
+                                xspace + 147, (y + 70)))
                         else:
                             self.blit(img2, escalarXY(xspace + 123, y - 15))
-                            self.blit(numRepet, escalarXY(xspace + 210, y + 70))
+                            self.blit(numRepet, escalarXY(
+                                xspace + 210, y + 70))
                             xspace += 65 * ESCALAX
                         xspace += 100 * ESCALAX
                     else:
@@ -566,18 +573,22 @@ class PainelJogo(Painel):
                                 tambl = 70
                                 for cor in fase.coresdisponiveis:
                                     pygame.draw.rect(self, Util.get_cor(cor), (
-                                        pos.x + 5 + escalarX(tambl + 2) * vl, pos.y - escalarY(157), escalarX(tambl),
+                                        pos.x + 5 +
+                                        escalarX(tambl + 2) * vl, pos.y -
+                                        escalarY(157), escalarX(tambl),
                                         escalarY(tambl)))
                                     contornarRect(self, (
-                                        pos.x + 5 + escalarX(tambl + 2) * vl, pos.y - escalarY(157), escalarX(tambl),
+                                        pos.x + 5 +
+                                        escalarX(tambl + 2) * vl, pos.y -
+                                        escalarY(157), escalarX(tambl),
                                         escalarY(tambl)))
                                     vl += 1
 
                     if x.selecionado and x.get_tipo() != "inicioF" or (
-                            x.get_tipo() != "inicioF" and x.colisao_point(pygame.mouse.get_pos()) and not
-                    pygame.mouse.get_pressed()[
-                        0] and not self.seta2.colisao_point(pygame.mouse.get_pos()) and not self.seta.colisao_point(
-                        pygame.mouse.get_pos())):
+                        x.get_tipo() != "inicioF" and x.colisao_point(pygame.mouse.get_pos()) and not
+                            pygame.mouse.get_pressed()[
+                            0] and not self.seta2.colisao_point(pygame.mouse.get_pos()) and not self.seta.colisao_point(
+                            pygame.mouse.get_pos())):
                         # MUITO USO DE MEMORIA VER DEPOIS
                         s = pygame.Surface(
                             (x.get_rect().width, x.get_rect().height), pygame.SRCALPHA)
