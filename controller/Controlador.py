@@ -382,8 +382,11 @@ class Controlador:
                                     x.set_Valor(3)
                                     #self.tamFuncaoComando += 1
                                 self.sons.COLOCAR.play()
-                                bloco = Bloco(
-                                    x.get_tipo(), x.get_Valor())
+                                if x.get_tipo() == "mover":
+                                    bloco = Bloco(x.get_tipo())
+                                else:
+                                    bloco = Bloco(
+                                        x.get_tipo(), x.get_Valor())
                                 self.tela.jogoPane.funcaoComando.append(bloco)
                                 self.tamFuncaoComando += 1
 
