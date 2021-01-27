@@ -45,6 +45,9 @@ def getTutorials():
         tutoriais.append(carrega_imagem("t10.png"))
         tutoriais.append(carrega_imagem("t11.png"))
         tutoriais.append(carrega_imagem("t12.png"))
+        tutoriais.append(carrega_imagem("t13.png"))
+        tutoriais.append(carrega_imagem("t14.png"))
+        tutoriais.append(carrega_imagem("t15.png"))
     return tutoriais
 
 
@@ -125,8 +128,8 @@ def gerarFases(listaFases, t):
     fase.blocosdisponiveis.append(blocos.girar_direita)
     fase.blocosdisponiveis.append(blocos.pintar)
     fase.tutorial = list()
-    fase.tutorial.append(t[8])
-    fase.tutorial.append(t[0])
+    # fase.tutorial.append(t[8])
+    # fase.tutorial.append(t[0])
     fase.desenhoDesafio = Desenho(4, 5, 1)
     fase.desenhoResposta = Desenho(4, 5, 1)
     fase.desenhoDesafio.tiles[0][3] = 0
@@ -332,6 +335,12 @@ def gerarFases(listaFases, t):
     fase.coresdisponiveis.append(1)
     fase.coresdisponiveis.append(2)
     fase.coresdisponiveis.append(3)
+
+    fase.tutorial = list()
+    fase.tutorial.append(t[14])
+    fase.tutorial.append(t[15])
+    fase.tutorial.append(t[16])
+    fase.tutorial.append(t[0])
 
     fase.desenhoDesafio = Desenho(3, 3, 0)
     fase.desenhoResposta = Desenho(3, 3, 1)

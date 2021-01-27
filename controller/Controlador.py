@@ -53,7 +53,7 @@ class Controlador:
         self.rodando = True
         self.pressNovojogo = self.executandoComando = False
         self.saves = list()
-        self.tam = 1
+        self.tam = 0
         self.comando = list()
         self.__inicio = None
         self.jogador = None
@@ -94,6 +94,7 @@ class Controlador:
         self.comando.append(self.__inicio)
         self.tela.jogoPane.funcaoComando.append(self.__inicioF)
         gerarFases(self.fases, getTutorials())
+        self.tam = 0
         self.sons.BACKGROUND.set_volume(0.2)
         self.sons.BACKGROUND.play(TOCAREMLOOP)
         self.carregarConfig()
@@ -155,7 +156,7 @@ class Controlador:
             if self.tam < 1 or len(self.comando) <= 1:
                 self.refreshDesenho()
                 self.executandoComando = False
-                self.tam = 1
+                self.tam = 0
                 self.verificandodesenho = True
         else:
             self.espera += ((Util.Config.VELOCIDADE/60))
@@ -173,7 +174,7 @@ class Controlador:
         self.i = self.j = 0
         self.refreshDesenho()
         self.tela.textoAlerta = (
-            "Acabaram suas Execuções!,", "e a casa não está como o cliente pediu!",
+            "QUE PENA!,", "A casa não está como o cliente pediu!",
             "Pressione OK para tentar novamente")
         self.tela.desenhaAlerta = True
         self.pincel.posicaoInicial()
@@ -183,6 +184,7 @@ class Controlador:
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         else:
             gerarFases(self.fases, getTutorials())
+            self.tam = 0
             self.limparFnComando()
             self.fase = self.fases[self.faseSelecionada]
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
@@ -211,6 +213,7 @@ class Controlador:
                 self.jogador.subirNivel()
                 self.fase = self.fases[self.jogador.getNivel()]
             self.pincel.posicaoInicial()
+            self.limparFnComando()
             # self.fase = self.fases[self.jogador.getNivel()]
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
             gravar_saves(self.saves)
@@ -243,6 +246,7 @@ class Controlador:
                 if x.clicked and int(x.string) <= int(self.jogador.getNivel())+1:
                     self.faseSelecionada = int(x.string)-1
                     gerarFases(self.fases, getTutorials())
+                    self.tam = 0
                     self.limparFnComando()
                     self.fase = self.fases[self.faseSelecionada]
                     self.atualizarListaBlMover(
@@ -254,6 +258,7 @@ class Controlador:
                     x.clicked = False
                     self.tela.telaMenuFases = False
                     self.tela.telaJogo = True
+                    self.esperaJogoAparecer = False
         elif self.tela.telaConfig:
             self.tela.sliderVl.listen(events)
             Util.Config.VELOCIDADE = self.tela.sliderVl.value
@@ -273,20 +278,21 @@ class Controlador:
                         self.tela.telaSaves = True
                 elif self.tela.telaJogo and not self.tela.desenhaAlerta and not self.tela.desenhaConfirmacao and not self.tela.jogoPane.exibindoTutorial:
                     self._VerificarTelaJogo(posicaomaouse)
-                elif self.tela.jogoPane.exibindoTutorial:
+                elif self.tela.telaJogo and self.tela.jogoPane.exibindoTutorial:
                     if self.fase.tutorial is None or len(self.fase.tutorial) <= self.tela.jogoPane.indexTutorial:
                         self.tela.jogoPane.exibindoTutorial = False
                         break
                     img = self.fase.tutorial[self.tela.jogoPane.indexTutorial]
                     if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial > 0:
                         self.tela.jogoPane.indexTutorial -= 1
-                    elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse) or (img is not None and pygame.Rect((
+                    elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse) or (img is not None and self.esperaJogoAparecer and pygame.Rect((
                             self.largura/2)-(img.get_rect().w/2), (self.altura/2)-(img.get_rect().h/2), img.get_rect().w, img.get_rect().h).collidepoint(posicaomaouse)):
                         self.tela.jogoPane.indexTutorial += 1
                     elif self.tela.jogoPane.botaoPularTutorial.colisao_point(posicaomaouse):
                         self.tela.jogoPane.exibindoTutorial = False
 
             elif event.type == pygame.MOUSEBUTTONUP:
+                self.esperaJogoAparecer = True
                 if self.tela.desenhaConfirmacao:
                     if self.tela.cancelarbotao.colisao_point(posicaomaouse):
                         self.tela.desenhaConfirmacao = False
@@ -426,6 +432,7 @@ class Controlador:
     def gerarNovoJogo(self):
         self.tela.desenhaNovoJogo = self.pressNovojogo = False
         gerarFases(self.fases, getTutorials())
+        self.tam = 0
         self.limparFnComando()
         if Util.Config.MOBILE:
             self.jogador = Jogador("Save "+str(len(self.saves)+1))
@@ -508,7 +515,7 @@ class Controlador:
             self.pincel.posicaoInicial()
             self.comando.clear()
             self.comando.append(self.__inicio)
-            self.tam = 1
+            self.tam = 0
             if self.jogandoFasePersonalizada:
                 self.tela.fasespersonalizadas = ler_fases()
                 self.fase = self.tela.fasespersonalizadas[self.index]
@@ -516,6 +523,7 @@ class Controlador:
             else:
                 faseindex = self.fase.nivel-1
                 gerarFases(self.fases, getTutorials())
+                self.tam = 0
                 self.limparFnComando()
                 self.fase = self.fases[faseindex]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
@@ -736,6 +744,7 @@ class Controlador:
             self.tela.telaCriar = False
             self.tela.jogoPane.botaoSalvar.mudarImg("BOTAOPROX.PNG")
             self.tela.telaJogo = True
+            self.esperaJogoAparecer = False
         self.botaoclicado = False
 
     def _VerificarTelaSaves(self, posicaomouse):
@@ -800,6 +809,7 @@ class Controlador:
                     self.saveaexcluir = self.saves[i]
                 if x.colisao_point(posicaomouse):
                     gerarFases(self.fases, getTutorials())
+                    self.tam = 0
                     self.limparFnComando()
                     self.tela.telaSaves = False
                     self.jogador = self.saves[i]
@@ -954,6 +964,7 @@ class Controlador:
                     self.jogador = None
                     self.tela.telaFases = False
                     self.tela.telaJogo = True
+                    self.esperaJogoAparecer = False
                     break
 
     def carregarConfig(self):
