@@ -35,6 +35,7 @@ class Controlador:
         self.window = self.janela = Util.WINDOW
         self.window.fill(Cores.BRANCO)
         self.tamFuncaoComando = 0
+        self.tamFuncaoComandoAnterior = 0
         self.splash = carrega_imagem("splash.png", escala=2)
         # self.gif = GIFImage("loading.gif")
         self.window.blit(self.splash, ((self.largura/2) -
@@ -54,7 +55,9 @@ class Controlador:
         self.pressNovojogo = self.executandoComando = False
         self.saves = list()
         self.tam = 0
+        self.tamAnterior = 0
         self.comando = list()
+        self.manterComando = False
         self.__inicio = None
         self.jogador = None
         self.fase = self.faseanterior = None
@@ -73,6 +76,7 @@ class Controlador:
         self.blOpcaoTrue = None
         self.faseSelecionada = 0
         self.__inicioF = None
+        self.comandoAnterior = None
         # self.lixeira = self.play = None
         ###
         # self.gif.executar(self.window, 950, 350)
@@ -174,10 +178,10 @@ class Controlador:
         self.i = self.j = 0
         self.refreshDesenho()
         self.tela.textoAlerta = (
-            "QUE PENA!,", "A casa não está como o cliente pediu!",
-            "Pressione OK para tentar novamente")
+            "Você não completou objetivo.", " A casa não está pintada corretamente.")
         self.tela.desenhaAlerta = True
         self.pincel.posicaoInicial()
+        self.manterComando = True
         if self.jogandoFasePersonalizada:
             self.tela.fasespersonalizadas = ler_fases()
             self.fase = self.tela.fasespersonalizadas[self.index]
@@ -185,7 +189,7 @@ class Controlador:
         else:
             gerarFases(self.fases, getTutorials())
             self.tam = 0
-            self.limparFnComando()
+            # self.limparFnComando()
             self.fase = self.fases[self.faseSelecionada]
             self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
 
@@ -196,8 +200,7 @@ class Controlador:
             self.faseanterior = self.fase
             self.tela.jogoPane.reinicarAnimacaoConfete()
             self.tela.jogoPane.tempoAnGanhou = (57 * 4)
-            self.tela.textoAlerta = (
-                "Parabéns você concluiu a fase!", "Pressione OK para retornar!")
+            self.tela.textoAlerta = ("Parabéns você concluiu a fase!")
             self.pincel.posicaoInicial()
             self.tela.fasespersonalizadas = ler_fases()
             self.tela.desenhaAlerta = True
@@ -206,8 +209,7 @@ class Controlador:
             self.faseanterior = self.fase
             self.tela.jogoPane.reinicarAnimacaoConfete()
             self.tela.jogoPane.tempoAnGanhou = (57 * 4)
-            self.tela.textoAlerta = (
-                "Parabéns você concluiu o nível!", "Pressione OK para continuar!")
+            self.tela.textoAlerta = ("Parabéns você concluiu o nível!", "")
             self.tela.desenhaAlerta = True
             if self.fase.nivel > int(self.jogador.getNivel()):
                 self.jogador.subirNivel()
@@ -223,7 +225,7 @@ class Controlador:
             self.tela.jogoPane.reinicarAnimacaoConfete()
             self.tela.jogoPane.tempoAnGanhou = (57 * 4)
             self.tela.textoAlerta = (
-                "Parabéns você concluiu o jogo!", "Pressione OK para continuar!")
+                "Parabéns você concluiu o jogo!")
             self.tela.desenhaAlerta = True
             self.fimdejogo = True
             self.pincel.posicaoInicial()
@@ -315,6 +317,10 @@ class Controlador:
                     if self.fase is not None and self.fase.tentativas is not None:
                         self.tela.jogoPane.exibindoTutorial = True
                         self.tela.jogoPane.indexTutorial = 0
+                        if self.manterComando:
+                            self.tam = self.tamAnterior
+                            self.comando = self.comandoAnterior
+                            self.manterComando = False
                     if self.jogandoFasePersonalizada:
                         self.jogandoFasePersonalizada = False
                         self.tela.telaFases = True
@@ -364,7 +370,7 @@ class Controlador:
                                     self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Não é possível colocar um bloco de repetição em outro!"
                                     self.tela.jogoPane.exibeAviso = True
                                 else:
-                                    if self.tamFuncaoComando <= 6:
+                                    if self.tamFuncaoComando <= 12:
                                         if c.blocos is None:
                                             c.blocos = list()
                                         bl = Bloco(x.get_tipo(), x.get_Valor())
@@ -383,9 +389,9 @@ class Controlador:
                                 self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Bloco de Função não pode fazer parte da função!"
                                 self.tela.jogoPane.exibeAviso = True
 
-                            elif self.tamFuncaoComando <= 6:
+                            elif self.tamFuncaoComando <= 12:
                                 if x.get_tipo() == "repetir":
-                                    x.set_Valor(3)
+                                    x.set_Valor(4)
                                     #self.tamFuncaoComando += 1
                                 self.sons.COLOCAR.play()
                                 if x.get_tipo() == "mover":
@@ -407,7 +413,7 @@ class Controlador:
                                 bloco = Bloco(x.get_tipo(), x.get_Valor())
                                 if bloco.get_tipo() == "repetir":
                                     # self.tam += 1
-                                    bloco.set_Valor(3)
+                                    bloco.set_Valor(4)
                                 # elif bloco.get_tipo() == "blocoF":
                                 #     if bloco.blocos is None:
                                 #         bloco.blocos = list()
@@ -425,6 +431,10 @@ class Controlador:
                         self.fase.blocosdisponiveis, True)
 
     def limparFnComando(self):
+        self.tam = 0
+        self.comando.clear()
+        self.comando.append(self.__inicio)
+
         self.tamFuncaoComando = 0
         self.tela.jogoPane.funcaoComando.clear()
         self.tela.jogoPane.funcaoComando.append(self.__inicioF)
@@ -505,7 +515,7 @@ class Controlador:
                 gravar_fase(self.fase)
                 self.tela.jogoPane.finalizacriacao = False
                 self.tela.textoAlerta = (
-                    "Nível criado com sucesso!", "", "Pressione OK para voltar ao início")
+                    "Nível criado com sucesso!", "", "")
                 self.tela.desenhaAlerta = True
                 self.tela.telaJogo = False
                 self.tela.telaInicio = True
@@ -545,6 +555,8 @@ class Controlador:
             self.tela.telaJogo = False
         # Executar
         elif self.tela.jogoPane.get_executarButton().colisao_point(posicaomouse) and len(self.comando) > 1:
+            self.tamAnterior = self.tam
+            self.comandoAnterior = self.comando.copy()
             self.executandoComando = True
         #  Arrastar BLoco comando
         for x in self.fase.blocosdisponiveis:
@@ -769,7 +781,7 @@ class Controlador:
         if self.tela.botaoNovoJogo.colisao_point(posicaomouse):
             if not Util.Config.MOBILE:
                 self.tela.textoAlerta = (
-                    "Digite Seu Nome: ", "Pressione OK para continuar")
+                    "Digite Seu Nome: ", "")
                 self.tela.caixaTexto.active = True
                 self.tela.caixaTexto.selected = True
                 self.tela.desenhaNovoJogo = True

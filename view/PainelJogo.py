@@ -86,7 +86,7 @@ class PainelJogo(Painel):
         self.funcaoOpcao = Sprite("funcao.png", 1, 2)
         self.funcaoOpcaoAtiva = False
         self.boxFuncao = pygame.Rect(
-            0, escalarY(175), escalarX(600), escalarY(100))
+            20, escalarY(175), escalarX(950), escalarY(100))
         self.moverEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2, 2)
         self.moverDireita = Sprite("BOTAODIREITA.png", 1, 2, 2)
         # self.lixo.definirPosicao((1150, 410))
@@ -407,28 +407,6 @@ class PainelJogo(Painel):
                         self.seta2.definirPosicao(
                             (pos.x + escalarX(210), pos.y - escalarY(160)), False)
                         self.seta2.desenharBt(self)
-                # elif x.get_tipo() == "blocoF":
-                #     self.funcaoOpcao.definirPosicao(
-                #         (pos.x + escalarX(140), pos.y - escalarY(65)), False)
-                #     self.funcaoOpcao.desenharBt(self)
-                #     if self.funcaoOpcaoAtiva:
-                #         # self.boxFuncao = pygame.Rect(
-                #         #     pos.x, pos.y - escalarY(175), escalarX(600), escalarY(100))
-                #         self.boxFuncao = pygame.Rect(
-                #             25, escalarY(660), escalarX(600), escalarY(100))
-                #         pygame.draw.rect(
-                #             self, Cores.BRANCO, self.boxFuncao)
-                #         contornar(self, 25, escalarY(660),
-                #                   escalarX(599), escalarY(99), 4, Cores.VERMELHO)
-                #         # contornar(self, pos.x, pos.y - escalarY(175),
-                #         #           escalarX(599), escalarY(99), 4, Cores.VERMELHO)
-                #         if x.blocos is not None:
-                #             xrelativo = 0
-                #             for bl in x.blocos:
-                #                 bl.definirPosicao(
-                #                     ((25 + xrelativo)/ESCALAX, (670)/ESCALAY))
-                #                 bl.desenhar(self)
-                #                 xrelativo += bl.get_rect().w - (ESCALAX*15)
 
                 elif x.get_tipo() == "selecionar_cor":
                     self.corOpcao.definirPosicao(
@@ -460,18 +438,18 @@ class PainelJogo(Painel):
                 self.blit(s, (x.get_rect().x, x.get_rect().y))
                 contornar(self, x.get_rect().x, x.get_rect().y, x.get_rect(
                 ).w, x.get_rect().h, tam=3, cor=Cores.CORPRINCIPAL)
-        y = 680
-        xspace = -60
+        y = 675
+        xspace = -75
         self.fndesenha = False
         for f in fase.blocosdisponiveis:
             if f.get_tipo() == "blocoF":
                 self.fndesenha = True
                 self.boxFuncao = pygame.Rect(
-                    25, escalarY(660), escalarX(600), escalarY(100))
+                    20, escalarY(660), escalarX(950), escalarY(100))
                 pygame.draw.rect(
                     self, Cores.BRANCO, self.boxFuncao)
-                contornar(self, 25, escalarY(660),
-                          escalarX(599), escalarY(99), 4, Cores.VERMELHO)
+                contornar(self, 20, escalarY(660),
+                          escalarX(949), escalarY(99), 2, Cores.VERMELHO)
                 xrelativo = 0
                 for x in self.funcaoComando:
                     if x.get_tipo() == "repetir":
