@@ -182,6 +182,10 @@ class PainelJogo(Painel):
                 if not self.exibindoTutorial:
                     self.reiniciarbotao.desenharBt(self)
                 self.desenharDesenhoGuia(fase.desenhoResposta)
+                pygame.gfxdraw.box(self, escalar(
+                    680 + self.__tela.ajuste, 20, 300, 510), Cores.BRANCO)
+                contornar(self, 680 + self.__tela.ajuste, 20,
+                          300, 510, eX=ESCALAX, eY=ESCALAY)
                 self.desenharCaixaExecucao(comando, fase)
                 self.desenharCaixaBlocos(fase)
                 self.desenharInfo(fase, jogador)
@@ -578,10 +582,6 @@ class PainelJogo(Painel):
                         ).w, x.get_rect().h, tam=3, cor=Cores.CORPRINCIPAL)
 
     def desenharCaixaBlocos(self, fase):
-        pygame.gfxdraw.box(self, escalar(
-            680 + self.__tela.ajuste, 20, 300, 510), Cores.BRANCO)
-        contornar(self, 680 + self.__tela.ajuste, 20,
-                  300, 510, eX=ESCALAX, eY=ESCALAY)
         x = fase.blocosdisponiveis
         xspace = escalarX(300)
         ajustex = ajustey = 0

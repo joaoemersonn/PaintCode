@@ -153,11 +153,24 @@ class Controlador:
     def executarcomando(self):
         if self.espera > 20:
             self.espera = 0
-            self.pincel.mover(self.comando[1], self.fase.desenhoDesafio,
-                              self, comandofn=self.tela.jogoPane.funcaoComando)
+
+            concluido = self.pincel.mover(self.comando[1], self.fase.desenhoDesafio,
+                                          self, comandofn=self.tela.jogoPane.funcaoComando)
             self.comando.pop(1)
             self.tam -= 1
-            if self.tam < 1 or len(self.comando) <= 1:
+            if not concluido:
+                self.sons.ALERT.play(1)
+                self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Pincel só pode mover para direção de sua base!"
+                self.tela.jogoPane.exibeAviso = True
+                faseindex = self.fase.nivel-1
+                gerarFases(self.fases, getTutorials())
+                self.fase = self.fases[faseindex]
+                self.refreshDesenho()
+                self.pincel.posicaoInicial()
+                self.executandoComando = False
+                self.tam = self.tamAnterior
+                self.comando = self.comandoAnterior
+            elif self.tam < 1 or len(self.comando) <= 1:
                 self.refreshDesenho()
                 self.executandoComando = False
                 self.tam = 0
@@ -200,7 +213,7 @@ class Controlador:
             self.faseanterior = self.fase
             self.tela.jogoPane.reinicarAnimacaoConfete()
             self.tela.jogoPane.tempoAnGanhou = (57 * 4)
-            self.tela.textoAlerta = ("Parabéns você concluiu a fase!")
+            self.tela.textoAlerta = ("Parabéns você concluiu a fase!", "")
             self.pincel.posicaoInicial()
             self.tela.fasespersonalizadas = ler_fases()
             self.tela.desenhaAlerta = True
@@ -225,7 +238,7 @@ class Controlador:
             self.tela.jogoPane.reinicarAnimacaoConfete()
             self.tela.jogoPane.tempoAnGanhou = (57 * 4)
             self.tela.textoAlerta = (
-                "Parabéns você concluiu o jogo!")
+                "Parabéns você concluiu o jogo!", "")
             self.tela.desenhaAlerta = True
             self.fimdejogo = True
             self.pincel.posicaoInicial()

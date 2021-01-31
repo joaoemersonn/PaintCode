@@ -1,5 +1,5 @@
 import pygame
-from util.Util import carrega_imagem, SONS
+from util.Util import Sons, carrega_imagem, SONS
 
 
 class Pincel:
@@ -37,7 +37,34 @@ class Pincel:
                     self.posicaoY += 1
                 elif self.rotacao == 270 and self.posicaoX > 0 and int(desenho.tiles[self.posicaoX - 1][self.posicaoY]) >= 0:
                     self.posicaoX -= 1
-
+            elif x.get_tipo() == "esquerda":
+                if self.rotacao == 270:
+                    if self.posicaoX > 0 and int(desenho.tiles[self.posicaoX - 1][self.posicaoY]) >= 0:
+                        self.posicaoX -= 1
+                        SONS.MOVE.play()
+                else:
+                    return False
+            elif x.get_tipo() == "direita":
+                if self.rotacao == 90:
+                    if self.posicaoX < desenho.colunas - 1 and int(desenho.tiles[self.posicaoX + 1][self.posicaoY]) >= 0:
+                        self.posicaoX += 1
+                        SONS.MOVE.play()
+                else:
+                    return False
+            elif x.get_tipo() == "baixo":
+                if (self.rotacao == 360 or self.rotacao == 0):
+                    if self.posicaoY < desenho.linhas - 1 and int(desenho.tiles[self.posicaoX][self.posicaoY + 1]) >= 0:
+                        self.posicaoY += 1
+                        SONS.MOVE.play()
+                else:
+                    return False
+            elif x.get_tipo() == "cima":
+                if self.rotacao == 180:
+                    if self.posicaoY > 0 and int(desenho.tiles[self.posicaoX][self.posicaoY - 1]) >= 0:
+                        self.posicaoY -= 1
+                        SONS.MOVE.play()
+                else:
+                    return False
             elif x.get_tipo() == "girar_esquerda":
                 SONS.MOVE.play()
                 self.image = pygame.transform.rotate(self.image, 90)
@@ -55,19 +82,28 @@ class Pincel:
                 self.image = pygame.transform.rotate(
                     carrega_imagem("pincel" + str(self.cor) + ".png"), self.rotacao)
             elif x.get_tipo() == "repetir" and x.blocos is not None:
+                c = True
                 for j in range(0, x.get_Valor()):
                     for bloc in x.blocos:
                         if controller is not None:
                             controller.refreshDesenho()
-                            self.mover(bloc, desenho)
+                            c = self.mover(bloc, desenho)
                             pygame.time.delay(100)
                         else:
-                            self.mover(bloc, desenho)
+                            c = self.mover(bloc, desenho)
+                        if not c:
+                            return c
+                return c
             elif x.get_tipo() == "blocoF" and comandofn is not None:
-                for bloc in comandofn:#x.blocos:
+                c = True
+                for bloc in comandofn:
                     if controller is not None:
                         controller.refreshDesenho()
-                        self.mover(bloc, desenho)
+                        c = self.mover(bloc, desenho)
                         pygame.time.delay(100)
                     else:
-                        self.mover(bloc, desenho)
+                        c = self.mover(bloc, desenho)
+                    if not c:
+                        return c
+                return c
+        return True
