@@ -162,18 +162,24 @@ class PainelJogo(Painel):
         self.coresEdicao.append(pygame.Rect(
             escalar(700 + self.__tela.ajuste, 30, 75, 75)))
 
-    def desenhar(self, fase, jogador=None, comando=None, pincel=None, alerta=False):
+    def desenhar(self, fase, jogador=None, comando=None, pincel=None, alerta=False, tutorials=None):
         if not alerta:
             self.fase = fase
             desenho = fase.desenhoDesafio
             self.__tela.jogoPane.fill(self.__tela.corfundo)
 
-            if fase.tutorial is None or len(fase.tutorial) <= self.indexTutorial:
-                self.exibindoTutorial = False
-                self.indexTutorial = 0
-                img = None
-            else:
-                img = fase.tutorial[self.indexTutorial]
+            if self.exibindoTutorial:
+                tutorial = fase.tutorial
+                if tutorial is None:
+                    tutorial = tutorials
+                    if self.indexTutorial <= 0:
+                        self.indexTutorial = 1
+                if tutorial is None or len(tutorial) <= self.indexTutorial:
+                    self.exibindoTutorial = False
+                    self.indexTutorial = 0
+                    img = None
+                else:
+                    img = tutorial[self.indexTutorial]
 
             if not self.exibindoTutorial:
                 self.botaoVoltar.desenharBt(self)
@@ -181,6 +187,10 @@ class PainelJogo(Painel):
             if not self.criando:
                 if not self.exibindoTutorial:
                     self.reiniciarbotao.desenharBt(self)
+                    self.__tela.btAjuda.definirPosicao((830, 25))
+                    self.__tela.btAjuda.desenharBt(self)
+                    self.__tela.botaoVolume.definirPosicao((895, 25))
+                    self.__tela.botaoVolume.desenharBt(self)
                 self.desenharDesenhoGuia(fase.desenhoResposta)
                 pygame.gfxdraw.box(self, escalar(
                     680 + self.__tela.ajuste, 20, 300, 510), Cores.BRANCO)

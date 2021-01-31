@@ -25,11 +25,13 @@ class Tela:
         self.altura = altura
         self.fontetipo = 'comicsansms'
         self.ajuste = 360
+        self.opcoesFases = False
         self.largura = largura
         self.scala_x = self.largura / 1366
         self.scala_y = self.altura / 768
         self.tamanho = (self.largura, self.altura)
         self.indexAjuda = 1
+        self.continua = False
         # pygame.display.set_mode(self.tamanho,pygame.SCALED)
         self.janela = window
         self.__janela = carrega_imagem("janela.png")
@@ -59,6 +61,12 @@ class Tela:
         # pygame.display.set_mode((self.largura, self.altura),pygame.FULLSCREEN)
         self.ok = Sprite("ok.png", 1, 2)
         self.ok.definirPosicao((760, 380))
+        self.menu = Sprite("menu.png", 1, 2)
+        self.menu.definirPosicao((550, 360))
+        self.reiniciar = Sprite("reiniciar.png", 1, 2)
+        self.reiniciar.definirPosicao((630, 360))
+        self.continuar = Sprite("continuar.png", 1, 2)
+        self.continuar.definirPosicao((710, 360))
         self.desenhaAlerta = self.desenhaNovoJogo = False
         self.textoAlerta = ("TEXTO TITULO!", "PRESSIONE OK PARA CONTINUAR!")
         self.caixaTexto = TextBox(self.janela, int(550*ESCALAX), int(300*ESCALAY), 250*ESCALAX, 40*ESCALAY, fontSize=20,
@@ -75,6 +83,7 @@ class Tela:
         self.c1 = carrega_imagem("c1.png")
         self.c2 = carrega_imagem("c2.png")
         self.c4 = carrega_imagem("c4.png")
+        self.c5 = carrega_imagem("c5.png")
        # self.botaostart.definirPosicao((((largura/2)-self.botaostart.rect.h), 330))
         self.botaostart.definirPosicao((350 + (self.ajuste / 2), 330))
         self.botaoCriar.definirPosicao((350 + (self.ajuste / 2), 450))
@@ -196,7 +205,9 @@ class Tela:
             # TELA INICIO
             if self.telaInicio:
                 # BOTÕES
+                self.botaoVolume.definirPosicao((1290, 50))
                 self.botaoVolume.desenharBt(self.janela)
+                self.btAjuda.definirPosicao((1130, 50))
                 self.btAjuda.desenharBt(self.janela)
                 self.btConfig.desenharBt(self.janela)
                 self.janela.blit(
@@ -207,7 +218,9 @@ class Tela:
             # TELA SAVES
             elif self.telaSaves:
                 if self.saves is None or len(self.saves) <= 0:
+                    self.botaoVolume.definirPosicao((1290, 50))
                     self.botaoVolume.desenharBt(self.janela)
+                    self.btAjuda.definirPosicao((1130, 50))
                     self.btAjuda.desenharBt(self.janela)
                     self.btConfig.desenharBt(self.janela)
                     self.janela.blit(
@@ -400,14 +413,23 @@ class Tela:
         font = pygame.font.Font(self.fa, self.escalarX(23))
         textod = font.render(texto, True, Cores.PRETO)
         textod2 = font.render(texto2, True, Cores.PRETO)
-        superfice.blit(self.c4, rect)
+        if self.opcoesFases:
+            superfice.blit(self.c5, rect)
+        else:
+            superfice.blit(self.c4, rect)
         superfice.blit(textod, (self.escalarX(421), self.escalarY(282)))
         superfice.blit(textod2, (self.escalarX(421), self.escalarX(302)))
         if len(textolist) > 2:
             font = pygame.font.Font(self.fa, self.escalarX(17))
             textod3 = font.render(textolist[2], True, Cores.PRETO)
             superfice.blit(textod3, (self.escalarX(441), self.escalarY(372)))
-        self.ok.desenharBt(superfice)
+        if self.opcoesFases:
+            self.reiniciar.desenharBt(superfice)
+            self.menu.desenharBt(superfice)
+            if self.continua:
+                self.continuar.desenharBt(superfice)
+        else:
+            self.ok.desenharBt(superfice)
 
     def desenharNovoJogo(self):
         superfice = self.janela
