@@ -104,6 +104,7 @@ class PainelJogo(Painel):
         self.__boxExecucao = pygame.rect.Rect(escalar(20, 550, 1011, 100))
         self.fontePequena = pygame.font.Font(fontearquivo, escalarX(12))
         self.fonten = pygame.font.Font(fontearquivo, escalarX(17))
+        self.fontemedia = pygame.font.Font(fontearquivo, escalarX(25))
         self.fonteg = pygame.font.Font(fontearquivo, escalarX(32))
         self.fontexg = pygame.font.Font(fontearquivo, escalarX(52))
         self.fontexxg = pygame.font.Font(fontearquivo, escalarX(150))
@@ -119,12 +120,15 @@ class PainelJogo(Painel):
             (self.__tela.largura, self.__tela.altura), pygame.SRCALPHA)
 
         self.exibindoTutorial = False
+        self.opcaosempreTutorial = True
+        self.checkbox = Sprite("boxon.png", 1, 2)
         self.botaoPularTutorial = Sprite("BOTAOPULAR.png", 1, 2)
         self.botaoEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2)
         self.botaoDireita = Sprite("BOTAODIREITA.png", 1, 2)
         self.botaoEsquerda.definirPosicao((60, 350))
         self.botaoDireita.definirPosicao((1220, 350))
         self.botaoPularTutorial.definirPosicao((590, 650))
+        self.checkbox.definirPosicao((40, 640))
         self.indexTutorial = 0
         self.fndesenha = False
         self.destaque = False
@@ -219,9 +223,13 @@ class PainelJogo(Painel):
         s.blit(self.transparent, (0, 0))
         s.blit(img, ((
             self.__tela.largura/2)-(img.get_rect().w/2), (self.__tela.altura/2)-(img.get_rect().h/2)))
+        txtCheck = self.fontemedia.render(
+            ("Exibir tutoriais ao entrar na fase"), True, Cores.CORPRINCIPAL)
+        s.blit(txtCheck, (130, 680))
         self.botaoDireita.desenharBt(s)
         self.botaoEsquerda.desenharBt(s)
         self.botaoPularTutorial.desenharBt(s)
+        self.checkbox.desenharBt(s)
 
     def reinicarAnimacaoConfete(self):
         self.confete.spriteativo = self.confete2.spriteativo = self.confete3.spriteativo = self.confete4.spriteativo = 0

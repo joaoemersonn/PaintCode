@@ -272,7 +272,7 @@ class Controlador:
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
                     self.tela.jogoPane.exibindoTutorial = (
-                        self.fase.tutorial is not None)
+                        self.fase.tutorial is not None and self.tela.jogoPane.opcaosempreTutorial)
                     self.tela.jogoPane.indexTutorial = 0
                     self.tela.nivelJogador = int(self.jogador.getNivel())
                     x.clicked = False
@@ -304,7 +304,13 @@ class Controlador:
                     #     break
                     # img = self.fase.tutorial[self.tela.jogoPane.indexTutorial]
                     # print("x",img.get_rect().x," y:",img.get_rect().y,"w:",img.get_rect().w," h:",img.get_rect().h)
-                    if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial > 0:
+                    if self.tela.jogoPane.checkbox.colisao_point(posicaomaouse):
+                        self.tela.jogoPane.opcaosempreTutorial = not self.tela.jogoPane.opcaosempreTutorial
+                        if self.tela.jogoPane.opcaosempreTutorial:
+                            self.tela.jogoPane.checkbox.mudarImg("boxon.png")
+                        else:
+                            self.tela.jogoPane.checkbox.mudarImg("boxoff.png")
+                    elif self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.jogoPane.indexTutorial > 0:
                         self.tela.jogoPane.indexTutorial -= 1
                     elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse) or (self.esperaJogoAparecer and pygame.Rect((
                             self.largura/2)-(793/2), (self.altura/2)-(529/2), 793, 529).collidepoint(posicaomaouse)):
@@ -377,6 +383,7 @@ class Controlador:
                         self.atualizarListaBlMover(
                             self.fase.blocosdisponiveis, True)
                 elif self.tela.continua and self.tela.continuar.colisao_point(posicaomaouse):
+                    self.tela.jogoPane.tempoAnGanhou = 0
                     self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     prox = self.fase.nivel
                     self.fase = self.fases[prox]
@@ -527,7 +534,13 @@ class Controlador:
     def _verificarTelaAjuda(self, posicaomaouse):
         tutoriais = getTutorials()
         img = tutoriais[self.tela.indexAjuda]
-        if self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.indexAjuda > 1:
+        if self.tela.jogoPane.checkbox.colisao_point(posicaomaouse):
+            self.tela.jogoPane.opcaosempreTutorial = not self.tela.jogoPane.opcaosempreTutorial
+            if self.tela.jogoPane.opcaosempreTutorial:
+                self.tela.jogoPane.checkbox.mudarImg("boxon.png")
+            else:
+                self.tela.jogoPane.checkbox.mudarImg("boxoff.png")
+        elif self.tela.jogoPane.botaoEsquerda.colisao_point(posicaomaouse) and self.tela.indexAjuda > 1:
             self.tela.indexAjuda -= 1
         elif self.tela.jogoPane.botaoDireita.colisao_point(posicaomaouse) or (img is not None and pygame.Rect((
                 self.largura/2)-(img.get_rect().w/2), (self.altura/2)-(img.get_rect().h/2), img.get_rect().w, img.get_rect().h).collidepoint(posicaomaouse)):
