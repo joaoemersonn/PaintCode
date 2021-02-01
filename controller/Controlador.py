@@ -348,14 +348,15 @@ class Controlador:
                     #     self.fimdejogo = self.tela.telaJogo = False
                     #     self.tela.telaMenuFases = True
                 elif self.tela.opcoesFases and self.tela.reiniciar.colisao_point(posicaomaouse):
+                    self.tela.jogoPane.tempoAnGanhou = 0
                     self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     print("reiniciou!")
                     self.sons.REINICAR.play()
                     self.pincel.posicaoInicial()
                     self.comando.clear()
                     self.comando.append(self.__inicio)
-                    #self.tam = 0
                     if self.jogandoFasePersonalizada:
+                        self.tam = 0
                         self.tela.fasespersonalizadas = ler_fases()
                         self.fase = self.tela.fasespersonalizadas[self.index]
                         self.atualizarListaBlMover(
@@ -604,6 +605,7 @@ class Controlador:
             #     self.comando = self.comandoAnterior
             #     self.manterComando = False
             if self.jogandoFasePersonalizada:
+                self.tam = 0
                 self.tela.fasespersonalizadas = ler_fases()
                 self.fase = self.tela.fasespersonalizadas[self.index]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
@@ -1059,6 +1061,7 @@ class Controlador:
                     self.fase = self.tela.fasespersonalizadas[i]
                     self.atualizarListaBlMover(
                         self.fase.blocosdisponiveis, True)
+                    self.tam = 0
                     self.jogandoFasePersonalizada = True
                     self.jogador = None
                     self.tela.telaFases = False
