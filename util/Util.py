@@ -27,7 +27,7 @@ def animarLoad():
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
                          (int(338*ESCALAX), int(645*ESCALAY), int(800*ESCALAX), int(40*ESCALAY)))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
-                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*6.6*STATUSCARREGAMENTO), int(30*ESCALAY)))
+                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*6.4*STATUSCARREGAMENTO), int(30*ESCALAY)))
         pygame.display.update()
         STATUSCARREGAMENTO += 1
         # print(STATUSCARREGAMENTO)
