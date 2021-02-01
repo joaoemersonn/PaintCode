@@ -162,17 +162,19 @@ class Controlador:
             self.tam -= 1
             print(self.tam)
             if not concluido:
-                self.sons.ALERT.play(1)
-                self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Pincel só pode mover para direção de sua base!"
-                self.tela.jogoPane.exibeAviso = True
-                faseindex = self.fase.nivel-1
-                gerarFases(self.fases, getTutorials())
-                self.fase = self.fases[faseindex]
-                self.refreshDesenho()
-                self.pincel.posicaoInicial()
                 self.executandoComando = False
-                self.tam = self.tamAnterior
-                self.comando = self.comandoAnterior
+                self.perdeu("MOVIMENTO INVÁLIDO!, Pincel move-se", "apenas na direção em que está apontado"
+                            )
+                # self.sons.ALERT.play(1)
+                # self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Pincel só pode mover para direção de sua base!"
+                # self.tela.jogoPane.exibeAviso = True
+                # faseindex = self.fase.nivel-1
+                # gerarFases(self.fases, getTutorials())
+                # self.fase = self.fases[faseindex]
+                # self.refreshDesenho()
+                # self.pincel.posicaoInicial()
+                # self.tam = self.tamAnterior
+                # self.comando = self.comandoAnterior
             elif self.tam < 1 or len(self.comando) <= 1:
                 self.refreshDesenho()
                 self.executandoComando = False
@@ -189,12 +191,12 @@ class Controlador:
             else:
                 self.contaviso += 1
 
-    def perdeu(self):
+    def perdeu(self, titulo="Você não completou objetivo.", sub=" A casa não está pintada corretamente."):
         self.sons.LOSE.play()
         self.i = self.j = 0
         self.refreshDesenho()
         self.tela.textoAlerta = (
-            "Você não completou objetivo.", " A casa não está pintada corretamente.")
+            titulo, sub)
         self.tela.opcoesFases = self.tela.desenhaAlerta = True
         self.pincel.posicaoInicial()
         self.manterComando = True
