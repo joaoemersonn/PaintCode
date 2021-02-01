@@ -163,8 +163,8 @@ class Controlador:
             print(self.tam)
             if not concluido:
                 self.executandoComando = False
-                self.perdeu("MOVIMENTO INVÁLIDO!, Pincel move-se", "apenas na direção em que está apontado"
-                            )
+                self.perdeu("MOVIMENTO INVÁLIDO!, Pincel move-se",
+                            "apenas na direção em que está apontado")
                 # self.sons.ALERT.play(1)
                 # self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Pincel só pode mover para direção de sua base!"
                 # self.tela.jogoPane.exibeAviso = True
