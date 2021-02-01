@@ -167,7 +167,7 @@ class PainelJogo(Painel):
             self.fase = fase
             desenho = fase.desenhoDesafio
             self.__tela.jogoPane.fill(self.__tela.corfundo)
-
+            img = None
             if self.exibindoTutorial:
                 tutorial = fase.tutorial
                 if tutorial is None:
