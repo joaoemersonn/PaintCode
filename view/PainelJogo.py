@@ -86,7 +86,7 @@ class PainelJogo(Painel):
         self.funcaoOpcao = Sprite("funcao.png", 1, 2)
         self.funcaoOpcaoAtiva = False
         self.boxFuncao = pygame.Rect(
-            20, escalarY(175), escalarX(950), escalarY(100))
+            escalarX(20), escalarY(175), escalarX(980), escalarY(100))
         self.moverEsquerda = Sprite("BOTAOESQUERDA.png", 1, 2, 2)
         self.moverDireita = Sprite("BOTAODIREITA.png", 1, 2, 2)
         # self.lixo.definirPosicao((1150, 410))
@@ -97,11 +97,11 @@ class PainelJogo(Painel):
         # pygame.transform.rotate(self.__seta2.sheet, 180)
         self.seta2.sheet = pygame.transform.flip(
             self.seta2.sheet, True, False)
-        self.__executarButton.definirPosicao((980, 550))
-        self.botaoVoltar.definirPosicao((1080, 570))
+        self.__executarButton.definirPosicao((1040, 550))
+        self.botaoVoltar.definirPosicao((1080, 660))
         self.botaoSalvar.definirPosicao((790, 570))
         self.reiniciarbotao.definirPosicao((960, 25))
-        self.__boxExecucao = pygame.rect.Rect(escalar(20, 550, 950, 100))
+        self.__boxExecucao = pygame.rect.Rect(escalar(20, 550, 1011, 100))
         self.fontePequena = pygame.font.Font(fontearquivo, escalarX(12))
         self.fonten = pygame.font.Font(fontearquivo, escalarX(17))
         self.fonteg = pygame.font.Font(fontearquivo, escalarX(32))
@@ -459,11 +459,11 @@ class PainelJogo(Painel):
             if f.get_tipo() == "blocoF":
                 self.fndesenha = True
                 self.boxFuncao = pygame.Rect(
-                    20, escalarY(660), escalarX(950), escalarY(100))
+                    20, escalarY(660), escalarX(1011), escalarY(100))
                 pygame.draw.rect(
                     self, Cores.BRANCO, self.boxFuncao)
                 contornar(self, 20, escalarY(660),
-                          escalarX(949), escalarY(99), 2, Cores.VERMELHO)
+                          escalarX(1010), escalarY(99), 2, Cores.VERMELHO)
                 xrelativo = 0
                 for x in self.funcaoComando:
                     if x.get_tipo() == "repetir":

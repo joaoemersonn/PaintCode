@@ -197,7 +197,7 @@ class Controlador:
         self.refreshDesenho()
         self.tela.textoAlerta = (
             titulo, sub)
-        self.tela.opcoesFases = self.tela.desenhaAlerta = True
+        self.tela.desenhaalertaCaixaPerdeu = self.tela.opcoesFases = self.tela.desenhaAlerta = True
         self.pincel.posicaoInicial()
         self.manterComando = True
         # if self.jogandoFasePersonalizada:
@@ -349,7 +349,7 @@ class Controlador:
                     #     self.tela.telaMenuFases = True
                 elif self.tela.opcoesFases and self.tela.reiniciar.colisao_point(posicaomaouse):
                     self.tela.jogoPane.tempoAnGanhou = 0
-                    self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
+                    self.tela.desenhaalertaCaixaPerdeu = self.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     print("reiniciou!")
                     self.sons.REINICAR.play()
                     self.pincel.posicaoInicial()
@@ -377,19 +377,21 @@ class Controlador:
                         self.atualizarListaBlMover(
                             self.fase.blocosdisponiveis, True)
                 elif self.tela.continua and self.tela.continuar.colisao_point(posicaomaouse):
-                    self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
+                    self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     prox = self.fase.nivel
                     self.fase = self.fases[prox]
                 elif self.tela.opcoesFases and self.tela.menu.colisao_point(posicaomaouse):
-                    self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
+                    self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     if self.jogandoFasePersonalizada:
                         self.jogandoFasePersonalizada = False
                         self.tela.telaFases = True
                         self.tela.telaJogo = False
                     # self.fimdejogo or (self.jogador is not None and self.fase.nivel <= int(self.jogador.getNivel())):
                     else:
+                        self.tela.nivelJogador = int(self.jogador.getNivel())
                         self.fimdejogo = self.tela.telaJogo = False
                         self.tela.telaMenuFases = True
+                        self.tratarEventos()
                 elif self.tela.telaCriar:
                     self._VerificarTelaCriar(posicaomaouse)
                 elif self.tela.telaConfig:
@@ -594,7 +596,7 @@ class Controlador:
         ReproduzirSons(self.volume, SONS)
         # or (self.tela.opcoesFases and self.tela.reiniciar.colisao_point(posicaomouse)):
         if self.tela.jogoPane.reiniciarbotao.colisao_point(posicaomouse):
-            self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
+            self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
             self.sons.REINICAR.play()
             self.pincel.posicaoInicial()
             self.comando.clear()
@@ -617,7 +619,7 @@ class Controlador:
                 self.fase = self.fases[faseindex]
                 self.atualizarListaBlMover(self.fase.blocosdisponiveis, True)
         elif self.tela.opcoesFases and self.tela.menu.colisao_point(posicaomouse):
-            self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
+            self.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
             if self.jogandoFasePersonalizada:
                 self.jogandoFasePersonalizada = False
                 self.tela.telaFases = True
@@ -734,7 +736,7 @@ class Controlador:
                     self.tela.jogoPane.funcaoOpcaoAtiva = True
             elif x.selecionado and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(75), escalarX(tamx), escalarY(70)).collidepoint(posicaomouse):
                 pass
-            elif x.selecionado and x.get_tipo() == "repetir" and pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse):
+            elif x.selecionado and x.get_tipo() == "repetir" and (pygame.Rect(x.get_rect().x, x.get_rect().y - escalarY(175), escalarX(300), escalarY(100)).collidepoint(posicaomouse)):
                 pass
             # :
             elif x.selecionado and x.get_tipo() == "blocoF" and (self.tela.jogoPane.boxFuncao.collidepoint(posicaomouse) or self.segurandoBloco):
@@ -817,6 +819,9 @@ class Controlador:
                         self.blOpcaoTrue = None
                     x.selecionado = False
                 i += 1
+        else:
+            for x in self.comando:
+                x.selecionado = False
 
     def _VerificarTelaCriar(self, posicaomouse):
         if self.tela.btCimaEx.colisao_point(posicaomouse) and self.tela.execucoes < 9:

@@ -25,6 +25,7 @@ class Tela:
         self.altura = altura
         self.fontetipo = 'comicsansms'
         self.ajuste = 360
+        self.desenhaalertaCaixaPerdeu = False
         self.opcoesFases = False
         self.largura = largura
         self.scala_x = self.largura / 1366
@@ -82,6 +83,7 @@ class Tela:
         self.logo = carrega_imagem("img2.png", escala=3)
         self.c1 = carrega_imagem("c1.png")
         self.c2 = carrega_imagem("c2.png")
+        self.c3 = carrega_imagem("c3.png")
         self.c4 = carrega_imagem("c4.png")
         self.c5 = carrega_imagem("c5.png")
        # self.botaostart.definirPosicao((((largura/2)-self.botaostart.rect.h), 330))
@@ -414,7 +416,10 @@ class Tela:
         textod = font.render(texto, True, Cores.PRETO)
         textod2 = font.render(texto2, True, Cores.PRETO)
         if self.opcoesFases:
-            superfice.blit(self.c5, rect)
+            if self.desenhaalertaCaixaPerdeu:
+                superfice.blit(self.c3, rect)
+            else:
+                superfice.blit(self.c5, rect)
         else:
             superfice.blit(self.c4, rect)
         superfice.blit(textod, (self.escalarX(421), self.escalarY(282)))

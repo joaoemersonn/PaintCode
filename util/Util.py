@@ -27,7 +27,7 @@ def animarLoad():
         pygame.draw.rect(WINDOW, Cores.CORSECUNDARIA,
                          (int(338*ESCALAX), int(645*ESCALAY), int(800*ESCALAX), int(40*ESCALAY)))
         pygame.draw.rect(WINDOW, Cores.CORPRINCIPAL,
-                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*6.4*STATUSCARREGAMENTO), int(30*ESCALAY)))
+                         (int(343*ESCALAX), int(650*ESCALAY), int(ESCALAX*6.2*STATUSCARREGAMENTO), int(30*ESCALAY)))
         pygame.display.update()
         STATUSCARREGAMENTO += 1
         # print(STATUSCARREGAMENTO)
@@ -406,22 +406,38 @@ def carregar_imagem_blocos(imagem_nome):
 def ReproduzirSons(somativo, sons):
     if somativo:
         sons.BACKGROUND.set_volume(0.2)
+        sons.CONFIRMAR.set_volume(0.5)
         sons.WIN.set_volume(1)
         sons.LOSE.set_volume(1)
         sons.CLICK.set_volume(1)
         sons.TICK.set_volume(1)
         sons.ALERT.set_volume(1)
-        sons.CONFIRMAR.set_volume(0.5)
+        sons.MOVE.set_volume(1)
+        sons.PAINT.set_volume(1)
+        sons.COLORCHANGE.set_volume(1)
+        sons.REINICAR.set_volume(1)
+        sons.COLOCAR.set_volume(1)
+        sons.PEGAR.set_volume(1)
+        sons.DELETE.set_volume(1)
         sons.NEGAR.set_volume(1)
+        sons.MENOS.set_volume(1)
     else:
         sons.WIN.set_volume(0)
-        sons.BACKGROUND.set_volume(0)
         sons.LOSE.set_volume(0)
         sons.CLICK.set_volume(0)
         sons.TICK.set_volume(0)
         sons.ALERT.set_volume(0)
-        sons.CONFIRMAR.set_volume(0)
+        sons.MOVE.set_volume(0)
+        sons.PAINT.set_volume(0)
+        sons.COLORCHANGE.set_volume(0)
+        sons.REINICAR.set_volume(0)
+        sons.COLOCAR.set_volume(0)
+        sons.PEGAR.set_volume(0)
+        sons.DELETE.set_volume(0)
         sons.NEGAR.set_volume(0)
+        sons.MENOS.set_volume(0)
+        sons.CONFIRMAR.set_volume(0)
+        sons.BACKGROUND.set_volume(0)
 
 
 class Sons:
