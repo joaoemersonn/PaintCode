@@ -686,9 +686,10 @@ class Controlador:
                 x.pressionado = True
                 self.segurandoBloco = True
         i = 0
-
+        self.tela.jogoPane.temComandoSelecionado = False
         for x in self.tela.jogoPane.funcaoComando:
             if x.selecionado:
+                self.tela.jogoPane.temComandoSelecionado = True
                 self.tela.jogoPane.funcaoOpcaoAtiva = True
                 if self.tela.jogoPane.lixo.colisao_point(posicaomouse):
                     self.sons.DELETE.play()
@@ -763,7 +764,7 @@ class Controlador:
 
             i += 1
         i = 0
-        if not self.tela.jogoPane.funcaoOpcaoAtiva:
+        if not self.tela.jogoPane.temComandoSelecionado:
             for x in self.comando:
                 if x.selecionado:
                     if self.tela.jogoPane.lixo.colisao_point(posicaomouse):

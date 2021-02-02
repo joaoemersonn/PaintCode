@@ -68,6 +68,7 @@ class PainelJogo(Painel):
         self.__janela = carrega_imagem("janela.png")
         self.__edit = carrega_imagem("edit.png")
         self.funcaoComando = list()
+        self.temComandoSelecionado = False
         self.__janela2 = pygame.transform.scale(
             self.__janela, escalarXY(30, 30))
         # self.__janela2 = pygame.transform.scale(self.__janela, escalarXY(escala, escala))
@@ -449,7 +450,7 @@ class PainelJogo(Painel):
                             vl += 1
 
             if x.selecionado and x.get_tipo() != "inicio" or (x.get_tipo() != "inicio" and x.colisao_point(pygame.mouse.get_pos()) and not pygame.mouse.get_pressed()[
-                    0] and not self.seta2.colisao_point(pygame.mouse.get_pos()) and not self.funcaoOpcaoAtiva and not self.seta.colisao_point(
+                    0] and not self.seta2.colisao_point(pygame.mouse.get_pos()) and not self.temComandoSelecionado and not self.seta.colisao_point(
                     pygame.mouse.get_pos())):
                 # MUITO USO DE MEMORIA VER DEPOIS
                 s = pygame.Surface(
