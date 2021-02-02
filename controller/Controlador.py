@@ -163,8 +163,8 @@ class Controlador:
             print(self.tam)
             if not concluido:
                 self.executandoComando = False
-                self.perdeu("MOVIMENTO INVÁLIDO!, Pincel move-se",
-                            "apenas na direção em que está apontado")
+                self.perdeu("MOVIMENTO INVÁLIDO!",
+                            "Você não completou o objetivo")
                 # self.sons.ALERT.play(1)
                 # self.tela.jogoPane.textoaviso = "MOVIMENTO INVÁLIDO!", "Pincel só pode mover para direção de sua base!"
                 # self.tela.jogoPane.exibeAviso = True
@@ -191,7 +191,7 @@ class Controlador:
             else:
                 self.contaviso += 1
 
-    def perdeu(self, titulo="Você não completou objetivo.", sub=" A casa não está pintada corretamente."):
+    def perdeu(self, titulo="Você não completou o objetivo.", sub=" A casa não está pintada corretamente."):
         self.sons.LOSE.play()
         self.i = self.j = 0
         self.refreshDesenho()
