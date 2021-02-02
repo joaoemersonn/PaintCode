@@ -245,6 +245,7 @@ class Controlador:
             self.tela.textoAlerta = (
                 "Parabéns você concluiu o jogo!", "")
             self.tela.opcoesFases = self.tela.desenhaAlerta = True
+            self.limparFnComando()
             self.fimdejogo = True
             self.pincel.posicaoInicial()
             gravar_saves(self.saves)
@@ -383,10 +384,13 @@ class Controlador:
                         self.atualizarListaBlMover(
                             self.fase.blocosdisponiveis, True)
                 elif self.tela.continua and self.tela.continuar.colisao_point(posicaomaouse):
-                    self.tela.jogoPane.tempoAnGanhou = 0
+                    self.tela.jogoPane.tempoAnGanhou = 0                    
                     self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     prox = self.fase.nivel
                     self.fase = self.fases[prox]
+                    self.tela.jogoPane.exibindoTutorial = (
+                        self.fase.tutorial is not None and self.tela.jogoPane.opcaosempreTutorial)
+                    self.tela.jogoPane.indexTutorial = 0
                 elif self.tela.opcoesFases and self.tela.menu.colisao_point(posicaomaouse):
                     self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     if self.jogandoFasePersonalizada:
