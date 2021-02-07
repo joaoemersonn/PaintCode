@@ -100,7 +100,7 @@ class PainelJogo(Painel):
             self.seta2.sheet, True, False)
         self.__executarButton.definirPosicao((1040, 550))
         self.botaoVoltar.definirPosicao((1080, 660))
-        self.botaoSalvar.definirPosicao((790, 570))
+        self.botaoSalvar.definirPosicao((790, 660))
         self.reiniciarbotao.definirPosicao((960, 25))
         self.__boxExecucao = pygame.rect.Rect(escalar(20, 550, 1011, 100))
         self.fontePequena = pygame.font.Font(fontearquivo, escalarX(12))

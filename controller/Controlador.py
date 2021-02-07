@@ -384,7 +384,7 @@ class Controlador:
                         self.atualizarListaBlMover(
                             self.fase.blocosdisponiveis, True)
                 elif self.tela.continua and self.tela.continuar.colisao_point(posicaomaouse):
-                    self.tela.jogoPane.tempoAnGanhou = 0                    
+                    self.tela.jogoPane.tempoAnGanhou = 0
                     self.tela.desenhaalertaCaixaPerdeu = self.tela.continua = self.tela.opcoesFases = self.tela.desenhaAlerta = False
                     prox = self.fase.nivel
                     self.fase = self.fases[prox]
