@@ -78,6 +78,7 @@ class Tela:
         self.botaoSair = Sprite("BOTAOSAIR.PNG", 1, 2)
         self.botaoVolume = Sprite("BOTAOVOLUMEON.PNG", 1, 2)
         self.btAjuda = Sprite("ajuda.png", 1, 2)
+        self.btyt = Sprite("youtube.png", 1, 2)
         self.btConfig = Sprite("engrenagem.png", 1, 2)
         self.img = carrega_imagem("img2.png")
         self.logo = carrega_imagem("img2.png", escala=3)
@@ -92,6 +93,7 @@ class Tela:
         self.botaoSair.definirPosicao((350 + (self.ajuste / 2), 570))
         # self.botaoCriar.definirPosicao((((largura / 2) - self.botaoCriar.rect.h), 450))
         # self.botaoSair.definirPosicao((((largura / 2) - self.botaoSair.rect.h), 590))
+        self.btyt.definirPosicao((1040, 40))
         self.btAjuda.definirPosicao((1130, 50))
         self.btConfig.definirPosicao((1210, 50))
         self.botaoVolume.definirPosicao((1290, 50))
@@ -210,6 +212,8 @@ class Tela:
                 self.botaoVolume.definirPosicao((1290, 50))
                 self.botaoVolume.desenharBt(self.janela)
                 self.btAjuda.definirPosicao((1130, 50))
+                self.btyt.definirPosicao((1040, 40))
+                self.btyt.desenharBt(self.janela)
                 self.btAjuda.desenharBt(self.janela)
                 self.btConfig.desenharBt(self.janela)
                 self.janela.blit(
@@ -223,6 +227,8 @@ class Tela:
                     self.botaoVolume.definirPosicao((1290, 50))
                     self.botaoVolume.desenharBt(self.janela)
                     self.btAjuda.definirPosicao((1130, 50))
+                    self.btyt.definirPosicao((1040, 40))
+                    self.btyt.desenharBt(self.janela)
                     self.btAjuda.desenharBt(self.janela)
                     self.btConfig.desenharBt(self.janela)
                     self.janela.blit(
