@@ -878,6 +878,8 @@ class Controlador:
                 self.tela.telaInicio = self.tela.telaSaves = False
                 self.tela.telaConfig = True
         # BOTÃO VOLUME
+            elif self.tela.btyt.colisao_point(posicaomouse):
+                webbrowser.open('https://youtu.be/OCh03ST0rok')
             elif self.tela.btAjuda.colisao_point(posicaomouse):
                 self.tela.indexAjuda = 1
                 self.tela.telaInicio = False
